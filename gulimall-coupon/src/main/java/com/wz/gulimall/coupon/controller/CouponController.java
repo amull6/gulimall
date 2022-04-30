@@ -30,11 +30,20 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
 
+
+    @RequestMapping("/member/list")
+    public R memberCoupon() {
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("满100减10");
+        return R.ok().put("coupons", couponEntity);
+    }
+
     /**
      * 列表
      */
     @RequestMapping("/list")
-        public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
+
         PageUtils page = couponService.queryPage(params);
 
         return R.ok().put("page", page);
