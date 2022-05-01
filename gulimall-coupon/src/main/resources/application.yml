@@ -20,3 +20,8 @@ mybatis-plus:
       id-type: auto
       logic-delete-value: 1
       logic-not-delete-value: 0
+
+coupon:
+ user:
+   name: qinjie
+   age: 18
