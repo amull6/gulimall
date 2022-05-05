@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: baidu
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baodu
+        - id: taobao
+          uri: https://www.taobao.com
+          predicates:
+            - Query=url,taobao
