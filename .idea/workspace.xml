@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/gulimall-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-fast/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/renren-fast/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-fast/src/main/java/io/renren/RenrenApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/renren-fast/src/main/java/io/renren/RenrenApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-fast/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/renren-fast/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/resources/bootstrap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/resources/bootstrap.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/renren-generator" beforeDir="false" afterPath="$PROJECT_DIR$/renren-generator" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +18,7 @@
       <list>
         <option value="Interface" />
         <option value="spring-beans.schema" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -63,7 +60,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../apache-maven-3.6.0/mvn_repository/org/projectlombok/lombok/1.18.4/lombok-1.18.4.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gulimall-product/src/main/resources" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.14760508" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -74,11 +71,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\project\myProject\gulimall\gulimall-product\src\main\resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-product" />
       <recent name="D:\project\myProject\gulimall" />
       <recent name="D:\project\myProject\gulimall\gulimall-ware\src\main\resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-ware\src" />
-      <recent name="D:\project\myProject\gulimall\gulimall-order\src\main\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -89,19 +86,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.RenrenApplication">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GulimallProductApplicationTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="gulimall-product" />
       <extension name="coverage">
@@ -176,13 +160,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RenrenApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="renren-generator" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="RenrenApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="renren-fast" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
@@ -200,7 +177,6 @@
       <item itemvalue="Spring Boot.GulimallProductApplication" />
       <item itemvalue="Spring Boot.GulimallWareApplication" />
       <item itemvalue="Spring Boot.GulimallGateApplication" />
-      <item itemvalue="Spring Boot.RenrenApplication (1)" />
     </list>
     <recent_temporary>
       <list>
@@ -226,7 +202,13 @@
       <workItem from="1651323630659" duration="8070000" />
       <workItem from="1651726382592" duration="19317000" />
       <workItem from="1651764666581" duration="3257000" />
-      <workItem from="1651796801284" duration="700000" />
+      <workItem from="1651796801284" duration="1419000" />
+      <workItem from="1651799521067" duration="2227000" />
+      <workItem from="1651806532374" duration="18197000" />
+      <workItem from="1651904128332" duration="338000" />
+      <workItem from="1651908707512" duration="855000" />
+      <workItem from="1652001140967" duration="516000" />
+      <workItem from="1652056304343" duration="149000" />
     </task>
     <task id="LOCAL-00001" summary="nacos服务注册">
       <created>1651222731736</created>
@@ -249,7 +231,35 @@
       <option name="project" value="LOCAL" />
       <updated>1651386734413</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="网关跨域处理">
+      <created>1651814487706</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1651814487706</updated>
+    </task>
+    <task id="LOCAL-00005" summary="数据库迁百度云">
+      <created>1651821427953</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651821427953</updated>
+    </task>
+    <task id="LOCAL-00006" summary="产品栏目逻辑删除">
+      <created>1651827543761</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651827543761</updated>
+    </task>
+    <task id="LOCAL-00007" summary="nacos/mysql服务地址切换">
+      <created>1651904409778</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651904409778</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,7 +281,11 @@
     <MESSAGE value="nacos服务注册" />
     <MESSAGE value="feign远程调用测试" />
     <MESSAGE value="nacos配置中心测试" />
-    <option name="LAST_COMMIT_MESSAGE" value="nacos配置中心测试" />
+    <MESSAGE value="网关跨域处理" />
+    <MESSAGE value="数据库迁百度云" />
+    <MESSAGE value="产品栏目逻辑删除" />
+    <MESSAGE value="nacos/mysql服务地址切换" />
+    <option name="LAST_COMMIT_MESSAGE" value="nacos/mysql服务地址切换" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
