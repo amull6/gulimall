@@ -1,10 +1,10 @@
-package com.wz.gulimall.order;
+package com.wz.gulimall.thirdparty;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GulimallOrderApplicationTests {
+class GulimallThirdPartyApplicationTests {
 
     @Test
     void contextLoads() {

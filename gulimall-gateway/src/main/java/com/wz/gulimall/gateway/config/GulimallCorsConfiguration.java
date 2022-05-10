@@ -22,7 +22,7 @@ public class GulimallCorsConfiguration {
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin("*");
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config);
         return new CorsWebFilter(urlBasedCorsConfigurationSource);
     }
