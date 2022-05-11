@@ -69,7 +69,7 @@ public class BrandController {
      * 修改
      */
     @RequestMapping("/update")
-        public R update(@Valid @RequestBody BrandEntity brand/*, BindingResult result*/){
+        public R update(@Validated @RequestBody BrandEntity brand/*, BindingResult result*/){
 //        if (result.hasErrors()) {
 //            Map<String, String> map = new HashMap<>();
 //            result.getFieldErrors().forEach((item)->{
