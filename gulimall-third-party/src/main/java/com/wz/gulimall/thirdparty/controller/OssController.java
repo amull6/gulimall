@@ -5,8 +5,10 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import com.wz.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,14 +23,12 @@ import java.util.Map;
  * @Description:
  */
 @RestController
+@RefreshScope
 public class OssController {
-
     @Value ("${spring.cloud.alicloud.oss.endpoint}")
     String endpoint ;
-
     @Value("${spring.cloud.alicloud.oss.bucket}")
     String bucket ;
-
     @Value("${spring.cloud.alicloud.access-key}")
     String accessId ;
     @Value("${spring.cloud.alicloud.secret-key}")
@@ -37,7 +37,7 @@ public class OssController {
     OSS ossClient;
 
     @RequestMapping("/oss/policy")
-    public Map<String, String> policy(){
+    public R policy(){
         String host = "https://" + bucket + "." + endpoint;
         String dir = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         Map<String, String> respMap = null;
@@ -68,6 +68,6 @@ public class OssController {
         }finally {
             ossClient.shutdown();
         }
-        return respMap;
+        return  R.ok().put("data",respMap);
     }
 }
