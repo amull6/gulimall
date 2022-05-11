@@ -4,10 +4,11 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GulimallCouponApplicationTests {
+public class GulimallCouponApplicationTests {
 
-    @Test
-    void contextLoads() {
+   @Test
+   public void contextLoads() {
+        System.out.println("sds");
     }
 
 }

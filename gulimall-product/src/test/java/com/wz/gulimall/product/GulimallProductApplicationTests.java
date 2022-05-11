@@ -10,31 +10,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-class GulimallProductApplicationTests {
+public class GulimallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
     @Test
-    void contextLoads() {
-        BrandEntity brandEntity = new BrandEntity();
-        brandEntity.setDescript("hello");
-        brandEntity.setName("华为");
-        brandService.save(brandEntity);
-        System.out.println("保存成功");
-
+    public void contextLoads() {
+//        BrandEntity brandEntity = new BrandEntity();
+//        brandEntity.setDescript("hello");
+//        brandEntity.setName("华为");
+//        brandService.save(brandEntity);
+//        System.out.println("保存成功");
     }
 
     @Test
-    void testUpdate() {
-        BrandEntity brandEntity = new BrandEntity();
-        brandEntity.setDescript("helloworld");
-        brandEntity.setName("华为");
-        brandEntity.setBrandId(1L);
-        List<BrandEntity> list = brandService.list(new QueryWrapper<BrandEntity>().eq("name", "华为"));
-        list.forEach((be)->{
-            System.out.println(be);
-        });
-
+    public void testUpdate() {
+//        BrandEntity brandEntity = new BrandEntity();
+//        brandEntity.setDescript("helloworld");
+//        brandEntity.setName("华为");
+//        brandEntity.setBrandId(1L);
+//        List<BrandEntity> list = brandService.list(new QueryWrapper<BrandEntity>().eq("name", "华为"));
+//        list.forEach((be)->{
+//            System.out.println(be);
+//        });
     }
 
 }
