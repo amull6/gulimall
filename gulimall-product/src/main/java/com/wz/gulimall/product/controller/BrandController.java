@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.wz.common.validator.group.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -69,7 +70,7 @@ public class BrandController {
      * 修改
      */
     @RequestMapping("/update")
-        public R update(@Validated @RequestBody BrandEntity brand/*, BindingResult result*/){
+        public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand/*, BindingResult result*/){
 //        if (result.hasErrors()) {
 //            Map<String, String> map = new HashMap<>();
 //            result.getFieldErrors().forEach((item)->{
