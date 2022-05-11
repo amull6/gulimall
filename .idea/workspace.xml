@@ -7,26 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/gulimall-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-coupon/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-coupon/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-coupon/src/test/java/com/wz/gulimall/coupon/GulimallCouponApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-coupon/src/test/java/com/wz/gulimall/coupon/GulimallCouponApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-gateway/src/test/java/com/wz/gulimall/gateway/GulimallGateApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-gateway/src/test/java/com/wz/gulimall/gateway/GulimallGateApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-member/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-member/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-member/src/test/java/com/wz/gulimall/member/GulimallMemberApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-member/src/test/java/com/wz/gulimall/member/GulimallMemberApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-order/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-order/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-order/src/test/java/com/wz/gulimall/order/GulimallOrderApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-order/src/test/java/com/wz/gulimall/order/GulimallOrderApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/test/java/com/wz/gulimall/product/GulimallProductApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/test/java/com/wz/gulimall/product/GulimallProductApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-third-party/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-third-party/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-third-party/src/test/java/com/wz/gulimall/thirdparty/GulimallThirdPartyApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-third-party/src/test/java/com/wz/gulimall/thirdparty/GulimallThirdPartyApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-ware/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-ware/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-ware/src/test/java/com/wz/gulimall/ware/GulimallWareApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-ware/src/test/java/com/wz/gulimall/ware/GulimallWareApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-fast/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/renren-fast/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-generator" beforeDir="false" afterPath="$PROJECT_DIR$/renren-generator" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/renren-generator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/renren-generator/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,7 +65,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14760508" />
     <property name="project.structure.side.proportion" value="0.6411483" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -216,13 +197,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RenrenApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="renren-generator" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="RenrenApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="renren-fast" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
@@ -242,7 +216,6 @@
       <item itemvalue="Spring Boot.GulimallProductApplication" />
       <item itemvalue="Spring Boot.GulimallWareApplication" />
       <item itemvalue="Spring Boot.GulimallGateApplication" />
-      <item itemvalue="Spring Boot.RenrenApplication (1)" />
     </list>
     <recent_temporary>
       <list>
@@ -284,7 +257,7 @@
       <workItem from="1652195104471" duration="1192000" />
       <workItem from="1652222654995" duration="4421000" />
       <workItem from="1652228888528" duration="1181000" />
-      <workItem from="1652230100032" duration="1055000" />
+      <workItem from="1652230100032" duration="4166000" />
     </task>
     <task id="LOCAL-00001" summary="nacos服务注册">
       <created>1651222731736</created>
@@ -349,7 +322,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652166160611</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="图片上传获取签名配置文件实时刷新">
+      <created>1652234137714</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1652234137714</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -377,7 +357,8 @@
     <MESSAGE value="nacos/mysql服务地址切换" />
     <MESSAGE value="批量修改产品分类树节点位置" />
     <MESSAGE value="SpringBoot/SpringCloudAlibaba低版本更换、第三方服务模块搭建" />
-    <option name="LAST_COMMIT_MESSAGE" value="SpringBoot/SpringCloudAlibaba低版本更换、第三方服务模块搭建" />
+    <MESSAGE value="图片上传获取签名配置文件实时刷新" />
+    <option name="LAST_COMMIT_MESSAGE" value="图片上传获取签名配置文件实时刷新" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
