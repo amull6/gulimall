@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wz.common.validator.annotation.ListValue;
 import com.wz.common.validator.group.AddGroup;
 import com.wz.common.validator.group.UpdateGroup;
 import lombok.Data;
@@ -46,12 +47,13 @@ public class BrandEntity implements Serializable {
     /**
      * 介绍
      */
-    @NotBlank(message = "介绍必须非空",groups = {AddGroup.class})
+    @NotBlank(message = "介绍必须非空", groups = {AddGroup.class})
     private String descript;
     /**
      * 显示状态[0-不显示；1-显示]
      */
     @NotNull(groups = {AddGroup.class})
+    @ListValue(values = {0, 1}, groups = {AddGroup.class, UpdateGroup.class})
     private Integer showStatus;
     /**
      * 检索首字母
