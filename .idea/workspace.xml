@@ -8,27 +8,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gulimall-common/src/main/java/com/wz/common/validator/annotation/ListValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gulimall-common/src/main/java/com/wz/common/validator/annotation/constraint/ListValueConstraintValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gulimall-common/src/main/resources/ValidationMessages.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/BrandEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/BrandEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrGroupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrGroupService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrGroupServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrGroupServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CompilerWorkspaceConfiguration">
-    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
         <option value="spring-beans.schema" />
-        <option value="Enum" />
-        <option value="AnnotationType" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -43,6 +38,14 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:\apache-maven-3.6.0" />
+        <option name="userSettingsFile" value="D:\apache-maven-3.6.0\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectId" id="28Pud0zfxrxTNkCBhpx0rG9Poxl" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -67,7 +70,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14760508" />
     <property name="project.structure.side.proportion" value="0.6411483" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -197,13 +200,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RenrenApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="renren-generator" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="RenrenApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="renren-fast" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="io.renren.RenrenApplication" />
@@ -223,7 +219,6 @@
       <item itemvalue="Spring Boot.GulimallProductApplication" />
       <item itemvalue="Spring Boot.GulimallWareApplication" />
       <item itemvalue="Spring Boot.GulimallGateApplication" />
-      <item itemvalue="Spring Boot.RenrenApplication (1)" />
     </list>
     <recent_temporary>
       <list>
@@ -265,8 +260,8 @@
       <workItem from="1652195104471" duration="1192000" />
       <workItem from="1652222654995" duration="4421000" />
       <workItem from="1652228888528" duration="1181000" />
-      <workItem from="1652230100032" duration="12247000" />
-      <workItem from="1652273791600" duration="3301000" />
+      <workItem from="1652230100032" duration="14803000" />
+      <workItem from="1652313829198" duration="6146000" />
     </task>
     <task id="LOCAL-00001" summary="nacos服务注册">
       <created>1651222731736</created>
@@ -338,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652234137714</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="品牌参数分组校验">
+      <created>1652259779635</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1652259779635</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -367,7 +369,8 @@
     <MESSAGE value="批量修改产品分类树节点位置" />
     <MESSAGE value="SpringBoot/SpringCloudAlibaba低版本更换、第三方服务模块搭建" />
     <MESSAGE value="图片上传获取签名配置文件实时刷新" />
-    <option name="LAST_COMMIT_MESSAGE" value="图片上传获取签名配置文件实时刷新" />
+    <MESSAGE value="品牌参数分组校验" />
+    <option name="LAST_COMMIT_MESSAGE" value="品牌参数分组校验" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -376,6 +379,11 @@
           <url>jar://$PROJECT_DIR$/../../../apache-maven-3.6.0/mvn_repository/com/alibaba/cloud/spring-cloud-alicloud-oss/2.1.0.RELEASE/spring-cloud-alicloud-oss-2.1.0.RELEASE.jar!/com/alibaba/alicloud/oss/OssAutoConfiguration.class</url>
           <line>22</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrGroupServiceImpl.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
