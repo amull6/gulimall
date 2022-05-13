@@ -1,5 +1,7 @@
 package com.wz.gulimall.product.service.impl;
 
+import com.wz.gulimall.product.service.CategoryBrandRelationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,10 +19,15 @@ import com.wz.common.utils.Query;
 import com.wz.gulimall.product.dao.CategoryDao;
 import com.wz.gulimall.product.entity.CategoryEntity;
 import com.wz.gulimall.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Autowired
+    CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -54,9 +61,18 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     @Override
     public Long[] getCatelogPath(Long catelogId) {
         List<Long> paths = new ArrayList<>();
-        paths = this.catelogPath(catelogId,paths);
+        paths = this.catelogPath(catelogId, paths);
         Collections.reverse(paths);
         return paths.toArray(new Long[paths.size()]);
+    }
+
+    @Override
+    @Transactional
+    public void updateDetail(CategoryEntity category) {
+        this.updateById(category);
+        if (!StringUtils.isEmpty(category.getName())) {
+            categoryBrandRelationService.updateByCategoryId(category);
+        }
     }
 
     private List<Long> catelogPath(Long catelogId, List<Long> paths) {
