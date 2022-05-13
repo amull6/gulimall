@@ -128,4 +128,25 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         return attrRespVo;
     }
 
+    @Override
+    public void updateAttrInfo(AttrVo attrVo) {
+//        修改AttrPO
+        AttrEntity attrEntity = new AttrEntity();
+        BeanUtils.copyProperties(attrVo, attrEntity);
+        this.updateById(attrEntity);
+//        修改AttrGroupRelationEntity
+        if (attrVo.getAttrGroupId() == null) {
+            relationService.remove(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrVo.getAttrId()));
+        }else{
+            AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = new AttrAttrgroupRelationEntity();
+            attrAttrgroupRelationEntity.setAttrId(attrVo.getAttrId());
+            attrAttrgroupRelationEntity.setAttrGroupId(attrVo.getAttrGroupId());
+            int count = relationService.count(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrVo.getAttrId()));
+            if (count > 0) {
+                relationService.update(attrAttrgroupRelationEntity, new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrVo.getAttrId()));
+            } else {
+                relationService.save(attrAttrgroupRelationEntity);
+            }
+        }
+    }
 }
