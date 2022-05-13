@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -157,5 +158,19 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             return attrAttrgroupRelationEntity.getAttrId();
         }).collect(Collectors.toList());
         return ids.size() > 0 ? (List<AttrEntity>) this.listByIds(ids) : null;
+    }
+
+    @Override
+    public PageUtils getNoRelationAttr(long attrgroupId) {
+//        获取分组
+        AttrGroupEntity attrGroupEntity = attrGroupService.getById(attrgroupId);
+//        根据分组Id获取分类信息
+//        categoryService.
+//        根据分类Id查找所有分组
+//        遍历组成分组ID集合
+//        从属性分组关系表中查找所有在分组ID集合中的数据
+//        遍历组成属性ID集合
+//        查找分类Id下所有关联属性且不在属性ID集合中的属性且属性类型不属于销售属性
+        return null;
     }
 }
