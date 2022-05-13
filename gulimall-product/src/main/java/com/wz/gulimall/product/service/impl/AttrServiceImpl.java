@@ -137,7 +137,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 //        修改AttrGroupRelationEntity
         if (attrVo.getAttrGroupId() == null) {
             relationService.remove(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrVo.getAttrId()));
-        }else{
+        } else {
             AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = new AttrAttrgroupRelationEntity();
             attrAttrgroupRelationEntity.setAttrId(attrVo.getAttrId());
             attrAttrgroupRelationEntity.setAttrGroupId(attrVo.getAttrGroupId());
@@ -148,5 +148,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 relationService.save(attrAttrgroupRelationEntity);
             }
         }
+    }
+
+    @Override
+    public List<AttrEntity> getRelationAttr(long attrgroupId) {
+        List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntities = relationService.list(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_group_id", attrgroupId));
+        List<Long> ids = attrAttrgroupRelationEntities.stream().map((attrAttrgroupRelationEntity) -> {
+            return attrAttrgroupRelationEntity.getAttrId();
+        }).collect(Collectors.toList());
+        return ids.size() > 0 ? (List<AttrEntity>) this.listByIds(ids) : null;
     }
 }
