@@ -1,9 +1,15 @@
 package com.wz.gulimall.product.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wz.gulimall.product.entity.AttrAttrgroupRelationEntity;
+import com.wz.gulimall.product.vo.AttrGroupRelationVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -53,5 +59,18 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             );
         }
         return new PageUtils(page);
+    }
+
+    @Override
+    public void deleteRelations(AttrGroupRelationVo[] vos) {
+        List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntities = Arrays.asList(vos).stream().map((vo)->{
+            AttrAttrgroupRelationEntity entity = new AttrAttrgroupRelationEntity();
+//            BeanUtils.copyProperties(vos,entity);
+            entity.setAttrGroupId(vo.getAttrGroupId());
+            entity.setAttrId(vo.getAttrId());
+            return entity;
+        }).collect(Collectors.toList());
+        baseMapper.removeRelations(attrAttrgroupRelationEntities);
+
     }
 }

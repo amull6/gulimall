@@ -92,7 +92,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             }
 //        查找分组名称
             AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = relationService.getOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", item.getAttrId()));
-            if (attrAttrgroupRelationEntity != null) {
+            if (attrAttrgroupRelationEntity != null && attrAttrgroupRelationEntity.getAttrGroupId() != null) {
                 AttrGroupEntity attrGroupEntity = attrGroupService.getById(attrAttrgroupRelationEntity.getAttrGroupId());
                 attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
             }
