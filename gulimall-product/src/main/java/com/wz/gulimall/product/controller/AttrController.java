@@ -3,6 +3,7 @@ package com.wz.gulimall.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wz.gulimall.product.vo.AttrRespVo;
 import com.wz.gulimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,11 @@ public class AttrController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{attrId}")
+    @GetMapping("/info/{attrId}")
         public R info(@PathVariable("attrId") Long attrId){
-		AttrEntity attr = attrService.getById(attrId);
-
-        return R.ok().put("attr", attr);
+//		AttrEntity attr = attrService.getById(attrId);
+        AttrRespVo attrRespVo = attrService.getAttrInfo(attrId);
+        return R.ok().put("attr", attrRespVo);
     }
 
     /**
