@@ -9,10 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/AttrGroupEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/AttrGroupEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/CategoryEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/entity/CategoryEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/CategoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrAttrgroupRelationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrAttrgroupRelationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrAttrgroupRelationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrAttrgroupRelationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +23,8 @@
       <list>
         <option value="Interface" />
         <option value="spring-beans.schema" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -44,7 +43,6 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="D:\apache-maven-3.6.0" />
         <option name="userSettingsFile" value="D:\apache-maven-3.6.0\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
@@ -55,6 +53,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
@@ -67,23 +66,23 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/gulimall-product/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/renren-fast/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14760508" />
     <property name="project.structure.side.proportion" value="0.6411483" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/renren-fast/src/main/resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-product\src\main\resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-product" />
       <recent name="D:\project\myProject\gulimall" />
       <recent name="D:\project\myProject\gulimall\gulimall-ware\src\main\resources" />
-      <recent name="D:\project\myProject\gulimall\gulimall-ware\src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -213,20 +212,20 @@
       <item itemvalue="JUnit.GulimallProductApplicationTests.contextLoads" />
       <item itemvalue="JUnit.GulimallProductApplicationTests.testUpdate" />
       <item itemvalue="JUnit.RenrenApplicationTests.contextLoads" />
-      <item itemvalue="Spring Boot.GulimallThirdPartyApplication" />
       <item itemvalue="Spring Boot.GulimallCouponApplication" />
-      <item itemvalue="Spring Boot.RenrenApplication" />
+      <item itemvalue="Spring Boot.GulimallGateApplication" />
       <item itemvalue="Spring Boot.GulimallMemberApplication" />
       <item itemvalue="Spring Boot.GulimallOrderApplication" />
       <item itemvalue="Spring Boot.GulimallProductApplication" />
+      <item itemvalue="Spring Boot.GulimallThirdPartyApplication" />
       <item itemvalue="Spring Boot.GulimallWareApplication" />
-      <item itemvalue="Spring Boot.GulimallGateApplication" />
+      <item itemvalue="Spring Boot.RenrenApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.GulimallProductApplicationTests.contextLoads" />
         <item itemvalue="JUnit.RenrenApplicationTests.contextLoads" />
         <item itemvalue="JUnit.GulimallProductApplicationTests.testUpdate" />
+        <item itemvalue="JUnit.GulimallProductApplicationTests.contextLoads" />
       </list>
     </recent_temporary>
   </component>
@@ -264,6 +263,10 @@
       <workItem from="1652228888528" duration="1181000" />
       <workItem from="1652230100032" duration="14803000" />
       <workItem from="1652313829198" duration="10117000" />
+      <workItem from="1652490505243" duration="142000" />
+      <workItem from="1652491284149" duration="122000" />
+      <workItem from="1652491661987" duration="257000" />
+      <workItem from="1652492160401" duration="8597000" />
     </task>
     <task id="LOCAL-00001" summary="nacos服务注册">
       <created>1651222731736</created>
@@ -342,7 +345,21 @@
       <option name="project" value="LOCAL" />
       <updated>1652259779635</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="product分页插件">
+      <created>1652365549621</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1652365549621</updated>
+    </task>
+    <task id="LOCAL-00013" summary="13、获取属性分组没有关联的其他属性">
+      <created>1652500269626</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1652500269626</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,6 +378,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/renren-generator" />
+    </ignored-roots>
     <MESSAGE value="nacos服务注册" />
     <MESSAGE value="feign远程调用测试" />
     <MESSAGE value="nacos配置中心测试" />
@@ -372,18 +392,9 @@
     <MESSAGE value="SpringBoot/SpringCloudAlibaba低版本更换、第三方服务模块搭建" />
     <MESSAGE value="图片上传获取签名配置文件实时刷新" />
     <MESSAGE value="品牌参数分组校验" />
-    <option name="LAST_COMMIT_MESSAGE" value="品牌参数分组校验" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint type="java-line">
-          <url>jar://$PROJECT_DIR$/../../../apache-maven-3.6.0/mvn_repository/com/alibaba/cloud/spring-cloud-alicloud-oss/2.1.0.RELEASE/spring-cloud-alicloud-oss-2.1.0.RELEASE.jar!/com/alibaba/alicloud/oss/OssAutoConfiguration.class</url>
-          <line>22</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="product分页插件" />
+    <MESSAGE value="13、获取属性分组没有关联的其他属性" />
+    <option name="LAST_COMMIT_MESSAGE" value="13、获取属性分组没有关联的其他属性" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -54,13 +54,15 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
     @Override
     public void saveAttr(AttrVo attrvo) {
-        AttrEntity attrEntity = new AttrEntity();
-        BeanUtils.copyProperties(attrvo, attrEntity);
-        this.save(attrEntity);
-        AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
-        relationEntity.setAttrId(attrEntity.getAttrId());
-        relationEntity.setAttrGroupId(attrvo.getAttrGroupId());
-        relationService.save(relationEntity);
+            AttrEntity attrEntity = new AttrEntity();
+            BeanUtils.copyProperties(attrvo, attrEntity);
+            this.save(attrEntity);
+        if (attrvo.getAttrGroupId() != null) {
+            AttrAttrgroupRelationEntity relationEntity = new AttrAttrgroupRelationEntity();
+            relationEntity.setAttrId(attrEntity.getAttrId());
+            relationEntity.setAttrGroupId(attrvo.getAttrGroupId());
+            relationService.save(relationEntity);
+        }
     }
 
     @Override

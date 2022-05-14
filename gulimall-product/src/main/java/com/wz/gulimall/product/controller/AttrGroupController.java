@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.wz.gulimall.product.entity.AttrEntity;
+import com.wz.gulimall.product.service.AttrAttrgroupRelationService;
 import com.wz.gulimall.product.service.AttrService;
 import com.wz.gulimall.product.service.CategoryService;
+import com.wz.gulimall.product.service.impl.AttrAttrgroupRelationServiceImpl;
 import com.wz.gulimall.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,15 @@ public class AttrGroupController {
 
     @Autowired
     private AttrService attrService;
+
+    @Autowired
+    private AttrAttrgroupRelationService attrAttrgroupRelationService;
+
+    @PostMapping("/attr/relation")
+    public R saveRelation(@RequestBody List<AttrGroupRelationVo> vos) {
+        attrAttrgroupRelationService.saveRelationBatch(vos);
+        return R.ok();
+    }
 
     @GetMapping("/{attrgroupId}/noattr/relation")
     public R getNoRelationAttr(@RequestParam Map<String, Object> params, @PathVariable long attrgroupId) {
