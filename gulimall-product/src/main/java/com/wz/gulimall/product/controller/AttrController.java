@@ -41,9 +41,9 @@ public class AttrController {
     /**
      * 列表
      */
-    @GetMapping("/base/list/{catelogId}")
-    public R baseList(@RequestParam Map<String, Object> params,@PathVariable long catelogId){
-        PageUtils page = attrService.queryBaseAttrPage(params,catelogId);
+    @GetMapping("/{type}/list/{catelogId}")
+    public R baseList(@RequestParam Map<String, Object> params,@PathVariable long catelogId,@PathVariable String type){
+        PageUtils page = attrService.queryBaseAttrPage(params,catelogId,type);
         return R.ok().put("page", page);
     }
 

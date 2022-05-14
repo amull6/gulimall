@@ -8,9 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2c1b817-a803-4d3d-8881-3eaef3230bde" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrGroupController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrAttrgroupRelationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrAttrgroupRelationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrAttrgroupRelationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrAttrgroupRelationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gulimall-member/src/main/resources/bootstrap.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrController.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/controller/AttrController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/AttrService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/gulimall-product/src/main/java/com/wz/gulimall/product/service/impl/AttrServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +67,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/renren-fast/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gulimall-member/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14760508" />
@@ -78,11 +79,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/gulimall-member/src/main/resources" />
       <recent name="$PROJECT_DIR$/renren-fast/src/main/resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-product\src\main\resources" />
       <recent name="D:\project\myProject\gulimall\gulimall-product" />
       <recent name="D:\project\myProject\gulimall" />
-      <recent name="D:\project\myProject\gulimall\gulimall-ware\src\main\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -266,7 +267,7 @@
       <workItem from="1652490505243" duration="142000" />
       <workItem from="1652491284149" duration="122000" />
       <workItem from="1652491661987" duration="257000" />
-      <workItem from="1652492160401" duration="8597000" />
+      <workItem from="1652492160401" duration="11009000" />
     </task>
     <task id="LOCAL-00001" summary="nacos服务注册">
       <created>1651222731736</created>
