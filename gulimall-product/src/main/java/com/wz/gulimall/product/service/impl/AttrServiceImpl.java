@@ -1,5 +1,6 @@
 package com.wz.gulimall.product.service.impl;
 
+import com.wz.common.constant.ProductConstant;
 import com.wz.gulimall.product.entity.AttrAttrgroupRelationEntity;
 import com.wz.gulimall.product.entity.AttrGroupEntity;
 import com.wz.gulimall.product.entity.CategoryEntity;
@@ -8,14 +9,13 @@ import com.wz.gulimall.product.service.AttrGroupService;
 import com.wz.gulimall.product.service.CategoryService;
 import com.wz.gulimall.product.vo.AttrRespVo;
 import com.wz.gulimall.product.vo.AttrVo;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -161,16 +161,37 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
     }
 
     @Override
-    public PageUtils getNoRelationAttr(long attrgroupId) {
+    public PageUtils getNoRelationAttr(Map<String, Object> params, long attrgroupId) {
 //        获取分组
         AttrGroupEntity attrGroupEntity = attrGroupService.getById(attrgroupId);
 //        根据分组Id获取分类信息
-//        categoryService.
+        Long catergorId = attrGroupEntity.getCatelogId();
 //        根据分类Id查找所有分组
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catergorId));
 //        遍历组成分组ID集合
+        List<Long> groupIds = attrGroupEntities.stream().map((item) -> {
+            return item.getAttrGroupId();
+        }).collect(Collectors.toList());
 //        从属性分组关系表中查找所有在分组ID集合中的数据
+        List<AttrAttrgroupRelationEntity> attrAttrgroupRelationEntities = relationService.list(new QueryWrapper<AttrAttrgroupRelationEntity>().in("attr_group_id", groupIds));
 //        遍历组成属性ID集合
+        List<Long> attrIds = attrAttrgroupRelationEntities.stream().map((item) -> {
+            return item.getAttrId();
+        }).collect(Collectors.toList());
 //        查找分类Id下所有关联属性且不在属性ID集合中的属性且属性类型不属于销售属性
-        return null;
+//        分页及查询条件处理
+        QueryWrapper<AttrEntity> queryWrapper = new QueryWrapper<AttrEntity>();
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            queryWrapper.and((i) -> {
+                i.eq("attr_id", key).or().like("attr_name", key);
+            });
+        }
+        if (attrIds != null && attrIds.size() > 0) {
+            queryWrapper.notIn("attr_id", attrIds);
+        }
+        queryWrapper.eq("catelog_id", catergorId).ne("attr_type", ProductConstant.AttrType.ATTR_TYPE_SALE);
+        IPage page = this.page(new Query<AttrEntity>().getPage(params), queryWrapper);
+        return new PageUtils(page);
     }
 }

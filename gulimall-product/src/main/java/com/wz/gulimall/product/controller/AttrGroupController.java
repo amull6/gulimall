@@ -38,9 +38,9 @@ public class AttrGroupController {
     private AttrService attrService;
 
     @GetMapping("/{attrgroupId}/noattr/relation")
-    public R getNoRelationAttr(@PathVariable long attrgroupId) {
-        PageUtils pageUtils = attrService.getNoRelationAttr(attrgroupId);
-        return R.ok().put("data", pageUtils);
+    public R getNoRelationAttr(@RequestParam Map<String, Object> params, @PathVariable long attrgroupId) {
+        PageUtils pageUtils = attrService.getNoRelationAttr(params, attrgroupId);
+        return R.ok().put("page", pageUtils);
     }
 
     @PostMapping("/attr/relation/delete")
