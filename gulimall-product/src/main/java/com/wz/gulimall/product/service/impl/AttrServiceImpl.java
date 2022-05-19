@@ -87,11 +87,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         List<AttrRespVo> attrRespVos = attrEntities.stream().map((item) -> {
             AttrRespVo attrRespVo = new AttrRespVo();
             BeanUtils.copyProperties(item, attrRespVo);
-//        查找分类名称
-            CategoryEntity categoryEntity = categoryService.getById(item.getCatelogId());
-            if (categoryEntity != null) {
-                attrRespVo.setCatelogName(categoryEntity.getName());
+            if (item.getCatelogId() != null) {
+                //        查找分类名称
+                CategoryEntity categoryEntity = categoryService.getById(item.getCatelogId());
+                if (categoryEntity != null) {
+                    attrRespVo.setCatelogName(categoryEntity.getName());
+                }
             }
+
 //        查找分组名称
             AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = relationService.getOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", item.getAttrId()));
             if (attrAttrgroupRelationEntity != null && attrAttrgroupRelationEntity.getAttrGroupId() != null) {

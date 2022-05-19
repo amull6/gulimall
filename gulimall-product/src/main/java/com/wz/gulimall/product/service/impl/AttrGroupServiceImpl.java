@@ -2,8 +2,12 @@ package com.wz.gulimall.product.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wz.gulimall.product.entity.AttrAttrgroupRelationEntity;
+import com.wz.gulimall.product.entity.AttrEntity;
+import com.wz.gulimall.product.service.AttrService;
 import com.wz.gulimall.product.vo.AttrGroupRelationVo;
+import com.wz.gulimall.product.vo.AttrGroupWithAttrVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -25,6 +29,9 @@ import org.springframework.util.StringUtils;
 
 @Service("attrGroupService")
 public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEntity> implements AttrGroupService {
+
+    @Autowired
+    AttrService attrService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -72,5 +79,18 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         }).collect(Collectors.toList());
         baseMapper.removeRelations(attrAttrgroupRelationEntities);
 
+    }
+
+    @Override
+    public List<AttrGroupWithAttrVo> getAttrGroupWithAttrByCatelogId(Long catelogId) {
+        List<AttrGroupEntity> attrGroupEntities = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
+        List<AttrGroupWithAttrVo> attrGroupWithAttrVos = attrGroupEntities.stream().map((obj) -> {
+            AttrGroupWithAttrVo attrGroupWithAttrVo = new AttrGroupWithAttrVo();
+            BeanUtils.copyProperties(obj, attrGroupWithAttrVo);
+            List<AttrEntity> attrEntities = attrService.getRelationAttr(obj.getAttrGroupId());
+            attrGroupWithAttrVo.setAttrs(attrEntities);
+            return attrGroupWithAttrVo;
+        }).collect(Collectors.toList());
+        return attrGroupWithAttrVos;
     }
 }
