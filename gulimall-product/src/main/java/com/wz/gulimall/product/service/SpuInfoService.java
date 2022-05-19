@@ -1,10 +1,10 @@
-package com.atguigu.gulimall.product.service;
+package com.wz.gulimall.product.service;
 
-import com.atguigu.gulimall.product.entity.SpuInfoDescEntity;
-import com.atguigu.gulimall.product.vo.SpuSaveVo;
+import com.wz.gulimall.product.entity.SpuInfoDescEntity;
+import com.wz.gulimall.product.vo.SpuSaveVo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.atguigu.common.utils.PageUtils;
-import com.atguigu.gulimall.product.entity.SpuInfoEntity;
+import com.wz.common.utils.PageUtils;
+import com.wz.gulimall.product.entity.SpuInfoEntity;
 
 import java.util.Map;
 

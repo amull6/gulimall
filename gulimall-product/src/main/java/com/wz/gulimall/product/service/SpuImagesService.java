@@ -1,8 +1,8 @@
-package com.atguigu.gulimall.product.service;
+package com.wz.gulimall.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.atguigu.common.utils.PageUtils;
-import com.atguigu.gulimall.product.entity.SpuImagesEntity;
+import com.wz.common.utils.PageUtils;
+import com.wz.gulimall.product.entity.SpuImagesEntity;
 
 import java.util.List;
 import java.util.Map;

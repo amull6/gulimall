@@ -1,4 +1,4 @@
-package com.atguigu.gulimall.product.vo;
+package com.wz.gulimall.product.vo;
 
 import lombok.Data;
 

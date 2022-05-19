@@ -1,8 +1,8 @@
-package com.atguigu.gulimall.product.feign;
+package com.wz.gulimall.product.feign;
 
-import com.atguigu.common.to.SkuReductionTo;
-import com.atguigu.common.to.SpuBoundTo;
-import com.atguigu.common.utils.R;
+import com.wz.common.to.SkuReductionTo;
+import com.wz.common.to.SpuBoundTo;
+import com.wz.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

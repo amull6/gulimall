@@ -1,9 +1,9 @@
-package com.atguigu.gulimall.product.controller;
+package com.wz.gulimall.product.controller;
 
 import java.util.Arrays;
 import java.util.Map;
 
-import com.atguigu.gulimall.product.vo.SpuSaveVo;
+import com.wz.gulimall.product.vo.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atguigu.gulimall.product.entity.SpuInfoEntity;
-import com.atguigu.gulimall.product.service.SpuInfoService;
-import com.atguigu.common.utils.PageUtils;
-import com.atguigu.common.utils.R;
+import com.wz.gulimall.product.entity.SpuInfoEntity;
+import com.wz.gulimall.product.service.SpuInfoService;
+import com.wz.common.utils.PageUtils;
+import com.wz.common.utils.R;
 
 
 

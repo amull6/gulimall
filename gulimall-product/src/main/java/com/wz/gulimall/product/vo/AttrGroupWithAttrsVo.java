@@ -1,6 +1,6 @@
-package com.atguigu.gulimall.product.vo;
+package com.wz.gulimall.product.vo;
 
-import com.atguigu.gulimall.product.entity.AttrEntity;
+import com.wz.gulimall.product.entity.AttrEntity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 

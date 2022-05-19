@@ -1,6 +1,6 @@
-package com.atguigu.gulimall.product.dao;
+package com.wz.gulimall.product.dao;
 
-import com.atguigu.gulimall.product.entity.SpuImagesEntity;
+import com.wz.gulimall.product.entity.SpuImagesEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

@@ -1,4 +1,4 @@
-package com.atguigu.gulimall.product.entity;
+package com.wz.gulimall.product.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
