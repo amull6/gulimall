@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Data
 public class MemberPrice {
 
-    private int id;
+    private Long id;
     private String name;
     private BigDecimal price;
 

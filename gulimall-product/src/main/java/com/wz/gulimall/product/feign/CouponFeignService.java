@@ -1,5 +1,6 @@
 package com.wz.gulimall.product.feign;
 
+//import com.wz.common.to.SkuReductionTo;
 import com.wz.common.to.SkuReductionTo;
 import com.wz.common.to.SpuBoundTo;
 import com.wz.common.utils.R;
