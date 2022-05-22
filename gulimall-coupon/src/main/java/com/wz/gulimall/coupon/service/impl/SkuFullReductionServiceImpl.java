@@ -8,6 +8,7 @@ import com.wz.gulimall.coupon.service.SkuLadderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,14 +51,18 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionDao
         skuLadderEntity.setDiscount(skuReductionTo.getDiscount());
         skuLadderEntity.setFullCount(skuReductionTo.getFullCount());
         skuLadderEntity.setAddOther(skuReductionTo.getCountStatus());
-        skuLadderService.save(skuLadderEntity);
+        if (skuLadderEntity.getFullCount() > 0) {
+            skuLadderService.save(skuLadderEntity);
+        }
         SkuFullReductionEntity skuFullReductionEntity = new SkuFullReductionEntity();
         skuFullReductionEntity.setSkuId(skuReductionTo.getSkuId());
         skuFullReductionEntity.setFullPrice(skuReductionTo.getFullPrice());
         skuFullReductionEntity.setReducePrice(skuReductionTo.getReducePrice());
         skuFullReductionEntity.setAddOther(1);
-        this.save(skuFullReductionEntity);
-        List<MemberPriceEntity> memberPriceEntities = skuReductionTo.getMemberPrice().stream().map((obj)->{
+        if (skuFullReductionEntity.getFullPrice().compareTo(new BigDecimal("0")) == 1) {
+            this.save(skuFullReductionEntity);
+        }
+        List<MemberPriceEntity> memberPriceEntities = skuReductionTo.getMemberPrice().stream().map((obj) -> {
             MemberPriceEntity memberPriceEntity = new MemberPriceEntity();
             memberPriceEntity.setMemberPrice(obj.getPrice());
             memberPriceEntity.setSkuId(skuReductionTo.getSkuId());
@@ -65,6 +70,8 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionDao
             memberPriceEntity.setAddOther(1);
             memberPriceEntity.setMemberLevelName(obj.getName());
             return memberPriceEntity;
+        }).filter((obj) -> {
+            return obj.getMemberPrice().compareTo(new BigDecimal("0")) == 1;
         }).collect(Collectors.toList());
         memberPriceService.saveBatch(memberPriceEntities);
 
