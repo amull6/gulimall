@@ -1,6 +1,7 @@
 package com.wz.gulimall.product.service.impl;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wz.common.to.SkuReductionTo;
 import com.wz.common.to.SpuBoundTo;
 import com.wz.common.utils.R;
@@ -25,6 +26,7 @@ import com.wz.common.utils.PageUtils;
 import com.wz.common.utils.Query;
 
 import com.wz.gulimall.product.dao.SpuInfoDao;
+import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
 
@@ -107,7 +109,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 //        保存sku信息
         List<Skus> skusList = vo.getSkus();
         if (skusList != null && skusList.size() > 0) {
-            skusList.forEach((item)->{
+            skusList.forEach((item) -> {
                 String defaultImg = "";
                 for (Images image : item.getImages()) {
                     if (image.getDefaultImg() == 1) {
@@ -124,19 +126,19 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 skuInfoService.save(skuInfoEntity);
                 Long skuId = skuInfoEntity.getSkuId();
 //                保存sku图片
-                List<SkuImagesEntity> skuImagesEntities = item.getImages().stream().map((obj)->{
+                List<SkuImagesEntity> skuImagesEntities = item.getImages().stream().map((obj) -> {
                     SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
                     skuImagesEntity.setSkuId(skuInfoEntity.getSkuId());
                     skuImagesEntity.setImgUrl(obj.getImgUrl());
                     skuImagesEntity.setDefaultImg(obj.getDefaultImg());
                     return skuImagesEntity;
-                }).filter((obj)->{
+                }).filter((obj) -> {
                     return !StringUtils.isEmpty(obj.getImgUrl());
                 }).collect(Collectors.toList());
                 skuImagesService.saveBatch(skuImagesEntities);
 
 //                保存销售属性
-                List<SkuSaleAttrValueEntity>  skuSaleAttrValueEntities = item.getAttr().stream().map((obj)->{
+                List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = item.getAttr().stream().map((obj) -> {
                     SkuSaleAttrValueEntity skuSaleAttrValueEntity = new SkuSaleAttrValueEntity();
                     BeanUtils.copyProperties(obj, skuSaleAttrValueEntity);
                     skuSaleAttrValueEntity.setSkuId(skuId);
