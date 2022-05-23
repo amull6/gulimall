@@ -21,3 +21,7 @@ mybatis-plus:
       logic-not-delete-value: 0
 server:
   port: 11000
+
+logging:
+  level:
+    com.wz.gulimall.ware: debug
