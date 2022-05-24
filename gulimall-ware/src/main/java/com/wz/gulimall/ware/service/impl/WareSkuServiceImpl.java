@@ -1,7 +1,11 @@
 package com.wz.gulimall.ware.service.impl;
 
+import com.wz.common.utils.R;
+import com.wz.gulimall.ware.feign.ProductFeignClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,6 +22,9 @@ import org.springframework.util.StringUtils;
 
 @Service("wareSkuService")
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> implements WareSkuService {
+
+    @Autowired
+    ProductFeignClient productFeignClient;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -40,4 +47,27 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         return new PageUtils(page);
     }
 
+    @Override
+    public void addStock(Long skuId, Long wareId, Integer skuNum) {
+        List<WareSkuEntity> wareSkuEntities = this.list(new QueryWrapper<WareSkuEntity>().eq("sku_id", skuId).eq("ware_id", wareId));
+        if (wareSkuEntities == null || wareSkuEntities.size() == 0) {
+            WareSkuEntity wareSkuEntity = new WareSkuEntity();
+            wareSkuEntity.setSkuId(skuId);
+            wareSkuEntity.setWareId(wareId);
+            wareSkuEntity.setStockLocked(0);
+            wareSkuEntity.setStock(skuNum);
+            try {
+                R r = productFeignClient.info(skuId);
+                Map<String, Object> map = (Map<String, Object>) r.get("skuInfo");
+                if (r.getCode() == 200) {
+                    wareSkuEntity.setSkuName((String) map.get("skuName"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            this.save(wareSkuEntity);
+        } else {
+            baseMapper.stock(skuId, wareId, skuNum);
+        }
+    }
 }

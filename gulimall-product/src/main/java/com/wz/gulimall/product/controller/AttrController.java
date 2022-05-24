@@ -1,8 +1,10 @@
 package com.wz.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.wz.gulimall.product.entity.ProductAttrValueEntity;
 import com.wz.gulimall.product.vo.AttrRespVo;
 import com.wz.gulimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,20 @@ import com.wz.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    @PostMapping("/update/{spuId}")
+    public R updateAttr(@PathVariable Long spuId, @RequestBody List<ProductAttrValueEntity> productAttrValueEntities){
+        attrService.updateAttr(spuId, productAttrValueEntities);
+        return R.ok();
+    }
+    /**
+     * 列表
+     */
+    @GetMapping("/base/listforspu/{spuId}")
+    public R listforSpu(@PathVariable Long spuId){
+        List<ProductAttrValueEntity> productAttrValueEntities = attrService.listforSpu(spuId);
+        return R.ok().put("data", productAttrValueEntities);
+    }
 
     /**
      * 列表

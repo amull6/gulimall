@@ -3,6 +3,7 @@ package com.wz.gulimall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wz.common.utils.PageUtils;
 import com.wz.gulimall.product.entity.AttrEntity;
+import com.wz.gulimall.product.entity.ProductAttrValueEntity;
 import com.wz.gulimall.product.vo.AttrRespVo;
 import com.wz.gulimall.product.vo.AttrVo;
 
@@ -31,5 +32,9 @@ public interface AttrService extends IService<AttrEntity> {
     List<AttrEntity> getRelationAttr(long attrgroupId);
 
     PageUtils getNoRelationAttr(Map<String, Object> params, long attrgroupId);
+
+    List<ProductAttrValueEntity> listforSpu(Long spuId);
+
+    void updateAttr(Long spuId, List<ProductAttrValueEntity> productAttrValueEntities);
 }
 

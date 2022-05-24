@@ -1,12 +1,8 @@
 package com.wz.gulimall.product.service.impl;
 
 import com.wz.common.constant.ProductConstant;
-import com.wz.gulimall.product.entity.AttrAttrgroupRelationEntity;
-import com.wz.gulimall.product.entity.AttrGroupEntity;
-import com.wz.gulimall.product.entity.CategoryEntity;
-import com.wz.gulimall.product.service.AttrAttrgroupRelationService;
-import com.wz.gulimall.product.service.AttrGroupService;
-import com.wz.gulimall.product.service.CategoryService;
+import com.wz.gulimall.product.entity.*;
+import com.wz.gulimall.product.service.*;
 import com.wz.gulimall.product.vo.AttrRespVo;
 import com.wz.gulimall.product.vo.AttrVo;
 import org.springframework.beans.BeanUtils;
@@ -24,8 +20,6 @@ import com.wz.common.utils.PageUtils;
 import com.wz.common.utils.Query;
 
 import com.wz.gulimall.product.dao.AttrDao;
-import com.wz.gulimall.product.entity.AttrEntity;
-import com.wz.gulimall.product.service.AttrService;
 import org.springframework.util.StringUtils;
 
 
@@ -40,6 +34,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
     @Autowired
     AttrGroupService attrGroupService;
+
+    @Autowired
+    ProductAttrValueService productAttrValueService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -202,5 +199,20 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         queryWrapper.eq("catelog_id", catergorId).ne("attr_type", ProductConstant.AttrType.ATTR_TYPE_SALE);
         IPage page = this.page(new Query<AttrEntity>().getPage(params), queryWrapper);
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<ProductAttrValueEntity> listforSpu(Long spuId) {
+        return productAttrValueService.list(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId));
+    }
+
+    @Override
+    public void updateAttr(Long spuId, List<ProductAttrValueEntity> productAttrValueEntities) {
+        productAttrValueService.remove(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId));
+        List<ProductAttrValueEntity> productAttrValueEntities1 = productAttrValueEntities.stream().map((item) -> {
+            item.setSpuId(spuId);
+            return item;
+        }).collect(Collectors.toList());
+        productAttrValueService.saveBatch(productAttrValueEntities1);
     }
 }

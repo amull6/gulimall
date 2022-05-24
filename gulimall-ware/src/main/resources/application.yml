@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,7 +10,8 @@ spring:
     nacos:
       discovery:
         server-addr: 124.221.206.12:8848
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:dd
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
