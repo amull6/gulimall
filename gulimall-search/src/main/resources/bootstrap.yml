@@ -3,7 +3,7 @@ spring:
     nacos:
       config:
         server-addr: 124.221.206.12:8848
-        namespace:
+        namespace: 1598c458-53c6-45a7-9b59-0b331eccf9a8
 
   application:
     name: gulimall-search
