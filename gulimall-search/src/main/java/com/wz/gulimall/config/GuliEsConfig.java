@@ -24,26 +24,37 @@ public class GuliEsConfig {
         COMMON_OPTIONS = builder.build();
     }
 
+//    @Bean
+//    public RestHighLevelClient restHighLevelClient() {
+//
+//        //es 有用户名和密码
+//        RestHighLevelClient esClient = null;
+//        //初始化ES操作客户端
+//        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+//        credentialsProvider.setCredentials(AuthScope.ANY,
+//                new UsernamePasswordCredentials("elastic", "bb8371465@"));  //es账号密码
+//        esClient = new RestHighLevelClient(
+//                RestClient.builder(
+//                        new HttpHost("es-0d1te96k.public.tencentelasticsearch.com", 9200)
+//                ).setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
+//                    public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
+//                        httpClientBuilder.disableAuthCaching();
+//                        return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+//                    }
+//                }));
+//        return esClient;
+//    }
+
+
     @Bean
     public RestHighLevelClient restHighLevelClient() {
 
         //es 有用户名和密码
         RestHighLevelClient esClient = null;
-        //初始化ES操作客户端
-        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials("elastic", "123456"));  //es账号密码
         esClient = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("es-0d1te96k.public.tencentelasticsearch.com", 9200)
-                ).setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
-                    public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
-                        httpClientBuilder.disableAuthCaching();
-                        return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-                    }
-                }));
+                        new HttpHost("124.221.206.12", 9200,"http")
+                ));
         return esClient;
     }
-
-
 }
