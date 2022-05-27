@@ -209,5 +209,15 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         return new PageUtils(page);
     }
 
+    @Override
+    public void up(Long spuId) {
+//        根据spuId查询所有sku
+        List<SkuInfoEntity> skuInfoEntities = skuInfoService.getSkusBySpuId(spuId);
+//        根据spuId查询可用来检索的规格属性组成List
+//        筛选检索sku组成skuId集合
+//        筛选sku将符合条件的sku转成Es商品对象
+
+    }
+
 
 }

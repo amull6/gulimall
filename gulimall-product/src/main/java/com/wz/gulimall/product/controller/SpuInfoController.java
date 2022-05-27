@@ -31,6 +31,18 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
+    /*
+     * @Author 2014015130
+     * @Description 商品上架
+     * @Date 13:28 2022/5/27
+     * @Param
+     * @return
+     **/
+    @RequestMapping("/{spuId}/up")
+    public R up(@PathVariable Long spuId) {
+        spuInfoService.up(spuId);
+        return R.ok();
+    }
     /**
      * 列表
      */
