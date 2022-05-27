@@ -99,8 +99,13 @@ public class GuimallSearchApplicationTests {
         Aggregations aggregations = searchResponse.getAggregations();
         Terms byCompanyAggregation = aggregations.get("aggAge");
         for( Terms.Bucket bucket:byCompanyAggregation.getBuckets()){
+            Aggregations aggregations2 = bucket.getAggregations();
+            Avg averageAge = aggregations2.get("agg02");
             String key = bucket.getKeyAsString();
+            System.out.println(bucket.getDocCount());
             System.out.println(key);
+            System.out.println(averageAge.getValue());
+
         }
         Avg averageAge = aggregations.get("agg03");
         System.out.println(averageAge.getValue());
