@@ -20,4 +20,24 @@ public class ProductConstant {
             return msg;
         }
     }
+    public enum PublishStatus{
+        CREATED(0,"新建"),
+        UP(1,"已上架"),
+        DOWN(2,"已下架");
+        private Integer code;
+        private String msg;
+
+        PublishStatus(Integer code, String msg) {
+            this.code = code;
+            this.msg = msg;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+    }
 }

@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wz.gulimall</groupId>
-    <artifactId>guimall-search</artifactId>
+    <artifactId>gulimall-search</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>guimall-search</name>
     <description>检索服务</description>

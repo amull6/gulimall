@@ -1,5 +1,6 @@
 package com.wz.gulimall.ware.service.impl;
 
+import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.utils.R;
 import com.wz.gulimall.ware.feign.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -69,5 +72,20 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         } else {
             baseMapper.stock(skuId, wareId, skuNum);
         }
+    }
+
+    @Override
+    public List<SkuHasStockVo> hasStock(List<Long> skuIds) {
+        List<SkuHasStockVo> list = baseMapper.hasStock(skuIds);
+        Map<Long, Boolean> map = list.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId,SkuHasStockVo::getHasStock ));
+
+        List<SkuHasStockVo> list01 = skuIds.stream().map((obj) -> {
+            if (!map.containsKey(obj)) {
+                return new SkuHasStockVo(obj, false);
+            }else{
+                return new SkuHasStockVo(obj, map.get(obj));
+            }
+        }).collect(Collectors.toList());
+        return list01;
     }
 }

@@ -8,6 +8,8 @@
 
 package com.wz.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -20,6 +22,22 @@ import java.util.Map;
  */
 public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
+
+	public <T> T getData(TypeReference<T> typeReference){
+		// get("data") 默认是map类型 所以再由map转成string再转json
+		Object data = get("data");//得到list，list每个值是map类型
+		// list<Map>转json
+		String s = JSON.toJSONString(data);
+		// json转list<T>
+		return JSON.parseObject(s, typeReference);
+	}
+
+	public R setData(Object data) {
+		this.put("data", data);
+		return this;
+	}
+
+
 	
 	public R() {
 		put("code", 0);

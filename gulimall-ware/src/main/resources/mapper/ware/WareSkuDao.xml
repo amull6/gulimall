@@ -18,6 +18,13 @@
         where sku_id = #{skuId}
           and ware_id = #{wareId}
     </update>
+    <select id="hasStock" resultType="com.wz.common.to.SkuHasStockVo">
+        SELECT sku_id skuId,sum(stock-stock_locked) hasStock from wms_ware_sku where sku_id in
+        <foreach collection="skuIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY sku_id
+    </select>
 
 
 </mapper>
