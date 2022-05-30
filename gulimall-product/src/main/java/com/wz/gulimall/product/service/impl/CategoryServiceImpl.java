@@ -75,6 +75,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         }
     }
 
+    @Override
+    public List<CategoryEntity> getLevel1Categories() {
+        return this.baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid",0));
+    }
+
     private List<Long> catelogPath(Long catelogId, List<Long> paths) {
         CategoryEntity categoryEntity = this.getById(catelogId);
         paths.add(catelogId);
