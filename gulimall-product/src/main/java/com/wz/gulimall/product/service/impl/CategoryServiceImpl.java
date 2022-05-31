@@ -1,6 +1,7 @@
 package com.wz.gulimall.product.service.impl;
 
 import com.wz.gulimall.product.service.CategoryBrandRelationService;
+import com.wz.gulimall.product.vo.Catalog2Vo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +78,32 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     public List<CategoryEntity> getLevel1Categories() {
-        return this.baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid",0));
+        return this.baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+    }
+
+    @Override
+    public Map<String, List<Catalog2Vo>> getlevel2Categories() {
+//        获取所有栏目
+        List<CategoryEntity> categoryEntitiesAll = this.baseMapper.selectList(null);
+//        获取层级一List
+        List<CategoryEntity> level1Entities = this.getLevel1Categories();
+//        层级一转MAP，key为ID，value为层级二
+        Map<String, List<Catalog2Vo>> map = level1Entities.stream().collect(Collectors.toMap((k) -> k.getCatId().toString(),
+                (v) -> {
+                    List<CategoryEntity> categoryEntitiesL2 = getChildren(v, categoryEntitiesAll);
+                    List<Catalog2Vo> catalog2Vos = categoryEntitiesL2.stream().map((s) -> {
+                        Catalog2Vo catalog2Vo = new Catalog2Vo();
+                        catalog2Vo.setCatalog1Id(v.getCatId().toString());
+                        catalog2Vo.setId(s.getCatId().toString());
+                        catalog2Vo.setName(s.getName());
+                        List<CategoryEntity> categoryEntitiesL3 = getChildren(s, categoryEntitiesAll);
+                        List<Catalog2Vo.catalog3Vo> catalog3Vos = categoryEntitiesL3.stream().map((l3) -> new Catalog2Vo.catalog3Vo(s.getCatId().toString(), l3.getCatId().toString(), l3.getName())).collect(Collectors.toList());
+                        catalog2Vo.setCatalog3List(catalog3Vos);
+                        return catalog2Vo;
+                    }).collect(Collectors.toList());
+                    return catalog2Vos;
+                }));
+        return map;
     }
 
     private List<Long> catelogPath(Long catelogId, List<Long> paths) {
