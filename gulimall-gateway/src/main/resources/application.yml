@@ -11,7 +11,7 @@ spring:
         - id: admin_product
           uri: lb://gulimall-product
           predicates:
-            - Path=/api/product/**
+            - Path=/api/product/**,/index/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
         - id: admin_coupon

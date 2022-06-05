@@ -17,6 +17,7 @@ import com.wz.gulimall.product.vo.*;
 import oracle.jrockit.jfr.openmbean.ProducerDescriptorType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -74,6 +75,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     SearchFeighService searchFeighService;
+
+
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {

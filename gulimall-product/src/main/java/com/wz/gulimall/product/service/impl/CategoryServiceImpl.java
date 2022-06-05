@@ -1,14 +1,18 @@
 package com.wz.gulimall.product.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.wz.gulimall.product.service.CategoryBrandRelationService;
 import com.wz.gulimall.product.vo.Catalog2Vo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,6 +33,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Autowired
     CategoryBrandRelationService categoryBrandRelationService;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -83,8 +93,61 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     public Map<String, List<Catalog2Vo>> getlevel2Categories() {
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        String catalogJson = valueOperations.get("catalogJson");
+        if (StringUtils.isEmpty(catalogJson)) {
+
+//            数据库查询
+            Map<String, List<Catalog2Vo>> map = this.getlevel2CategoriesFromDbWithRedisLock();
+            return map;
+        }
+        System.out.println("缓存获取数据---------");
+        return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>() {
+        });
+    }
+
+    public Map<String, List<Catalog2Vo>> getlevel2CategoriesFromDbWithRedisLock() {
+        String uuid = UUID.randomUUID().toString();
+        Boolean isSet = redisTemplate.opsForValue().setIfAbsent("lock", uuid, 300, TimeUnit.SECONDS);
+        if (isSet) {
+            Map<String, List<Catalog2Vo>> map = getFromDb();
+//            删除锁
+//            非原子性
+//            String uuidLock = (String) redisTemplate.opsForValue().get("lock");
+//            if (uuidLock.equals(uuid)) {
+//                redisTemplate.delete("lock");
+//            }
+//            原子性lua脚本删除锁
+            String script = "if redis.call(\"get\",KEYS[1]) == ARGV[1] then\n" +
+                    "    return redis.call(\"del\",KEYS[1])\n" +
+                    "else\n" +
+                    "    return 0\n" +
+                    "end";
+            Long isDel = (Long) redisTemplate.execute(new DefaultRedisScript<Long>(script, Long.class), Arrays.asList("lock"), uuid);
+            return map;
+        } else {
+//            自旋
+            Map<String, List<Catalog2Vo>> map = this.getlevel2CategoriesFromDbWithRedisLock();
+            return map;
+        }
+//
+    }
+
+    public Map<String, List<Catalog2Vo>> getlevel2CategoriesFromDb() {
+        synchronized (this) {
+            return getFromDb();
+        }
+    }
+
+    private Map<String, List<Catalog2Vo>> getFromDb() {
+        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+        if (!StringUtils.isEmpty(catalogJson)) {
+            return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>() {
+            });
+        }
 //        获取所有栏目
         List<CategoryEntity> categoryEntitiesAll = this.baseMapper.selectList(null);
+        System.out.println("查询数据库了---------");
 //        获取层级一List
         List<CategoryEntity> level1Entities = this.getLevel1Categories();
 //        层级一转MAP，key为ID，value为层级二
@@ -103,6 +166,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                     }).collect(Collectors.toList());
                     return catalog2Vos;
                 }));
+        stringRedisTemplate.opsForValue().set("catalogJson", JSON.toJSONString(map));
         return map;
     }
 
