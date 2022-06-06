@@ -4,6 +4,7 @@ import com.alibaba.nacos.common.util.UuidUtils;
 import com.wz.gulimall.product.entity.CategoryEntity;
 import com.wz.gulimall.product.service.CategoryService;
 import com.wz.gulimall.product.vo.Catalog2Vo;
+import org.redisson.api.RCountDownLatch;
 import org.redisson.api.RLock;
 import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -112,6 +114,23 @@ public class IndexController {
         } finally {
             rLock.unlock();
         }
+    }
+
+    @RequestMapping("/index/door")
+    @ResponseBody
+    public String door() throws InterruptedException {
+        RCountDownLatch rCountDownLatch = redisson.getCountDownLatch("count-down-latch");
+        rCountDownLatch.trySetCount(5);
+        rCountDownLatch.await();
+        return "关门ok";
+    }
+
+    @RequestMapping("/index/go/{id}")
+    @ResponseBody
+    public String go(@PathVariable("id") Long id) {
+        RCountDownLatch rCountDownLatch = redisson.getCountDownLatch("count-down-latch");
+        rCountDownLatch.countDown();
+        return id + "班放学";
     }
 
 }
