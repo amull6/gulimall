@@ -1,11 +1,14 @@
 package com.wz.gulimall.product.web;
 
+import com.alibaba.nacos.common.util.UuidUtils;
 import com.wz.gulimall.product.entity.CategoryEntity;
 import com.wz.gulimall.product.service.CategoryService;
 import com.wz.gulimall.product.vo.Catalog2Vo;
 import org.redisson.api.RLock;
+import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class IndexController {
@@ -21,6 +26,9 @@ public class IndexController {
 
     @Autowired
     RedissonClient redisson;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     @RequestMapping({"/", "/index.html"})
     public String indexPage(Model model) {
@@ -53,4 +61,57 @@ public class IndexController {
             rLock.unlock();
         }
     }
+
+    @RequestMapping("/index/tryLock")
+    @ResponseBody
+    public void testTryLock() throws InterruptedException {
+        RLock rLock = redisson.getLock("my-lock");
+        boolean res = rLock.tryLock(15, 50, TimeUnit.SECONDS);
+        if (res) {
+            try {
+                System.out.println("加锁" + Thread.currentThread().getId());
+                Thread.sleep(30000);
+            } catch (Exception e) {
+
+            } finally {
+                // 如果这里宕机：有看门狗，不用担心
+                System.out.println("解锁" + Thread.currentThread().getId());
+                rLock.unlock();
+            }
+        } else {
+            System.out.println("我不等了");
+        }
+    }
+
+    @RequestMapping("/index/read")
+    @ResponseBody
+    public void read() {
+        RReadWriteLock rwLock = redisson.getReadWriteLock("rw-lock");
+        RLock rLock = rwLock.readLock();
+        rLock.lock();
+        try {
+            String str = stringRedisTemplate.opsForValue().get("qinjieID");
+            System.out.println(str);
+        } finally {
+            rLock.unlock();
+        }
+    }
+
+    @RequestMapping("/index/write")
+    @ResponseBody
+    public void write() {
+        RReadWriteLock rwLock = redisson.getReadWriteLock("rw-lock");
+        RLock rLock = rwLock.writeLock();
+        rLock.lock();
+        try {
+            String uuid = UuidUtils.generateUuid();
+            Thread.sleep(10000);
+            stringRedisTemplate.opsForValue().set("qinjieID", uuid);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            rLock.unlock();
+        }
+    }
+
 }
