@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://124.221.206.12:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://139.224.137.204:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: root
   application:
@@ -17,7 +17,7 @@ spring:
     suffix: .html
     prefix: classpath:/templates/
   redis:
-    host: 124.221.206.12
+    host: 139.224.137.204
     port: 6379
   cache:
     type: redis
