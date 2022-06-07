@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.wz.gulimall.product.service.CategoryBrandRelationService;
 import com.wz.gulimall.product.vo.Catalog2Vo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,6 +41,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    RedissonClient redisson;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -98,12 +103,24 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         if (StringUtils.isEmpty(catalogJson)) {
 
 //            数据库查询
-            Map<String, List<Catalog2Vo>> map = this.getlevel2CategoriesFromDbWithRedisLock();
+            Map<String, List<Catalog2Vo>> map = this.getlevel2CategoriesFromDbWithRedissionLock();
             return map;
         }
         System.out.println("缓存获取数据---------");
         return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>() {
         });
+    }
+
+    public Map<String, List<Catalog2Vo>> getlevel2CategoriesFromDbWithRedissionLock() {
+        RLock rLock = redisson.getLock("catalogJson-lock");
+        rLock.lock();
+        Map<String, List<Catalog2Vo>> map;
+        try {
+            map = getFromDb();
+        } finally {
+            rLock.unlock();
+        }
+        return map;
     }
 
     public Map<String, List<Catalog2Vo>> getlevel2CategoriesFromDbWithRedisLock() {
