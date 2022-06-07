@@ -4,10 +4,7 @@ import com.alibaba.nacos.common.util.UuidUtils;
 import com.wz.gulimall.product.entity.CategoryEntity;
 import com.wz.gulimall.product.service.CategoryService;
 import com.wz.gulimall.product.vo.Catalog2Vo;
-import org.redisson.api.RCountDownLatch;
-import org.redisson.api.RLock;
-import org.redisson.api.RReadWriteLock;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -133,4 +130,23 @@ public class IndexController {
         return id + "班放学";
     }
 
+    @RequestMapping("index/park")
+    @ResponseBody
+    public String park() {
+        RSemaphore rSemaphore = redisson.getSemaphore("part");
+        boolean isPark = rSemaphore.tryAcquire();
+        if (isPark) {
+            return "ok";
+        }else{
+            return "error";
+        }
+    }
+
+    @RequestMapping("index/go")
+    @ResponseBody
+    public String go() {
+        RSemaphore rSemaphore = redisson.getSemaphore("part");
+        rSemaphore.release();
+        return "go";
+    }
 }
