@@ -7,3 +7,7 @@ spring:
     nacos:
       discovery:
         server-addr: 111.67.194.232:8848
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
