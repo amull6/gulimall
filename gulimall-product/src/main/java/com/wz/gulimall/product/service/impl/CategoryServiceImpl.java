@@ -7,7 +7,9 @@ import com.wz.gulimall.product.vo.Catalog2Vo;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -85,6 +87,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = {"category"}, key = "'getLevel1Categories'"),
+            @CacheEvict(value = {"category"}, key = "'getlevel2Categories'")
+    })
     public void updateDetail(CategoryEntity category) {
         this.updateById(category);
         if (!StringUtils.isEmpty(category.getName())) {
@@ -93,14 +99,41 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     @Override
-    @Cacheable({"catalog"})
+    @Cacheable(value = {"category"}, key = "#root.methodName", sync = true)
     public List<CategoryEntity> getLevel1Categories() {
         System.out.println("数据库获取Level1");
         return this.baseMapper.selectList(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
     }
 
     @Override
+    @Cacheable(value = {"category"}, key = "#root.methodName", sync = true)
     public Map<String, List<Catalog2Vo>> getlevel2Categories() {
+//        获取所有栏目
+        List<CategoryEntity> categoryEntitiesAll = this.baseMapper.selectList(null);
+        System.out.println("查询数据库了---------");
+//        获取层级一List
+        List<CategoryEntity> level1Entities = this.getLevel1Categories();
+//        层级一转MAP，key为ID，value为层级二
+        Map<String, List<Catalog2Vo>> map = level1Entities.stream().collect(Collectors.toMap((k) -> k.getCatId().toString(),
+                (v) -> {
+                    List<CategoryEntity> categoryEntitiesL2 = getChildren(v, categoryEntitiesAll);
+                    List<Catalog2Vo> catalog2Vos = categoryEntitiesL2.stream().map((s) -> {
+                        Catalog2Vo catalog2Vo = new Catalog2Vo();
+                        catalog2Vo.setCatalog1Id(v.getCatId().toString());
+                        catalog2Vo.setId(s.getCatId().toString());
+                        catalog2Vo.setName(s.getName());
+                        List<CategoryEntity> categoryEntitiesL3 = getChildren(s, categoryEntitiesAll);
+                        List<Catalog2Vo.catalog3Vo> catalog3Vos = categoryEntitiesL3.stream().map((l3) -> new Catalog2Vo.catalog3Vo(s.getCatId().toString(), l3.getCatId().toString(), l3.getName())).collect(Collectors.toList());
+                        catalog2Vo.setCatalog3List(catalog3Vos);
+                        return catalog2Vo;
+                    }).collect(Collectors.toList());
+                    return catalog2Vos;
+                }));
+        return map;
+    }
+
+    //    @Override
+    public Map<String, List<Catalog2Vo>> getlevel2CategoriesByRedisTemplate() {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
         String catalogJson = valueOperations.get("catalogJson");
         if (StringUtils.isEmpty(catalogJson)) {
