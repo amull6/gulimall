@@ -43,9 +43,10 @@ public class SearchResult {
     public static class AttrVo {
         private Long attrId;
         private String attrName;
-        private String attrValue;
+        private List<String> attrValue;
     }
 
+    @Data
     public static class CatalogVo {
         private Long catalogId;
         private String catalogName;

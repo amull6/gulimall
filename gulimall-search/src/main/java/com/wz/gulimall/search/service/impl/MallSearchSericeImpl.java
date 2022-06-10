@@ -1,5 +1,7 @@
 package com.wz.gulimall.search.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.wz.common.to.es.SkuEsModel;
 import com.wz.gulimall.config.GuliEsConfig;
 import com.wz.gulimall.search.constant.EsConstant;
 import com.wz.gulimall.search.service.MallSearchSerice;
@@ -10,9 +12,14 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -22,6 +29,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MallSearchSericeImpl implements MallSearchSerice {
@@ -34,7 +44,7 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         SearchRequest searchRequest = this.handleSearchRequest(searchParam);
         try {
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest, GuliEsConfig.COMMON_OPTIONS);
-            searchResult = handleSearchResponse(searchResponse);
+            searchResult = handleSearchResponse(searchResponse, searchParam);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -130,7 +140,67 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         return new SearchRequest(new String[]{EsConstant.PRODUCT_INDEX}, searchSourceBuilder);
     }
 
-    private SearchResult handleSearchResponse(SearchResponse searchResponse) {
-        return null;
+    private SearchResult handleSearchResponse(SearchResponse searchResponse, SearchParam searchParam) {
+        SearchResult searchResult = new SearchResult();
+//        //    商品信息
+//        private List<SkuEsModel> products;
+        SearchHit[] searchHits = searchResponse.getHits().getHits();
+        List<SkuEsModel> skuEsModelList = new ArrayList<>();
+        for (SearchHit searchHit : searchHits) {
+            SkuEsModel skuEsModel = JSON.parseObject(searchHit.getSourceAsString(), SkuEsModel.class);
+            skuEsModelList.add(skuEsModel);
+        }
+        searchResult.setProducts(skuEsModelList);
+
+//        //    分页信息
+//        private Integer pageNum;
+//        private Long total;
+//        private Integer totalPages;
+//        private List<Integer> pageNavs;
+        searchResult.setPageNum(searchParam.getPageNum());
+        searchResult.setTotal(searchResponse.getHits().getTotalHits().value);
+        searchResult.setTotalPages((int) (searchResponse.getHits().getTotalHits().value % EsConstant.ES_PAGE_SIZE == 0 ? searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE : searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE + 1));
+
+        //
+//        List<SearchResult.BrandVo> brands;
+        List<SearchResult.BrandVo> brands = new ArrayList<>();
+        ParsedLongTerms brand_agg = searchResponse.getAggregations().get("brand_agg");
+        brands = brand_agg.getBuckets().stream().map((item) -> {
+            SearchResult.BrandVo brandVo = new SearchResult.BrandVo();
+            brandVo.setBrandId((Long) item.getKey());
+            ParsedStringTerms brand_img_agg = item.getAggregations().get("brand_img_agg");
+            brandVo.setBrandImg(brand_img_agg.getBuckets().get(0).getKeyAsString());
+            ParsedStringTerms brand_name_agg = item.getAggregations().get("brand_name_agg");
+            brandVo.setBrandName(brand_name_agg.getBuckets().get(0).getKeyAsString());
+            return brandVo;
+        }).collect(Collectors.toList());
+        searchResult.setBrands(brands);
+//        List<SearchResult.AttrVo> attrs;//涉及属性
+        List<SearchResult.AttrVo> attrs = new ArrayList<>();
+        ParsedNested parsedNested = searchResponse.getAggregations().get("attr_agg");
+        ParsedLongTerms attr_id_agg = parsedNested.getAggregations().get("attr_id_agg");
+        attrs = attr_id_agg.getBuckets().stream().map((item) -> {
+            SearchResult.AttrVo attrVo = new SearchResult.AttrVo();
+            attrVo.setAttrId(item.getKeyAsNumber().longValue());
+            ParsedStringTerms attr_name_agg = item.getAggregations().get("attr_name_agg");
+            attrVo.setAttrName(attr_name_agg.getBuckets().get(0).getKeyAsString());
+            ParsedStringTerms attr_value_agg = item.getAggregations().get("attr_value_agg");
+            List<String> attrValues = attr_value_agg.getBuckets().stream().map(MultiBucketsAggregation.Bucket::getKeyAsString).collect(Collectors.toList());
+            attrVo.setAttrValue(attrValues);
+            return attrVo;
+        }).collect(Collectors.toList());
+        searchResult.setAttrs(attrs);
+//        List<SearchResult.CatalogVo> catalogs;//涉及分类
+        List<SearchResult.CatalogVo> catalogVos = new ArrayList<>();
+        ParsedLongTerms catalog_agg = searchResponse.getAggregations().get("catalog_agg");
+        catalog_agg.getBuckets().forEach(item -> {
+            SearchResult.CatalogVo catalogVo = new SearchResult.CatalogVo();
+            catalogVo.setCatalogId((Long) item.getKey());
+            ParsedStringTerms catalog_name_agg = item.getAggregations().get("catalog_name_agg");
+            catalogVo.setCatalogName(catalog_name_agg.getBuckets().get(0).getKeyAsString());
+            catalogVos.add(catalogVo);
+        });
+        searchResult.setCatalogs(catalogVos);
+        return searchResult;
     }
 }
