@@ -12,7 +12,7 @@ public class SearchParam {
     private Integer hasStock;
     private String skuPrice;
     private List<Long> brandId;
-    private List<Long> Attrs;
+    private List<String> Attrs;
     //    排序
     private String sort;
 
