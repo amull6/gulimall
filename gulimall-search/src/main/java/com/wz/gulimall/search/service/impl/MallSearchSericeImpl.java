@@ -10,11 +10,10 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.AvgAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.lang.management.GarbageCollectorMXBean;
 
 @Service
 public class MallSearchSericeImpl implements MallSearchSerice {
@@ -112,21 +110,20 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         searchSourceBuilder.highlighter(highlightBuilder);
 
 //        聚合
-        AggregationBuilder aggregationBrandAgg = AggregationBuilders.terms("brand_agg").field("brandId").size(50);
+        TermsAggregationBuilder aggregationBrandAgg = AggregationBuilders.terms("brand_agg").field("brandId").size(50);
         aggregationBrandAgg.subAggregation(AggregationBuilders.terms("brand_name_agg").field("brandName").size(1));
         aggregationBrandAgg.subAggregation(AggregationBuilders.terms("brand_img_agg").field("brandImg").size(1));
+        searchSourceBuilder.aggregation(aggregationBrandAgg);
 
-        AggregationBuilder aggregationCatalogAgg = AggregationBuilders.terms("catalog_agg").field("catalogId").size(50);
+        TermsAggregationBuilder aggregationCatalogAgg = AggregationBuilders.terms("catalog_agg").field("catalogId").size(50);
         aggregationCatalogAgg.subAggregation(AggregationBuilders.terms("catalog_name_agg").field("catalogName").size(1));
+        searchSourceBuilder.aggregation(aggregationCatalogAgg);
 
         NestedAggregationBuilder nestedAggregationAttrsAgg = AggregationBuilders.nested("attr_agg", "attrs");
         AggregationBuilder aggregationBuildersAttrId = AggregationBuilders.terms("attr_id_agg").field("attrs.attrId").size(50);
         aggregationBuildersAttrId.subAggregation(AggregationBuilders.terms("attr_name_agg").field("attrs.attrName").size(1));
         aggregationBuildersAttrId.subAggregation(AggregationBuilders.terms("attr_value_agg").field("attrs.attrValue").size(1));
-        nestedAggregationAttrsAgg.subAggregation(nestedAggregationAttrsAgg);
-
-        searchSourceBuilder.aggregation(aggregationBrandAgg);
-        searchSourceBuilder.aggregation(aggregationCatalogAgg);
+        nestedAggregationAttrsAgg.subAggregation(aggregationBuildersAttrId);
         searchSourceBuilder.aggregation(nestedAggregationAttrsAgg);
 
         System.out.println(searchSourceBuilder);
