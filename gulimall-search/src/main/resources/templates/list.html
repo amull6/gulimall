@@ -873,7 +873,7 @@
                         <ul>
                             <li th:each="attrValue:${attr.getAttrValue()}">
                                 <a th:href="${'javascript:searchProducts(&quot;attrs&quot;,&quot;'+attr.getAttrId()+'_'+attrValue+'&quot;)'}"
-                                   th:text="attrValue">5.56英寸及以上</a>
+                                   th:text="${attrValue}">5.56英寸及以上</a>
                             </li>
                         </ul>
                     </div>
@@ -2020,7 +2020,7 @@
     }
 
     function searchByKeyword() {
-        var keyword = $("searchKeyword").val();
+        var keyword = $("#searchKeyword").val();
         searchProducts('keyword', keyword);
     }
 </script>
