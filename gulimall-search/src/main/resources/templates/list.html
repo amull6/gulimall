@@ -812,6 +812,35 @@
                         </a>
                     </div>
                 </div>
+                <!--分类-->
+                <div class="JD_nav_wrap">
+                    <div class="sl_key">
+                        <span>分类：</span>
+                    </div>
+                    <div class="sl_value">
+                            <ul>
+                                <li th:each="catalog:${result.getCatalogs()}">
+                                    <a href="static/search/#">
+                                        <div th:text="${catalog.getCatalogName()}">
+                                            华为(HUAWEI)
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                    </div>
+                    <div class="sl_ext">
+                        <a href="static/search/#">
+                            更多
+                            <i style='background: url("image/search.ele.png")no-repeat 3px 7px'></i>
+                            <b style='background: url("image/search.ele.png")no-repeat 3px -44px'></b>
+                        </a>
+                        <a href="static/search/#">
+                            多选
+                            <i>+</i>
+                            <span>+</span>
+                        </a>
+                    </div>
+                </div>
                 <!--价格-->
                 <div class="JD_pre">
                     <div class="sl_key">
