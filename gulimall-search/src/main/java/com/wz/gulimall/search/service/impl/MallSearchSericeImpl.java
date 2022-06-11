@@ -148,6 +148,7 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         List<SkuEsModel> skuEsModelList = new ArrayList<>();
         for (SearchHit searchHit : searchHits) {
             SkuEsModel skuEsModel = JSON.parseObject(searchHit.getSourceAsString(), SkuEsModel.class);
+            skuEsModel.setSkuTitle(searchHit.getHighlightFields().get("skuTitle").getFragments()[0].toString());
             skuEsModelList.add(skuEsModel);
         }
         searchResult.setProducts(skuEsModelList);
