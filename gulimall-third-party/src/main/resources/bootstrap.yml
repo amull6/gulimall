@@ -3,9 +3,9 @@ spring:
     nacos:
       config:
         name: gulimall-third-party
-        server-addr: 111.67.194.232:8848
-        namespace: 17f83ac2-aa06-461d-acde-e89073de009d
-        ext-config[0]:
-          data-id: oss.yml
-          group: DEFAULT_GROUP
-          refresh: true
+        server-addr: 139.224.137.204:8848
+#        namespace: 17f83ac2-aa06-461d-acde-e89073de009d
+#        ext-config[0]:
+#          data-id: oss.yml
+#          group: DEFAULT_GROUP
+#          refresh: true
