@@ -2036,6 +2036,32 @@
         var reg = eval('/(' + param + '=)([^&]*)/gi');
         return url.replace(reg, param + '=' + repalaceStr);
     }
+
+    function replaceParam(href, param, repalaceStr, forb) {
+        var url = href.toString();
+        if (url.indexOf("param") != -1) {
+            // 路径中存在参数
+            // 判断是否替换 forb
+            if (forb) {
+                // 替换
+                var reg = '/(' + param + '=)([^&]*)/gi';
+                return href.replace(reg, param + '=' + repalaceStr);
+            } else {
+                // 不替换
+                return href + "&" + param + '=' + repalaceStr;
+            }
+        } else {
+            // 路径中不存在参数
+            // 判断有无"？"
+            if (href.indexOf("?") == -1) {
+                // 无
+                return href + "?" + param + '=' + repalaceStr;
+            } else {
+                // 有
+                return href + "&" + param + '=' + repalaceStr;
+            }
+        }
+    }
 </script>
 </body>
 </html>
