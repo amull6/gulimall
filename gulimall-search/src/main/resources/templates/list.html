@@ -2023,7 +2023,7 @@
 
     $(".page_a").click(
         function () {
-            var pn = this.attr("pn");
+            var pn = $(this).attr("pn");
             if (location.href.indexOf("pageNum") == -1) {
                 location.href = location.href + '&pageNum=' + pn;
             } else {
