@@ -1248,7 +1248,7 @@
                                    th:if="${result.getPageNum()>1}">
                                     < 上一页
                                 </a>
-                                <a th:attr="pn=${nav},style= ${nav==result.getPageNum()?'border: 0;color:#ee2222;background: #fff':''}"
+                                <a class='page_a' th:attr="pn=${nav},style= ${nav==result.getPageNum()?'border: 0;color:#ee2222;background: #fff':''}"
                                    th:each="nav:${result.getPageNavs()}">[[${nav}]]</a>
                                 <a class="page_a" th:attr="pn=${result.getPageNum()+1}"
                                    th:if="${result.getPageNum()<result.getTotal()}">
