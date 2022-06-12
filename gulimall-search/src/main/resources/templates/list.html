@@ -403,7 +403,7 @@
         <a href="http://gulimall.com"><img src="static/search/image/logo1.jpg" alt=""></a>
     </div>
     <div class="header_form">
-        <input id="searchKeyword" type="text" placeholder="手机"/>
+        <input id="searchKeyword" type="text" placeholder="手机" th:value="${param.keyword}"/>
         <a href="javascript:searchByKeyword()">搜索</a>
     </div>
     <div class="header_ico">
@@ -1244,24 +1244,22 @@
                     <div class="filter_page">
                         <div class="page_wrap">
                             <span class="page_span1">
-                                <a href="static/search/#">
+                                <a class="page_a" th:attr="pn=${result.getPageNum()-1}"
+                                   th:if="${result.getPageNum()>1}">
                                     < 上一页
                                 </a>
-                                <a href="static/search/#" style="border: 0;color:#ee2222;background: #fff">1</a>
-                                <a href="static/search/#">2</a>
-                                <a href="static/search/#">3</a>
-                                <a href="static/search/#"
-                                   style="border: 0;font-size: 20px;color: #999;background: #fff">...</a>
-                                <a href="static/search/#">169</a>
-                                <a href="static/search/#">
+                                <a th:attr="pn=${nav},style= ${nav==result.getPageNum()?'border: 0;color:#ee2222;background: #fff':''}"
+                                   th:each="nav:${result.getPageNavs()}">[[nav]]</a>
+                                <a class="page_a" th:attr="pn=${result.getPageNum()+1}"
+                                   th:if="${result.getPageNum()<result.getTotal()}">
                                     下一页 >
                                 </a>
                             </span>
                             <span class="page_span2">
-                                <em>共<b>169</b>页&nbsp;&nbsp;到第</em>
+                                <em>共<b th:text="${result.getTotal()}">169</b>页&nbsp;&nbsp;到第</em>
                                 <input type="number" value="1">
                                 <em>页</em>
-                                <a href="static/search/#">确定</a>
+                                <a class="page_submit">确定</a>
                             </span>
                         </div>
                     </div>
@@ -1816,7 +1814,6 @@
         </ul>
     </div>
 </footer>
-
 <!--右侧侧边栏-->
 <div class="header_bar">
     <div class="header_bar_box">
@@ -2022,6 +2019,22 @@
     function searchByKeyword() {
         var keyword = $("#searchKeyword").val();
         searchProducts('keyword', keyword);
+    }
+
+    $(".page_a").click(
+        function () {
+            var pn = this.attr("pn");
+            if (location.href.indexOf("pageNum") == -1) {
+                location.href = location.href + '&pageNum=' + pn;
+            } else {
+                location.href = replaceHref(location.href, 'pageNum', pn);
+            }
+        });
+
+    function replaceHref(href, param, repalaceStr) {
+        var url = href.toString();
+        var reg = eval('/(' + param + '=)([^&]*)/gi');
+        return url.replace(reg, param + '=' + repalaceStr);
     }
 </script>
 </body>

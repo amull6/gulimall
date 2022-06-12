@@ -161,9 +161,17 @@ public class MallSearchSericeImpl implements MallSearchSerice {
 //        private Integer totalPages;
 //        private List<Integer> pageNavs;
         searchResult.setPageNum(searchParam.getPageNum());
-        searchResult.setTotal(searchResponse.getHits().getTotalHits().value);
-        searchResult.setTotalPages((int) (searchResponse.getHits().getTotalHits().value % EsConstant.ES_PAGE_SIZE == 0 ? searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE : searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE + 1));
+        long total = searchResponse.getHits().getTotalHits().value;
+        searchResult.setTotal(total);
 
+        int totalPages = (int) (searchResponse.getHits().getTotalHits().value % EsConstant.ES_PAGE_SIZE == 0 ? searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE : searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE + 1);
+        searchResult.setTotalPages(totalPages);
+
+        List<Integer> pageNavs = new ArrayList<>();
+        for (int i = 0; i < totalPages; i++) {
+            pageNavs.add(i);
+        }
+        searchResult.setPageNavs(pageNavs);
         //
 //        List<SearchResult.BrandVo> brands;
         List<SearchResult.BrandVo> brands = new ArrayList<>();
