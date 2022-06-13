@@ -167,10 +167,7 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         int totalPages = (int) (searchResponse.getHits().getTotalHits().value % EsConstant.ES_PAGE_SIZE == 0 ? searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE : searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE + 1);
         searchResult.setTotalPages(totalPages);
 
-        List<Integer> pageNavs = new ArrayList<>();
-        for (int i = 0; i < totalPages; i++) {
-            pageNavs.add(i);
-        }
+        List<Integer> pageNavs = getPageNavs(searchParam.getPageNum(),totalPages);
         searchResult.setPageNavs(pageNavs);
         //
 //        List<SearchResult.BrandVo> brands;
@@ -213,5 +210,23 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         });
         searchResult.setCatalogs(catalogVos);
         return searchResult;
+    }
+
+    private List<Integer> getPageNavs(int pageNum,int totalPages) {
+        Integer begin = 0;
+        Integer end = 5;
+        begin = pageNum - 4;
+        end = pageNum + 5;
+        if (begin < 1) {
+            begin = 1;
+        }
+        if (end > totalPages) {
+            end = totalPages;
+        }
+        List<Integer> pageNavs = new ArrayList<>();
+        for (int i = begin; i <=end; i++) {
+            pageNavs.add(i);
+        }
+        return pageNavs;
     }
 }
