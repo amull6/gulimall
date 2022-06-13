@@ -1068,13 +1068,13 @@
                     <div class="filter_top">
                         <div class="filter_top_left" th:with="p=${param.sort}">
                             <a th:class="${(!#strings.isEmpty(p)&&#strings.startsWith('hotScore')&&#strings.endsWith('desc'))?'sort_a desc':'sort_a'}"
-                               th:attr="${(!#strings.isEmpty(p)&&#strings.startsWith('hotScore'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
+                               th:attr="style=${(!#strings.isEmpty(p)&&#strings.startsWith('hotScore'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
                                sort='hotScore'>综合排序[[${(!#strings.isEmpty(p)&&#strings.startsWith('hotScore'))?(#strings.endsWith('desc')?''↓':'↑'):''}]]</a>
                             <a th:class="${(!#strings.isEmpty(p)&&#strings.startsWith('saleCount')&&#strings.endsWith('desc'))?'sort_a desc':'sort_a'}"
-                               th:attr="${(!#strings.isEmpty(p)&&#strings.startsWith('saleCount'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
+                               th:attr="style=${(!#strings.isEmpty(p)&&#strings.startsWith('saleCount'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
                                sort='saleCount'>销量[[${(!#strings.isEmpty(p)&&#strings.startsWith('saleCount'))?(#strings.endsWith('desc')?''↓':'↑'):''}]]</a>
                             <a th:class="${(!#strings.isEmpty(p)&&#strings.startsWith('skuPrice')&&#strings.endsWith('desc'))?'sort_a desc':'sort_a'}"
-                               th:attr="${(!#strings.isEmpty(p)&&#strings.startsWith('skuPrice'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
+                               th:attr="style=${(!#strings.isEmpty(p)&&#strings.startsWith('skuPrice'))?'color:#FFF;border-color:#e4393c;background:#e4393c':'color:#333; border-color:#CCC;background:#FFF'}"
                                sort='skuPrice'>价格[[${(!#strings.isEmpty(p)&&#strings.startsWith('skuPrice'))?(#strings.endsWith('desc')?''↓':'↑'):''}]]</a>
                             <a class='sort_a' href="static/search/#">评论分</a>
                             <a class='sort_a' href="static/search/#">上架时间</a>
