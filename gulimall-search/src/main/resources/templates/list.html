@@ -1066,12 +1066,12 @@
                 <div class="filter">
                     <!--综合排序-->
                     <div class="filter_top">
-                        <div class="filter_top_left">
-                            <a href="static/search/#">综合排序</a>
-                            <a href="static/search/#">销量</a>
-                            <a href="static/search/#">价格</a>
-                            <a href="static/search/#">评论分</a>
-                            <a href="static/search/#">上架时间</a>
+                        <div class="filter_top_left" th:with="p=${param.sort}">
+                            <a th:class="${(!#strings.isEmpty(p)&&#strings.startsWith('hotScore')&&#strings.endsWith('desc'))?'sort_a desc':'sort_a'}" sort='hotScore'>综合排序</a>
+                            <a class='sort_a' sort='saleCount'>销量</a>
+                            <a class='sort_a' sort='skuPrice'>价格</a>
+                            <a class='sort_a' href="static/search/#">评论分</a>
+                            <a class='sort_a' href="static/search/#">上架时间</a>
                         </div>
                         <div class="filter_top_right">
                             <span class="fp-text">
@@ -1248,7 +1248,8 @@
                                    th:if="${result.getPageNum()>1}">
                                     < 上一页
                                 </a>
-                                <a class='page_a' th:attr="pn=${nav},style= ${nav==result.getPageNum()?'border: 0;color:#ee2222;background: #fff':''}"
+                                <a class='page_a'
+                                   th:attr="pn=${nav},style= ${nav==result.getPageNum()?'border: 0;color:#ee2222;background: #fff':''}"
                                    th:each="nav:${result.getPageNavs()}">[[${nav}]]</a>
                                 <a class="page_a" th:attr="pn=${result.getPageNum()+1}"
                                    th:if="${result.getPageNum()<result.getTotalPages()}">
@@ -2039,13 +2040,16 @@
 
     function replaceParam(href, param, repalaceStr, forb) {
         var url = href.toString();
-        if (url.indexOf("param") != -1) {
+        if (url.indexOf(param) != -1) {
             // 路径中存在参数
             // 判断是否替换 forb
             if (forb) {
                 // 替换
-                var reg = '/(' + param + '=)([^&]*)/gi';
-                return href.replace(reg, param + '=' + repalaceStr);
+                var reg = eval('/(' + param + '=)([^&]*)/gi');
+                // console.log(url)
+                // var reg = /'(' + param + '=)([^&]*)'/gi;
+                // var reg = new RegExp('(' + param + '=)([^&]*)','gi');
+                return url.replace(reg, param + '=' + repalaceStr);
             } else {
                 // 不替换
                 return href + "&" + param + '=' + repalaceStr;
@@ -2061,6 +2065,33 @@
                 return href + "&" + param + '=' + repalaceStr;
             }
         }
+    }
+
+    $(".sort_a").click(function () {
+        $(this).toggleClass("desc");
+        // changeStyle($(this));
+        location.href = replaceParam(location.href, 'sort', $(this).hasClass("desc") ? $(this).attr("sort") + "_desc" : $(this).attr("sort") + "_asc", true);
+    })
+
+    function changeStyle(ele) {
+        // 樣式清空
+        $(".sort_a").css({"color": "#333", "border-color": "#CCC", "background": "#FFF"});
+        $(".sort_a").each(function () {
+            var text = $(this).text().replace('↓', '').replace('↑', '');
+            $(this).text(text);
+        });
+        $(ele).css({"color": "#FFF", "border-color": "#e4393c", "background": "#e4393c"});
+        $(ele).toggleClass("desc");
+        if ($(ele).hasClass("desc")) {
+            $(ele).text($(ele).text().replace('↓', ''))
+            $(ele).text($(ele).text().replace('↑', ''))
+            $(ele).text($(ele).text() + '↓')
+        } else {
+            $(ele).text($(ele).text().replace('↓', ''))
+            $(ele).text($(ele).text().replace('↑', ''))
+            $(ele).text($(ele).text() + '↑')
+        }
+
     }
 </script>
 </body>
