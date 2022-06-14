@@ -766,6 +766,9 @@
                 <a href="static/search/#">游戏手机</a>
             </div>
         </div>
+        <div class="JD_ipone_one c">
+            <a href="" class="qqq" th:each="nav:${result.getNavs()}"><span th:value="${nav.getNavName()}"></span><span th:value="${nav.getNavValue()}"></span>x</a>
+        </div>
         <i><img src="static/search/image/right-@1x.png" alt=""></i>
     </div>
 </div>

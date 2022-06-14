@@ -209,6 +209,16 @@ public class MallSearchSericeImpl implements MallSearchSerice {
             catalogVos.add(catalogVo);
         });
         searchResult.setCatalogs(catalogVos);
+//      面包屑导航 //不能用聚合后的属性聚合后属性非所选属性而是选完商品后商品具有的属性
+        List<SearchResult.NavVo> navs = new ArrayList<>();
+        attrs.stream().map((item) -> {
+            SearchResult.NavVo navVo = new SearchResult.NavVo();
+            navVo.setNavName(item.getAttrName());
+            navVo.setNavValue(item.getAttrValue().get(0));
+            navs.add(navVo);
+            return navs;
+        }).collect(Collectors.toList());
+        searchResult.setNavs(navs);
         return searchResult;
     }
 
