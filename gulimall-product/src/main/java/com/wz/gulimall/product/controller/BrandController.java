@@ -2,6 +2,7 @@ package com.wz.gulimall.product.controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.wz.common.validator.group.UpdateGroup;
@@ -55,6 +56,16 @@ public class BrandController {
 
         return R.ok().put("brand", brand);
     }
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/infos")
+    public R infos(@RequestParam("brandIds") List<Long> brandIds){
+        List<BrandEntity> brands = brandService.getByIds(brandIds);
+        return R.ok().put("brands", brands);
+    }
+
 
     /**
      * 保存

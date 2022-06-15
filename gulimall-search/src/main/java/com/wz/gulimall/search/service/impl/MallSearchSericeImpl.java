@@ -9,6 +9,7 @@ import com.wz.gulimall.search.constant.EsConstant;
 import com.wz.gulimall.search.feign.ProductFeignService;
 import com.wz.gulimall.search.service.MallSearchSerice;
 import com.wz.gulimall.search.vo.AttrResponseVo;
+import com.wz.gulimall.search.vo.BrandVo;
 import com.wz.gulimall.search.vo.SearchParam;
 import com.wz.gulimall.search.vo.SearchResult;
 import org.apache.lucene.search.join.ScoreMode;
@@ -240,6 +241,31 @@ public class MallSearchSericeImpl implements MallSearchSerice {
                 return navVo;
             }).collect(Collectors.toList());
             searchResult.setNavs(navs);
+//            条件联动
+//            品牌面包屑导航品牌
+//            选中品牌在面包导航显示
+//            获取brandIdList
+            List<Long> brandIds = searchParam.getBrandId();
+//            从product服务查询BrandVoList（BrandId，Brandname）放入缓存中
+            R brandR = productFeignService.BrandInfos(brandIds);
+            if (brandR.getCode() == 0) {
+                StringBuffer sb = new StringBuffer();
+                List<BrandVo> brandVos = brandR.getData("brands",new TypeReference<List<BrandVo>>() {});
+                for (BrandVo brandVo : brandVos) {
+                    sb.append(brandVo.getName()).append(";");
+                }
+                searchResult.getNavs().add()
+
+            }
+
+//            遍历拼接面包屑
+//
+//            拼接面包屑ID名称
+//
+//            拼接link
+//
+//            用replace判断替换Url智能换brandId = brandId
+
         }
         return searchResult;
     }
