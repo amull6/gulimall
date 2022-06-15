@@ -767,7 +767,7 @@
             </div>
         </div>
         <div class="JD_ipone_one c">
-            <a href="" class="qqq" th:each="nav:${result.getNavs()}"><span th:value="${nav.getNavName()}"></span><span th:value="${nav.getNavValue()}"></span>x</a>
+            <a th:href="${nav.getLink()}" class="qqq" th:each="nav:${result.getNavs()}"><span th:text="${nav.getNavName()}"></span>:<span th:text="${nav.getNavValue()}"></span> x</a>
         </div>
         <i><img src="static/search/image/right-@1x.png" alt=""></i>
     </div>
@@ -867,17 +867,16 @@
                         </ul>
                     </div>
                 </div>
-                <!--屏幕尺寸-->
-                <div class="JD_pre" th:each="attr:${result.getAttrs()}">
+                <!--商品属性-->
+                <div class="JD_pre" th:each="attr: ${result.getAttrs()}" >
                     <div class="sl_key">
-                        <span th:text="${attr.getAttrName()}">屏幕尺寸：</span>
+                        <span th:text="${attr.getAttrName()}">系统：</span>
                     </div>
                     <div class="sl_value">
                         <ul>
-                            <li th:each="attrValue:${attr.getAttrValue()}">
-                                <a th:href="${'javascript:searchProducts(&quot;attrs&quot;,&quot;'+attr.getAttrId()+'_'+attrValue+'&quot;)'}"
-                                   th:text="${attrValue}">5.56英寸及以上</a>
-                            </li>
+                            <li th:each="val: ${attr.getAttrValue()}">
+                                <a href="#"  th:text="${val}"
+                                   th:href="${'javascript:searchProducts(&quot;attrs&quot;,&quot;'+attr.attrId+'_'+val+'&quot;)'}">0-安卓（Android）</a></li>
                         </ul>
                     </div>
                 </div>

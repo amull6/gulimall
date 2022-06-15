@@ -1,10 +1,14 @@
 package com.wz.gulimall.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.wz.common.to.es.SkuEsModel;
+import com.wz.common.utils.R;
 import com.wz.gulimall.config.GuliEsConfig;
 import com.wz.gulimall.search.constant.EsConstant;
+import com.wz.gulimall.search.feign.ProductFeignService;
 import com.wz.gulimall.search.service.MallSearchSerice;
+import com.wz.gulimall.search.vo.AttrResponseVo;
 import com.wz.gulimall.search.vo.SearchParam;
 import com.wz.gulimall.search.vo.SearchResult;
 import org.apache.lucene.search.join.ScoreMode;
@@ -29,6 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +43,8 @@ import java.util.stream.Collectors;
 public class MallSearchSericeImpl implements MallSearchSerice {
     @Autowired
     RestHighLevelClient restHighLevelClient;
+    @Autowired
+    ProductFeignService productFeignService;
 
     @Override
     public SearchResult search(SearchParam searchParam) {
@@ -167,7 +175,7 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         int totalPages = (int) (searchResponse.getHits().getTotalHits().value % EsConstant.ES_PAGE_SIZE == 0 ? searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE : searchResponse.getHits().getTotalHits().value / EsConstant.ES_PAGE_SIZE + 1);
         searchResult.setTotalPages(totalPages);
 
-        List<Integer> pageNavs = getPageNavs(searchParam.getPageNum(),totalPages);
+        List<Integer> pageNavs = getPageNavs(searchParam.getPageNum(), totalPages);
         searchResult.setPageNavs(pageNavs);
         //
 //        List<SearchResult.BrandVo> brands;
@@ -211,18 +219,45 @@ public class MallSearchSericeImpl implements MallSearchSerice {
         searchResult.setCatalogs(catalogVos);
 //      面包屑导航 //不能用聚合后的属性聚合后属性非所选属性而是选完商品后商品具有的属性
         List<SearchResult.NavVo> navs = new ArrayList<>();
-        attrs.stream().map((item) -> {
-            SearchResult.NavVo navVo = new SearchResult.NavVo();
-            navVo.setNavName(item.getAttrName());
-            navVo.setNavValue(item.getAttrValue().get(0));
-            navs.add(navVo);
-            return navs;
-        }).collect(Collectors.toList());
-        searchResult.setNavs(navs);
+        if (searchParam.getAttrs() != null && searchParam.getAttrs().size() > 0) {
+            navs = searchParam.getAttrs().stream().map((item) -> {
+//            1_黄:绿
+                String[] splits = item.split("_");
+                SearchResult.NavVo navVo = new SearchResult.NavVo();
+//            远程调用product客户端，获取参数名称
+                navVo.setNavValue(splits[1]);
+                R r = productFeignService.info(Long.parseLong(splits[0]));
+                if (r.getCode() == 0) {
+                    AttrResponseVo attrRespVo = r.getData("attr", new TypeReference<AttrResponseVo>() {
+                    });
+                    navVo.setNavName(attrRespVo.getAttrName());
+                } else {
+                    navVo.setNavName(splits[0]);
+                }
+//                取消面包屑
+                String replace = replaceQueryString(searchParam, item, "attrs");
+                navVo.setLink("http://search.gulimall.com/list.html" + (StringUtils.isEmpty(replace) ? "" : "?" + replace));
+                return navVo;
+            }).collect(Collectors.toList());
+            searchResult.setNavs(navs);
+        }
         return searchResult;
     }
 
-    private List<Integer> getPageNavs(int pageNum,int totalPages) {
+    private String replaceQueryString(SearchParam searchParam, String item, String key) {
+        String _queryString = searchParam.get_queryString();
+        String encodeAttrValue = null;
+        try {
+            encodeAttrValue = URLEncoder.encode(item, "UTF-8");
+            encodeAttrValue.replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        String replace = _queryString.replace("&" + key + "=" + encodeAttrValue, "").replace(key + "=" + encodeAttrValue, "");
+        return replace;
+    }
+
+    private List<Integer> getPageNavs(int pageNum, int totalPages) {
         Integer begin = 0;
         Integer end = 5;
         begin = pageNum - 4;
@@ -234,7 +269,7 @@ public class MallSearchSericeImpl implements MallSearchSerice {
             end = totalPages;
         }
         List<Integer> pageNavs = new ArrayList<>();
-        for (int i = begin; i <=end; i++) {
+        for (int i = begin; i <= end; i++) {
             pageNavs.add(i);
         }
         return pageNavs;
