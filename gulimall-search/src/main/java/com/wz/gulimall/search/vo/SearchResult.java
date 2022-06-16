@@ -22,6 +22,7 @@ public class SearchResult {
 
     /* 面包屑导航数据 */
     private List<NavVo> navs = new ArrayList<>();
+    //    排除筛选条件中的attr
     private List<Long> attrIds = new ArrayList<>();
 
     @Data

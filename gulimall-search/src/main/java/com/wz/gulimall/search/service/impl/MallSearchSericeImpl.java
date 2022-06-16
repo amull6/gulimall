@@ -224,10 +224,12 @@ public class MallSearchSericeImpl implements MallSearchSerice {
             navs = searchParam.getAttrs().stream().map((item) -> {
 //            1_黄:绿
                 String[] splits = item.split("_");
+                searchResult.getAttrIds().add(Long.parseLong(splits[0]));
                 SearchResult.NavVo navVo = new SearchResult.NavVo();
 //            远程调用product客户端，获取参数名称
                 navVo.setNavValue(splits[1]);
-                R r = productFeignService.info(Long.parseLong(splits[0]));
+                R r = productFeignService.attrInfo(Long.parseLong(splits[0]));
+
                 if (r.getCode() == 0) {
                     AttrResponseVo attrRespVo = r.getData("attr", new TypeReference<AttrResponseVo>() {
                     });
@@ -241,32 +243,39 @@ public class MallSearchSericeImpl implements MallSearchSerice {
                 return navVo;
             }).collect(Collectors.toList());
             searchResult.setNavs(navs);
+        }
 //            条件联动
 //            品牌面包屑导航品牌
 //            选中品牌在面包导航显示
 //            获取brandIdList
-            List<Long> brandIds = searchParam.getBrandId();
+        List<Long> brandIds = searchParam.getBrandId();
+        if (brandIds != null && brandIds.size() > 0) {
 //            从product服务查询BrandVoList（BrandId，Brandname）放入缓存中
             R brandR = productFeignService.BrandInfos(brandIds);
             if (brandR.getCode() == 0) {
-                StringBuffer sb = new StringBuffer();
-                List<BrandVo> brandVos = brandR.getData("brands",new TypeReference<List<BrandVo>>() {});
-                for (BrandVo brandVo : brandVos) {
-                    sb.append(brandVo.getName()).append(";");
-                }
-                searchResult.getNavs().add()
-
-            }
-
-//            遍历拼接面包屑
-//
+                SearchResult.NavVo navVo = new SearchResult.NavVo();
 //            拼接面包屑ID名称
-//
+                navVo.setNavName("品牌");
+                StringBuffer sb = new StringBuffer();
+                List<BrandVo> brandVos = brandR.getData("brands", new TypeReference<List<BrandVo>>() {
+                });
+//            遍历拼接面包屑
+                String replace = "";
+                for (BrandVo brandVo : brandVos) {
 //            拼接link
+                    sb.append(brandVo.getName()).append(";");
+                    replace = replaceQueryString(searchParam, String.valueOf(brandVo.getBrandId()), "brandId");
+                    searchParam.set_queryString(replace);
+                }
+                navVo.setNavValue(sb.toString().substring(0, sb.length() - 1));
+                navVo.setLink("http://search.gulimall.com/list.html" + (StringUtils.isEmpty(replace) ? "" : "?" + replace));
+                searchResult.getNavs().add(navVo);
+            }
+        }
 //
 //            用replace判断替换Url智能换brandId = brandId
 
-        }
+
         return searchResult;
     }
 
