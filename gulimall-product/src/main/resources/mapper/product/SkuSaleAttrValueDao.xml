@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wz.gulimall.product.dao.SkuSaleAttrValueDao">
+    <select id="getSkuItemSaleAttrVo" resultType="com.wz.gulimall.product.vo.SkuItemSaleAttrVo">
+        SELECT pssav.attr_id attrId, pssav.attr_name attrName, GROUP_CONCAT(DISTINCT pssav.attr_value) attrValues
+        FROM pms_sku_info psi
+                 inner join pms_sku_sale_attr_value pssav on psi.sku_id = pssav.sku_id
+        where psi.spu_id = 5
+        GROUP BY pssav.attr_id, pssav.attr_name
+    </select>
+</mapper>

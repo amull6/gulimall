@@ -19,6 +19,6 @@ public interface SpuInfoDescService extends IService<SpuInfoDescEntity> {
 
     void saveSpuInfoDesc(SpuInfoDescEntity descEntity);
 
-
+    SpuInfoDescEntity getBySpuId(Long spuId);
 }
 

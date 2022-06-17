@@ -12,12 +12,26 @@
         <result property="icon" column="icon"/>
         <result property="catelogId" column="catelog_id"/>
     </resultMap>
+    <resultMap id="spuItemGroupAttrVoMap" type="com.wz.gulimall.product.vo.SpuItemGroupAttrVo">
+        <result property="groupName" column="attr_group_name"/>
+        <collection property="spuAttrVoList" javaType="java.util.List" ofType="com.wz.gulimall.product.vo.Attr">
+            <result property="attrId" column="attr_id"/>
+            <result property="attrName" column="attr_name"/>
+            <result property="attrValue" column="attr_value"/>
+        </collection>
+    </resultMap>
     <delete id="removeRelations">
         delete from pms_attr_attrgroup_relation where
         <foreach collection="attrAttrgroupRelationEntities" item="entity" separator=" or ">
             attr_id = #{entity.attrId} and attr_group_id = #{entity.attrGroupId}
         </foreach>
     </delete>
-
-
+    <select id="getSpuItemGroupAttrVo" resultMap="spuItemGroupAttrVoMap">
+        SELECT pag.attr_group_name, pa.attr_id, pa.attr_name, ppav.attr_value
+        FROM pms_attr_group pag
+                 left join pms_attr_attrgroup_relation paar on pag.attr_group_id = paar.attr_group_id
+                 left join pms_attr pa on paar.attr_id = pa.attr_id
+                 left join pms_product_attr_value ppav on ppav.attr_id = pa.attr_id
+        where pag.catelog_id = #{catalogId} and ppav.spu_id = #{spuId}
+    </select>
 </mapper>
