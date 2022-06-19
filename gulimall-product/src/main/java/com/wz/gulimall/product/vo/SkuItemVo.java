@@ -21,4 +21,6 @@ public class SkuItemVo {
     SpuInfoDescEntity desp;
     //5.获取spu规格参数信息 pms_attr_group pms_product_attr_value
     List<SpuItemGroupAttrVo> groupAttr;
+
+    boolean hasStock = true;
 }
