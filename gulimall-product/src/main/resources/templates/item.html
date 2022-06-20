@@ -1293,7 +1293,8 @@
 <script src="static/item/js/js.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $(function() {
-        $(".sku_attr_value"")
+        $(".sku_attr_value").parent().attr("style", "border:1px solid #ccc;");
+        $("a[class='sku_attr_value checked']").parent().attr("style", "border:1px solid red;");
     })
 
 
