@@ -1300,21 +1300,22 @@
     $(".sku_attr_value").click(function () {
         // 当前元素添加clickClass
         $(this).addClass('click')
-        var spuIdsArray = [];
+        var spuIdsArray = new Array();
         // 当前元素spuId数组放入新数组spuIdsArray
         spuIdsArray.push($(this).attr('skuIds').split(','))
         // 去除同一行所有checked
-        $(this).parent().parent().find(".sku_attr_value checked").removeClass('checked');
+        $(this).parent().parent().find(".sku_attr_value").removeClass('checked');
         // 遍历所有代带checkedclass的元素，将spuId数组放入spuIdsArray
-        $(".sku_attr_value checked").each(function () {
+        $("a[class='sku_attr_value checked']").each(function () {
             spuIdsArray.push($(this).attr('skuIds').split(','))
         })
+        console.log(spuIdsArray);
         var filterEle = spuIdsArray[0];
         for (var i = 1; i < spuIdsArray.length; i++) {
-            filterEle = $(filterEle).push(spuIdsArray[i]);
+            filterEle = $(filterEle).filter(spuIdsArray[i]);
         }
-        location.href = "http://item.gulimall.com/" + filterEle[0] + ".html"
-
+        console.log(filterEle[0]);
+        // location.href = "http://item.gulimall.com/" + filterEle[0] + ".html"
     })
 
 
