@@ -41,3 +41,8 @@ server:
 logging:
   level:
     com.wz.gulimall: error
+gulimall:
+  thread:
+    coreSize: 20
+    maxSize: 50
+    keepAliveTime: 10
