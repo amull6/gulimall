@@ -1,0 +1,9 @@
+server:
+  port: 20000
+spring:
+  application:
+    name: gulimall-auth-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 139.224.137.204:8848
