@@ -7,3 +7,6 @@ spring:
     nacos:
       discovery:
         server-addr: 139.224.137.204:8848
+  thymeleaf:
+    cache: false
+
