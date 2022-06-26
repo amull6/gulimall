@@ -11,6 +11,12 @@ spring:
       oss:
         endpoint: oss-cn-qingdao.aliyuncs.com
         bucket: gulimall-518
+      sms:
+        accessKeyId: "LTAI5t9hgU42BZaKWbtm9fqD"
+        accessKeySecret: "BV4YJzHoSbmV6uE4JXMlx4QYdqVwHm"
+        endpoint: "dysmsapi.aliyuncs.com"
+        signName: "阿里云短信测试"
+        templateCode: "SMS_154950909"
 server:
   port: 30000
 
