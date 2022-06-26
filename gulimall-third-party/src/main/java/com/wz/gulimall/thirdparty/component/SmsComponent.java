@@ -22,12 +22,13 @@ public class SmsComponent {
 
     /**
      * 使用AK&SK初始化账号Client
+     *
      * @param accessKeyId
      * @param accessKeySecret
      * @return Client
      * @throws Exception
      */
-    public  com.aliyun.dysmsapi20170525.Client createClient(String accessKeyId, String accessKeySecret) throws Exception {
+    public com.aliyun.dysmsapi20170525.Client createClient(String accessKeyId, String accessKeySecret) throws Exception {
         Config config = new Config()
                 // 您的 AccessKey ID
                 .setAccessKeyId(accessKeyId)
@@ -38,8 +39,8 @@ public class SmsComponent {
         return new com.aliyun.dysmsapi20170525.Client(config);
     }
 
-    public void sendSmsCode(String phone,String code) throws Exception {
-        String codeJson = "{\"code\":\""+code+"\"}";
+    public String sendSmsCode(String phone, String code) throws Exception {
+        String codeJson = "{\"code\":\"" + code + "\"}";
         com.aliyun.dysmsapi20170525.Client client = this.createClient(accessKeyId, accessKeySecret);
         SendSmsRequest sendSmsRequest = new SendSmsRequest()
                 .setSignName(signName)
@@ -47,11 +48,15 @@ public class SmsComponent {
                 .setPhoneNumbers(phone)
                 .setTemplateParam(codeJson);
         RuntimeOptions runtime = new RuntimeOptions();
+        SendSmsResponseBody sendSmsResponseBody = null;
         try {
             // 复制代码运行请自行打印 API 的返回值
             SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, runtime);
-            SendSmsResponseBody sendSmsResponseBody = sendSmsResponse.getBody();
+            sendSmsResponseBody = sendSmsResponse.getBody();
             System.out.println(sendSmsResponseBody.getMessage());
+            if (sendSmsResponseBody.getCode().equals("200")) {
+                return sendSmsResponseBody.getMessage();
+            }
         } catch (TeaException error) {
             // 如有需要，请打印 error
             com.aliyun.teautil.Common.assertAsString(error.message);
@@ -60,5 +65,6 @@ public class SmsComponent {
             // 如有需要，请打印 error
             com.aliyun.teautil.Common.assertAsString(error.message);
         }
+        return "fail" + (sendSmsResponseBody == null ? "" : "_" + sendSmsResponseBody.getCode());
     }
 }
