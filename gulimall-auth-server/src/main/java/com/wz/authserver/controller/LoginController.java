@@ -50,7 +50,7 @@ public class LoginController {
                 return R.error(BizCodeEnum.VALIDE_CODE_EXCEPTION.getCode(), BizCodeEnum.VALIDE_CODE_EXCEPTION.getMsg());
             }
         }
-        String code = UUID.randomUUID().toString().substring(0, 6);
+        String code = String.valueOf((int)(Math.random()*9+1)*100000);
         redisTemplate.opsForValue().set(AuthServerConstant.SMS_CODE_CACHE_PREFIX+phone, code +"_"+System.currentTimeMillis() , 10, TimeUnit.MINUTES);
         try {
             return thirdPartFeignService.sendCode(phone, code);
