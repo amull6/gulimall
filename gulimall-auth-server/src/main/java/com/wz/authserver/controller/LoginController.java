@@ -2,11 +2,13 @@ package com.wz.authserver.controller;
 
 import com.sun.javaws.jnl.IconDesc;
 import com.wz.authserver.feign.ThirdPartFeignService;
+import com.wz.authserver.vo.UserRegisterVo;
 import com.wz.common.constant.AuthServerConstant;
 import com.wz.common.exception.BizCodeEnum;
 import com.wz.common.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -57,4 +59,12 @@ public class LoginController {
         }
         return R.ok();
     }
+
+    @RequestMapping("/regist")
+    public String regist(@RequestBody UserRegisterVo userRegisterVo, BindResult result) {
+        if(result.)
+
+        return "regist";
+    }
+
 }
