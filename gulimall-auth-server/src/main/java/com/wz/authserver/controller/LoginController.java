@@ -1,6 +1,5 @@
 package com.wz.authserver.controller;
 
-import com.sun.javaws.jnl.IconDesc;
 import com.wz.authserver.feign.ThirdPartFeignService;
 import com.wz.authserver.vo.UserRegisterVo;
 import com.wz.common.constant.AuthServerConstant;
@@ -8,17 +7,21 @@ import com.wz.common.exception.BizCodeEnum;
 import com.wz.common.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.UUID;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -61,9 +64,13 @@ public class LoginController {
     }
 
     @RequestMapping("/regist")
-    public String regist(@RequestBody UserRegisterVo userRegisterVo, BindResult result) {
-        if(result.)
-
+    public String regist(@Valid UserRegisterVo userRegisterVo, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            List<FieldError> fieldErrors =  bindingResult.getFieldErrors();
+            Map<String,String> errorMap = fieldErrors.stream().collect(Collectors.toMap(FieldError::getField,FieldError::getDefaultMessage));
+            model.addAttribute("error", errorMap);
+            return "forward:/reg.html";
+        }
         return "regist";
     }
 
