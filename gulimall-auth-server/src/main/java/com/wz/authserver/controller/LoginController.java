@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -64,14 +65,14 @@ public class LoginController {
     }
 
     @RequestMapping("/regist")
-    public String regist(@Valid UserRegisterVo userRegisterVo, BindingResult bindingResult, Model model) {
+    public String regist(@Valid UserRegisterVo userRegisterVo, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
             List<FieldError> fieldErrors =  bindingResult.getFieldErrors();
             Map<String,String> errorMap = fieldErrors.stream().collect(Collectors.toMap(FieldError::getField,FieldError::getDefaultMessage));
-            model.addAttribute("error", errorMap);
-            return "forward:/reg.html";
+            redirectAttributes.addFlashAttribute("error", errorMap);
+            return "redirect:http://auth.gulimall.com/reg.html";
         }
-        return "regist";
+        return "reg";
     }
 
 }
