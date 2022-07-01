@@ -3,6 +3,9 @@ package com.wz.gulimall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wz.common.exception.BizCodeEnum;
+import com.wz.gulimall.member.exception.PhoneExistException;
+import com.wz.gulimall.member.exception.UserNameExistException;
 import com.wz.gulimall.member.feign.CouponFeignSerice;
 import com.wz.gulimall.member.vo.MemberRegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,14 @@ public class MemberController {
 
     @RequestMapping("/register")
     public R register(@RequestBody MemberRegisterVo memberRegisterVo) {
-        memberService.register(memberRegisterVo);
+        try {
+            memberService.register(memberRegisterVo);
+        } catch (UserNameExistException e) {
+            return R.error(BizCodeEnum.USERNAME_EXIST_EXCEPTION.getCode(), BizCodeEnum.USERNAME_EXIST_EXCEPTION.getMsg());
+        } catch (PhoneExistException e) {
+            return R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMsg());
+
+        }
         return R.ok();
     }
 

@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient
+@FeignClient("gulimall-member")
 public interface MemberFeignService {
 
-    @RequestMapping("/register")
+    @RequestMapping("/member/member/register")
     R register(@RequestBody UserRegisterVo userRegisterVo);
 
 }

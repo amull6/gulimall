@@ -10,8 +10,11 @@ public enum BizCodeEnum {
     VALIDE_EXCEPTION(10001,"参数格式校验失败"),
     PRODUCT_UP_EXCEPTION(11000,"商品上架异常"),
 
-    VALIDE_CODE_EXCEPTION(10002,"短信验证码获取频率太高");
+    VALIDE_CODE_EXCEPTION(10002,"短信验证码获取频率太高"),
 
+    USERNAME_EXIST_EXCEPTION(15001,"用户已存在"),
+
+    PHONE_EXIST_EXCEPTION(15002, "手机号码已存在");
 
     private Integer code;
     private String msg;

@@ -60,7 +60,7 @@ public class LoginController {
                 return R.error(BizCodeEnum.VALIDE_CODE_EXCEPTION.getCode(), BizCodeEnum.VALIDE_CODE_EXCEPTION.getMsg());
             }
         }
-        String code = String.valueOf((int) (Math.random() * 9 + 1) * 100000);
+        String code = String.valueOf((int) ((Math.random() * 9 + 1) * (Math.pow(10, 5))));
         redisTemplate.opsForValue().set(AuthServerConstant.SMS_CODE_CACHE_PREFIX + phone, code + "_" + System.currentTimeMillis(), 10, TimeUnit.MINUTES);
         try {
             return thirdPartFeignService.sendCode(phone, code);
@@ -86,6 +86,7 @@ public class LoginController {
 //            对比
             String[] codeArray = codeStr.split("_");
             if (codeArray[0].equals(userRegisterVo.getCode())) {
+                redisTemplate.delete(AuthServerConstant.SMS_CODE_CACHE_PREFIX + userRegisterVo.getPhone());
 //                调用member服务注册用户
                 try {
                     R r = memberFeignService.register(userRegisterVo);

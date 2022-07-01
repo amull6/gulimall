@@ -54,7 +54,7 @@ public class SmsComponent {
             SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, runtime);
             sendSmsResponseBody = sendSmsResponse.getBody();
             System.out.println(sendSmsResponseBody.getMessage());
-            if (sendSmsResponseBody.getCode().equals("200")) {
+            if (sendSmsResponseBody.getCode().equals("OK")) {
                 return sendSmsResponseBody.getMessage();
             }
         } catch (TeaException error) {

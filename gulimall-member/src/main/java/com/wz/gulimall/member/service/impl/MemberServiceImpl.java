@@ -6,7 +6,10 @@ import com.wz.gulimall.member.exception.PhoneExistException;
 import com.wz.gulimall.member.exception.UserNameExistException;
 import com.wz.gulimall.member.vo.MemberRegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -46,12 +49,18 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         checkPhone(memberRegisterVo.getPhone());
         checkUserName(memberRegisterVo.getUserName());
 //        密码加密存储
-
-
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String password = encoder.encode(memberRegisterVo.getPassword());
+        entity.setPassword(password);
+        entity.setCreateTime(new Date());
+        entity.setStatus(0);
+        entity.setBirth(new Date());
+        entity.setGender(1);
+        this.baseMapper.insert(entity);
     }
 
     private void checkUserName(String userName) {
-        if (this.baseMapper.selectCount(new QueryWrapper<MemberEntity>().eq("user_name", userName)) > 0) {
+        if (this.baseMapper.selectCount(new QueryWrapper<MemberEntity>().eq("username", userName)) > 0) {
             throw new UserNameExistException();
         }
     }
