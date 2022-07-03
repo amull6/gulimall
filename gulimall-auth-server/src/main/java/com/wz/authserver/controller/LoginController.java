@@ -2,6 +2,7 @@ package com.wz.authserver.controller;
 
 import com.wz.authserver.feign.MemberFeignService;
 import com.wz.authserver.feign.ThirdPartFeignService;
+import com.wz.authserver.vo.UserLoginVo;
 import com.wz.authserver.vo.UserRegisterVo;
 import com.wz.common.constant.AuthServerConstant;
 import com.wz.common.exception.BizCodeEnum;
@@ -112,4 +113,17 @@ public class LoginController {
         }
     }
 
+    @RequestMapping("/login")
+    public String login(UserLoginVo userLoginVo) {
+        try {
+            R r = memberFeignService.login(userLoginVo);
+            if (r.getCode() == 0) {
+                return "redirect:http://gulimall.com.cn";
+            }else{
+                return "redirect:http://auth.gulimall.com/login.html";
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -37,6 +37,19 @@ public class MemberController {
     @Autowired
     CouponFeignSerice couponFeignSerice;
 
+    @RequestMapping("/login")
+    public R login(@RequestBody MemberRegisterVo memberRegisterVo) {
+        try {
+            memberService.register(memberRegisterVo);
+        } catch (UserNameExistException e) {
+            return R.error(BizCodeEnum.USERNAME_EXIST_EXCEPTION.getCode(), BizCodeEnum.USERNAME_EXIST_EXCEPTION.getMsg());
+        } catch (PhoneExistException e) {
+            return R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMsg());
+
+        }
+        return R.ok();
+    }
+
     @RequestMapping("/register")
     public R register(@RequestBody MemberRegisterVo memberRegisterVo) {
         try {
