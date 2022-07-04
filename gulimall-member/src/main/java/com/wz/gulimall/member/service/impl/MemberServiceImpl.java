@@ -52,6 +52,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
 //        密码加密存储
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String password = encoder.encode(memberRegisterVo.getPassword());
+        entity.setUsername(memberRegisterVo.getUserName());
         entity.setPassword(password);
         entity.setCreateTime(new Date());
         entity.setStatus(0);
