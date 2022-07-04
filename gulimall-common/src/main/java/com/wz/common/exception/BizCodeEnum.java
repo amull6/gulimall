@@ -14,7 +14,9 @@ public enum BizCodeEnum {
 
     USERNAME_EXIST_EXCEPTION(15001,"用户已存在"),
 
-    PHONE_EXIST_EXCEPTION(15002, "手机号码已存在");
+    PHONE_EXIST_EXCEPTION(15002, "手机号码已存在"),
+
+    LOGINACCT_PASSWORD_EXCEPTION(15002, "账号或者密码不正确");
 
     private Integer code;
     private String msg;

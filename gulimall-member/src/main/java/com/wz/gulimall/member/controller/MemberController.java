@@ -7,6 +7,7 @@ import com.wz.common.exception.BizCodeEnum;
 import com.wz.gulimall.member.exception.PhoneExistException;
 import com.wz.gulimall.member.exception.UserNameExistException;
 import com.wz.gulimall.member.feign.CouponFeignSerice;
+import com.wz.gulimall.member.vo.MemberLoginVo;
 import com.wz.gulimall.member.vo.MemberRegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,16 +39,13 @@ public class MemberController {
     CouponFeignSerice couponFeignSerice;
 
     @RequestMapping("/login")
-    public R login(@RequestBody MemberRegisterVo memberRegisterVo) {
-        try {
-            memberService.register(memberRegisterVo);
-        } catch (UserNameExistException e) {
-            return R.error(BizCodeEnum.USERNAME_EXIST_EXCEPTION.getCode(), BizCodeEnum.USERNAME_EXIST_EXCEPTION.getMsg());
-        } catch (PhoneExistException e) {
-            return R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMsg());
-
+    public R login(@RequestBody MemberLoginVo memberLoginVo) {
+        MemberEntity memberEntity = memberService.login(memberLoginVo);
+        if (memberEntity != null) {
+            return R.ok();
+        }else{
+            return R.error(BizCodeEnum.LOGINACCT_PASSWORD_EXCEPTION.getCode(), BizCodeEnum.LOGINACCT_PASSWORD_EXCEPTION.getMsg());
         }
-        return R.ok();
     }
 
     @RequestMapping("/register")

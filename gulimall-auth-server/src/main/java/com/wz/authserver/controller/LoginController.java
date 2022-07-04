@@ -1,5 +1,6 @@
 package com.wz.authserver.controller;
 
+import com.alibaba.fastjson.TypeReference;
 import com.wz.authserver.feign.MemberFeignService;
 import com.wz.authserver.feign.ThirdPartFeignService;
 import com.wz.authserver.vo.UserLoginVo;
@@ -114,12 +115,16 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    public String login(UserLoginVo userLoginVo) {
+    public String login(UserLoginVo userLoginVo, RedirectAttributes redirectAttributes) {
         try {
             R r = memberFeignService.login(userLoginVo);
             if (r.getCode() == 0) {
                 return "redirect:http://gulimall.com.cn";
-            }else{
+            } else {
+                Map<String, String> errorMap = new HashMap<>();
+                errorMap.put("msg", r.getData("msg", new TypeReference<String>() {
+                }));
+                redirectAttributes.addFlashAttribute("error", errorMap);
                 return "redirect:http://auth.gulimall.com/login.html";
             }
         } catch (Exception e) {
