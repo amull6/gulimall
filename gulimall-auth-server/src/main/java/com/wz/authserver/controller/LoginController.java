@@ -119,7 +119,7 @@ public class LoginController {
         try {
             R r = memberFeignService.login(userLoginVo);
             if (r.getCode() == 0) {
-                return "redirect:http://gulimall.com.cn";
+                return "redirect:http://gulimall.com";
             } else {
                 Map<String, String> errorMap = new HashMap<>();
                 errorMap.put("msg", r.getData("msg", new TypeReference<String>() {
