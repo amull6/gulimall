@@ -4,3 +4,4 @@ spring:
       config:
         server-addr:  47.100.105.74:8848
         name: gulimall-auth-server
+#        namespace: cbfe0921-a133-4f6f-b78a-1251d45666b4
