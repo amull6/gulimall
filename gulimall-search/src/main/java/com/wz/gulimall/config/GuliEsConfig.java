@@ -53,7 +53,7 @@ public class GuliEsConfig {
         RestHighLevelClient esClient = null;
         esClient = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("139.224.137.204", 9200,"http")
+                        new HttpHost("47.100.105.74", 9200,"http")
                 ));
         return esClient;
     }

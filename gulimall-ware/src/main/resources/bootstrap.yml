@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 139.224.137.204:8848
+        server-addr: 47.100.105.74:8848
 #        namespace: d069b35a-c417-4ffa-b3ef-971cbda37571
   application:
     name: gulimall-ware
