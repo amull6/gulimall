@@ -47,7 +47,7 @@ public class OAuth2Controller {
                 MemberResVo memberResVo = oauthLogin.getData(new TypeReference<MemberResVo>() {
                 });
 //             用户放入session
-                httpSession.setAttribute("memberResVo", memberResVo);
+                httpSession.setAttribute("loginUser", memberResVo);
 //        返回到主页
                 return "redirect:http://gulimall.com";
             } else {
