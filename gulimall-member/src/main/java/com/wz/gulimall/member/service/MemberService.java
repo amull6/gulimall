@@ -5,6 +5,7 @@ import com.wz.common.utils.PageUtils;
 import com.wz.gulimall.member.entity.MemberEntity;
 import com.wz.gulimall.member.vo.MemberLoginVo;
 import com.wz.gulimall.member.vo.MemberRegisterVo;
+import com.wz.gulimall.member.vo.SocialUser;
 
 import java.util.Map;
 
@@ -22,5 +23,7 @@ public interface MemberService extends IService<MemberEntity> {
     void register(MemberRegisterVo memberRegisterVo);
 
     MemberEntity login(MemberLoginVo memberLoginVo);
+
+    MemberEntity login(SocialUser socialUser) throws Exception;
 }
 

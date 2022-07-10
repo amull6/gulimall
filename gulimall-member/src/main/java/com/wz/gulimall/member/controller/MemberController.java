@@ -9,6 +9,7 @@ import com.wz.gulimall.member.exception.UserNameExistException;
 import com.wz.gulimall.member.feign.CouponFeignSerice;
 import com.wz.gulimall.member.vo.MemberLoginVo;
 import com.wz.gulimall.member.vo.MemberRegisterVo;
+import com.wz.gulimall.member.vo.SocialUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,12 @@ public class MemberController {
 
     @Autowired
     CouponFeignSerice couponFeignSerice;
+
+    @RequestMapping("/oauth2login")
+    public R login(@RequestBody SocialUser socialUser) throws Exception {
+        MemberEntity memberEntity = memberService.login(socialUser);
+        return R.ok().setData(memberEntity);
+    }
 
     @RequestMapping("/login")
     public R login(@RequestBody MemberLoginVo memberLoginVo) {

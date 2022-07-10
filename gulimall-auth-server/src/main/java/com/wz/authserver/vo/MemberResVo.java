@@ -1,29 +1,8 @@
-package com.wz.gulimall.member.entity;
+package com.wz.authserver.vo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
 import java.util.Date;
 
-import lombok.Data;
-
-/**
- * 会员
- *
- * @author qj
- * @email emailofqj@163.com
- * @date 2022-04-29 13:03:32
- */
-@Data
-@TableName("ums_member")
-public class MemberEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @TableId
+public class MemberResVo {
     private Long id;
     /**
      * 会员等级id
@@ -97,5 +76,4 @@ public class MemberEntity implements Serializable {
     private String accessToken;
     private Long expiresIn;
     private String uid;
-
 }

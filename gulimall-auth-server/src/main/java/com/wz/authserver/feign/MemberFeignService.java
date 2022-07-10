@@ -1,5 +1,6 @@
 package com.wz.authserver.feign;
 
+import com.wz.authserver.vo.SocialUser;
 import com.wz.authserver.vo.UserLoginVo;
 import com.wz.authserver.vo.UserRegisterVo;
 import com.wz.common.utils.R;
@@ -15,6 +16,9 @@ public interface MemberFeignService {
 
     @RequestMapping("/member/member/login")
     R login(@RequestBody UserLoginVo userLoginVo);
+
+    @RequestMapping("/member/member/oauth2login")
+    R login(@RequestBody SocialUser socialUser);
 
 
 }
