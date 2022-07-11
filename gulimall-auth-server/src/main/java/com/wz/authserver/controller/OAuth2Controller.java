@@ -7,6 +7,7 @@ import com.wz.common.vo.MemberResVo;
 import com.wz.authserver.vo.SocialUser;
 import com.wz.common.utils.HttpUtils;
 import com.wz.common.utils.R;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
-
+@Slf4j
 @Controller
 public class OAuth2Controller {
     @Autowired
@@ -44,6 +45,7 @@ public class OAuth2Controller {
             if (oauthLogin.getCode() == 0) {
                 MemberResVo memberResVo = oauthLogin.getData(new TypeReference<MemberResVo>() {
                 });
+                log.info("登录成功：用户：{}", memberResVo.toString());
 //             用户放入session
                 httpSession.setAttribute("loginUser", memberResVo);
 //        返回到主页
