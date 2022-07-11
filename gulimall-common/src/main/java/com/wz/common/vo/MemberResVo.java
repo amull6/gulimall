@@ -1,8 +1,8 @@
-package com.wz.authserver.vo;
+package com.wz.common.vo;
 
 import java.util.Date;
 
-public class MemberResVo {
+public class MemberResVo implements java.io.Serializable {
     private Long id;
     /**
      * 会员等级id

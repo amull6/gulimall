@@ -2,9 +2,8 @@ package com.wz.authserver.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.sun.javaws.jnl.IconDesc;
 import com.wz.authserver.feign.MemberFeignService;
-import com.wz.authserver.vo.MemberResVo;
+import com.wz.common.vo.MemberResVo;
 import com.wz.authserver.vo.SocialUser;
 import com.wz.common.utils.HttpUtils;
 import com.wz.common.utils.R;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 
 @Controller
