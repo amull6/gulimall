@@ -1,6 +1,6 @@
 package com.wz.common.utils;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -30,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 短信服务HTTP请求工具类
+ *
+ * @Author: wanzenghui
+ * @Date: 2021/11/27 23:19
+ */
 public class HttpUtils {
 
     /**
@@ -37,13 +43,12 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @return
      * @throws Exception
      */
-    public static HttpResponse doGet(String host, String path, String method,
+    public static HttpResponse doGet(String host, String path,
                                      Map<String, String> headers,
                                      Map<String, String> querys)
             throws Exception {
@@ -62,14 +67,13 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @param bodys
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
+    public static HttpResponse doPost(String host, String path,
                                       Map<String, String> headers,
                                       Map<String, String> querys,
                                       Map<String, String> bodys)
@@ -107,7 +111,7 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
+    public static HttpResponse doPost(String host, String path,
                                       Map<String, String> headers,
                                       Map<String, String> querys,
                                       String body)
@@ -131,14 +135,13 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @param body
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
+    public static HttpResponse doPost(String host, String path,
                                       Map<String, String> headers,
                                       Map<String, String> querys,
                                       byte[] body)
@@ -162,14 +165,13 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @param body
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPut(String host, String path, String method,
+    public static HttpResponse doPut(String host, String path,
                                      Map<String, String> headers,
                                      Map<String, String> querys,
                                      String body)
@@ -193,14 +195,13 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @param body
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPut(String host, String path, String method,
+    public static HttpResponse doPut(String host, String path,
                                      Map<String, String> headers,
                                      Map<String, String> querys,
                                      byte[] body)
@@ -224,13 +225,12 @@ public class HttpUtils {
      *
      * @param host
      * @param path
-     * @param method
      * @param headers
      * @param querys
      * @return
      * @throws Exception
      */
-    public static HttpResponse doDelete(String host, String path, String method,
+    public static HttpResponse doDelete(String host, String path,
                                         Map<String, String> headers,
                                         Map<String, String> querys)
             throws Exception {
@@ -313,4 +313,3 @@ public class HttpUtils {
         }
     }
 }
-
