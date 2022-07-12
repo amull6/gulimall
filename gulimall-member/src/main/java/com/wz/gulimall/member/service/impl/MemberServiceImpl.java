@@ -119,7 +119,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             map.put("access_token", socialUser.getAccess_token());
             map.put("uid", socialUser.getUid());
             try {
-                HttpResponse httpResponse = HttpUtils.doGet("https://api.weibo.com", "/2/users/show.json", "get", new HashMap<>(), map);
+                HttpResponse httpResponse = HttpUtils.doGet("https://api.weibo.com", "/2/users/show.json", new HashMap<>(), map);
                 if (httpResponse.getStatusLine().getStatusCode() == 200) {
                     String json = EntityUtils.toString(httpResponse.getEntity());
                     JSONObject jsonObject = JSON.parseObject(json);

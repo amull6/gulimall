@@ -1,7 +1,10 @@
 package com.wz.common.vo;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class MemberResVo implements java.io.Serializable {
     private Long id;
     /**
