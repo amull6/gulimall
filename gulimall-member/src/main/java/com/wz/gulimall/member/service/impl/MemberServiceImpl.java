@@ -98,7 +98,6 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
             newMemberEntity.setExpiresIn(socialUser.getExpires_in());
             newMemberEntity.setId(memberEntity.getId());
             this.baseMapper.updateById(memberEntity);
-
             memberEntity.setAccessToken(socialUser.getAccess_token());
             memberEntity.setExpiresIn(socialUser.getExpires_in());
             return memberEntity;

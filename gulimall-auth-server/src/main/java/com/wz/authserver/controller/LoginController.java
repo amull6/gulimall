@@ -8,6 +8,7 @@ import com.wz.authserver.vo.UserRegisterVo;
 import com.wz.common.constant.AuthServerConstant;
 import com.wz.common.exception.BizCodeEnum;
 import com.wz.common.utils.R;
+import com.wz.common.vo.MemberResVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -115,10 +117,13 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    public String login(UserLoginVo userLoginVo, RedirectAttributes redirectAttributes) {
+    public String login(UserLoginVo userLoginVo, RedirectAttributes redirectAttributes, HttpSession httpSession) {
         try {
             R r = memberFeignService.login(userLoginVo);
             if (r.getCode() == 0) {
+                MemberResVo memberResVo = r.getData("data", new TypeReference<MemberResVo>() {
+                });
+                httpSession.setAttribute("loginUser", memberResVo);
                 return "redirect:http://gulimall.com";
             } else {
                 Map<String, String> errorMap = new HashMap<>();
