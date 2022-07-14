@@ -22,11 +22,17 @@ public class loginController {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @RequestMapping("/loginUser")
+    public String getLoginUser(@RequestParam(value = "sso_token") String token) {
+        String userName = (String) redisTemplate.opsForValue().get(token);
+        return userName;
+    }
+
     @RequestMapping("/loginIndex")
-    public String loginIndex(@RequestParam(value = "res_redirect", required = false) String resUrl, Model model, @CookieValue(value = "sso_token",required = false) String token) {
-       if(!StringUtils.isEmpty(token)){
-           return "redirect:" + resUrl + "?token=" + token;
-       }
+    public String loginIndex(@RequestParam(value = "res_redirect", required = false) String resUrl, Model model, @CookieValue(value = "sso_token", required = false) String token) {
+        if (!StringUtils.isEmpty(token)) {
+            return "redirect:" + resUrl + "?token=" + token;
+        }
         model.addAttribute("res_redirect", resUrl);
         return "login";
     }

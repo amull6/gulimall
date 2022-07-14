@@ -2,12 +2,14 @@ package com.wz.gulimall.testssoclient02.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -15,8 +17,7 @@ import java.util.List;
 
 @Controller
 public class loginController {
-    @Autowired
-    RedisTemplate redisTemplate;
+
     @RequestMapping("/login")
     @ResponseBody
     public String toLogin() {
@@ -24,11 +25,12 @@ public class loginController {
     }
 
     @RequestMapping("/index")
-    public String index(Model model, @RequestParam(value = "token",required = false) String token,HttpSession session) {
+    public String index(Model model, @RequestParam(value = "token", required = false) String token, HttpSession session) {
 //        判断是否登录
         if (!StringUtils.isEmpty(token)) {
-            String loginUser = (String) redisTemplate.opsForValue().get(token);
-            session.setAttribute("loginUser", loginUser);
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://ossserver.com:8080/loginUser?sso_token=" + token, String.class);
+            session.setAttribute("loginUser", responseEntity.getBody());
         }
         Object loginUser = session.getAttribute("loginUser");
         if (loginUser == null) {
