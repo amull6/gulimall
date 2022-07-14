@@ -123,7 +123,7 @@ public class LoginController {
             if (r.getCode() == 0) {
                 MemberResVo memberResVo = r.getData("data", new TypeReference<MemberResVo>() {
                 });
-                httpSession.setAttribute("loginUser", memberResVo);
+                httpSession.setAttribute(AuthServerConstant.LOGIN_USER, memberResVo);
                 return "redirect:http://gulimall.com";
             } else {
                 Map<String, String> errorMap = new HashMap<>();

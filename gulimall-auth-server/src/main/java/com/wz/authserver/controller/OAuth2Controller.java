@@ -3,6 +3,7 @@ package com.wz.authserver.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.wz.authserver.feign.MemberFeignService;
+import com.wz.common.constant.AuthServerConstant;
 import com.wz.common.vo.MemberResVo;
 import com.wz.authserver.vo.SocialUser;
 import com.wz.common.utils.HttpUtils;
@@ -47,7 +48,7 @@ public class OAuth2Controller {
                 });
                 log.info("登录成功：用户：{}", memberResVo.toString());
 //             用户放入session
-                httpSession.setAttribute("loginUser", memberResVo);
+                httpSession.setAttribute(AuthServerConstant.LOGIN_USER, memberResVo);
 //        返回到主页
                 return "redirect:http://gulimall.com";
             } else {
