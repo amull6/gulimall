@@ -4,11 +4,14 @@ package com.wz.gulimall.search;
 import com.alibaba.fastjson.JSON;
 import com.wz.gulimall.config.GuliEsConfig;
 import lombok.Data;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -34,9 +37,24 @@ public class GuimallSearchApplicationTests {
     RestHighLevelClient restHighLevelClient;
 
     @Test
-    public void contextLoads() {
+    public void contextLoads() throws IOException {
+        CreateIndexRequest createIndexRequest = new CreateIndexRequest("gulimall_product");
+        String json = "{ \"mappings\":{ \"properties\":{ \"skuId\":{ \"type\":\"long\" }, \"spuId\":{ \"type\":\"keyword\" },\"skuTitle\":{ \"type\":\"text\", \"analyzer\":\"ik_smart\"}, \"skuPrice\":{ \"type\":\"keyword\" }, \"skuImg\"  :{ \"type\":\"keyword\" }, \"saleCount\":{ \"type\":\"long\" }, \"hasStock\":{ \"type\":\"boolean\" }, \"hotScore\":{ \"type\":\"long\"  }, \"brandId\": { \"type\":\"long\" }, \"catalogId\":{ \"type\":\"long\"  }, \"brandName\":{\"type\":\"keyword\"},\"brandImg\":{ \"type\":\"keyword\", \"index\":false}, \"catalogName\":{\"type\":\"keyword\" },\"attrs\":{ \"type\":\"nested\", \"properties\":{ \"attrId\":{\"type\":\"long\"  }, \"attrName\":{ \"type\":\"keyword\", \"index\":false}, \"attrValue\":{\"type\":\"keyword\" } } } } } }";
+        createIndexRequest.source(json, XContentType.JSON);
+        restHighLevelClient.indices().create(createIndexRequest, GuliEsConfig.COMMON_OPTIONS);
+    }
+    @Test
+    public void testDelete() throws IOException {
+//       删除索引
+        restHighLevelClient.indices().delete(new DeleteIndexRequest("gulimall_product"), GuliEsConfig.COMMON_OPTIONS);
     }
 
+    @Test
+    public void testGet() throws IOException {
+//       删除索引
+        boolean is = restHighLevelClient.indices().exists(new GetIndexRequest("gulimall_product"), GuliEsConfig.COMMON_OPTIONS);
+        System.out.println(is);
+    }
     @Test
     public void testIndex() throws IOException {
         // 设置索引
@@ -89,7 +107,7 @@ public class GuimallSearchApplicationTests {
         System.out.println(searchResponse.toString());
 
         SearchHit[] searchHits = searchResponse.getHits().getHits();
-        for (SearchHit searchHit : searchHits) {
+        for (SearchHit searchHit :searchHits) {
             String source = searchHit.getSourceAsString();
             Account account = JSON.parseObject(source, Account.class);
             System.out.println(account);
