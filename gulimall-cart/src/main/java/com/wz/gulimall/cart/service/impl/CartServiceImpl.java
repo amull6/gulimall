@@ -75,6 +75,13 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @Override
+    public CastItem getCartItemBySkuId(Long skuId) {
+        BoundHashOperations<String, Object, Object> operations = gerRedisOps();
+        String castItemStr = (String) operations.get(skuId.toString());
+        return JSONObject.parseObject(castItemStr,CastItem.class);
+    }
+
     private BoundHashOperations<String, Object, Object> gerRedisOps() {
         UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
 //        判断是临时用户还是登录用户
