@@ -1,6 +1,7 @@
 package com.wz.gulimall.cart.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.wz.common.utils.R;
@@ -14,8 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -24,32 +30,52 @@ public class CartServiceImpl implements CartService {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    ExecutorService executorService;
+
     private static final String PREFIX_CART = "gulimall:cart:";
 
     @Override
-    public void addToCart(int count, Long skuId) {
-        BoundHashOperations<String,Object,Object> redisOps = gerRedisOps();
-//        组装CastItem
-        CastItem castItem = new CastItem();
-//        查询Sku信息加入CastItem
-        R r = productFeignService.info(skuId);
-        SkuInfoVo skuInfoVo = r.getData("skuInfo", new TypeReference<SkuInfoVo>() {
-        });
-        castItem.setSkuId(skuId);
-        castItem.setCheck(true);
-        castItem.setImage(skuInfoVo.getSkuDefaultImg());
-        castItem.setTitle(skuInfoVo.getSkuTitle());
-        castItem.setPrice(skuInfoVo.getPrice());
-        castItem.setCount(count);
-//        查询SkuAttr
-        List<String> attrList = productFeignService.listBySkuId(skuId);
-        castItem.setSkuAttr(attrList);
+    public CastItem addToCart(int count, Long skuId) throws ExecutionException, InterruptedException {
+        BoundHashOperations<String, Object, Object> redisOps = gerRedisOps();
+        String castItemRedis = (String) redisOps.get(String.valueOf(skuId));
+        if (StringUtils.isEmpty(castItemRedis)) {
+            CastItem castItem =  new CastItem();
+            CompletableFuture getSkuInfoTask = CompletableFuture.runAsync(() -> {
+                //        组装CastItem
+                //        查询Sku信息加入CastItem
+                R r = productFeignService.info(skuId);
+                SkuInfoVo skuInfoVo = r.getData("skuInfo", new TypeReference<SkuInfoVo>() {
+                });
+                castItem.setSkuId(skuId);
+                castItem.setCheck(true);
+                castItem.setImage(skuInfoVo.getSkuDefaultImg());
+                castItem.setTitle(skuInfoVo.getSkuTitle());
+                castItem.setPrice(skuInfoVo.getPrice());
+                castItem.setCount(count);
+            },executorService);
+
+            CompletableFuture getSkuSaleAttrValues = CompletableFuture.runAsync(() -> {
+                //        查询SkuAttr
+                List<String> attrList = productFeignService.listBySkuId(skuId);
+                castItem.setSkuAttr(attrList);
+            },executorService);
+            CompletableFuture.allOf(getSkuInfoTask,getSkuSaleAttrValues).get();
 //        保存到redis
-        String castItemJson = JSON.toJSONString(castItem);
-        redisOps.put(skuId, castItemJson);
+            String castItemJson = JSON.toJSONString(castItem);
+            redisOps.put(String.valueOf(skuId), castItemJson);
+            return castItem;
+        } else {
+            CastItem castItem = JSONObject.parseObject(castItemRedis, new TypeReference<CastItem>() {
+            });
+            castItem.setCount(castItem.getCount() + count);
+            String castItemJson = JSON.toJSONString(castItem);
+            redisOps.put(String.valueOf(skuId), castItemJson);
+            return castItem;
+        }
     }
 
-    private BoundHashOperations<String,Object,Object> gerRedisOps() {
+    private BoundHashOperations<String, Object, Object> gerRedisOps() {
         UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
 //        判断是临时用户还是登录用户
         //        生成保存到redis的key

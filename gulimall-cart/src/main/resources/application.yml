@@ -11,3 +11,9 @@ spring:
   redis:
     host: 47.100.105.74
     port: 6379
+
+gulimall:
+  thread:
+    coreSize: 20
+    maxSize: 50
+    keepAliveTime: 10
