@@ -3,11 +3,11 @@ package com.wz.gulimall.cart.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.wz.common.utils.R;
 import com.wz.gulimall.cart.feign.ProductFeignService;
 import com.wz.gulimall.cart.interceptor.CartInterceptor;
 import com.wz.gulimall.cart.service.CartService;
+import com.wz.gulimall.cart.vo.Cast;
 import com.wz.gulimall.cart.vo.CastItem;
 import com.wz.gulimall.cart.vo.SkuInfoVo;
 import com.wz.gulimall.cart.vo.UserInfoTo;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -80,6 +79,30 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String, Object, Object> operations = gerRedisOps();
         String castItemStr = (String) operations.get(skuId.toString());
         return JSONObject.parseObject(castItemStr,CastItem.class);
+    }
+
+    @Override
+    public Cast getCast() {
+        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+//        区分登录用户，临时用户
+        if (StringUtils.isEmpty(userInfoTo.getUserId())) {
+//            临时用户
+            BoundHashOperations<String, Object, Object> operations = gerRedisOps();
+            List<Object> castItems = operations.values();
+            for (Object cast : castItems) {
+
+            }
+
+
+
+
+        } else {
+//            登录用户
+
+        }
+
+//        封装Cast
+        return null;
     }
 
     private BoundHashOperations<String, Object, Object> gerRedisOps() {

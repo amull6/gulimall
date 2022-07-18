@@ -2,6 +2,7 @@ package com.wz.gulimall.cart.controller;
 
 import com.wz.gulimall.cart.interceptor.CartInterceptor;
 import com.wz.gulimall.cart.service.CartService;
+import com.wz.gulimall.cart.vo.Cast;
 import com.wz.gulimall.cart.vo.CastItem;
 import com.wz.gulimall.cart.vo.UserInfoTo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.ExecutionException;
 
@@ -20,8 +22,9 @@ public class CartController {
     CartService cartService;
 
     @RequestMapping("/cart.html")
-    public String cartListPage(HttpServletResponse response) {
-        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+    public String cartListPage(Model model) {
+        Cast cart = cartService.getCast();
+        model.addAttribute("cart", cart);
         return "cartList";
     }
 
