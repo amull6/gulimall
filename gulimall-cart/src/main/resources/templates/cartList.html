@@ -23,12 +23,18 @@
 
 					</ul>
 					<ul class="header-right">
-						<li><a href="../登录页面\index.html" style="color: red;">你好，请登录</a></li>
-						<li><a href="../注册页面\index.html">免费注册</a></li>
-						<li class="spacer"></li>
-						<li><a href="">我的订单</a></li>
-						<li class="spacer"></li>
-
+						<li>
+							<a th:if="${session.loginUser != null}">欢迎，[[${session.loginUser == null?'':session.loginUser.nickname}]]</a>
+							<a href="http://auth.gulimall.com/login.html" th:if="${session.loginUser == null}">你好，请登录</a>
+						</li>
+						<li>
+							<a href=" http://auth.gulimall.com/reg.html" th:if="${session.loginUser == null}"
+							   class="li_2">免费注册</a>
+						</li>
+						<span>|</span>
+						<li>
+							<a href="#">我的订单</a>
+						</li>
 					</ul>
 					<div style="clear: both;"></div>
 				</div>
@@ -52,7 +58,7 @@
 						<input type="button" value="搜索" class="one_right_btn">
 					</div>
 				</div>
-				<div class="one_search_load" th:if="${userId}==null">
+				<div class="one_search_load" th:if="${session.loginUser}==null">
 					<img src="static/cart/img/shop_07.jpg" class="one_load_wraing">
 					<span>您还没有登录！登录后购物车的商品将保存到您账号中</span>
 					<a href="#"><input type="button" onclick="login()" value="立即登录" class="one_load_btn"></a>
@@ -80,33 +86,37 @@
 				</div>
 
 				<div class="One_ShopCon">
-					<ul>
-						<li th:each="cartInfo:${cartList}">
+					<ul th:if="${cast.getCastItems()==null}">
+						购物车还没有商品，<a href="http://gulimall.com">去购物</a>
+					</ul>
+					<ul th:if="${cast.getCastItems()!=null}">
+						<li th:each="item:${cast.castItems}">
 							<div> </div>
 
 							<div>
 								<ol>
-									<li><input type="checkbox" class="check" th:value="${cartInfo.skuId}" onchange="checkSku(this)" th:checked="(${cartInfo.isChecked}==1)?'true':'false'" /></li>
+									<li><input type="checkbox" class="check" th:value="${item.skuId}" onchange="checkSku(this)" th:checked="${item.check}" /></li>
 									<li>
-										<dt><img th:src="static/cart/${cartInfo.imgUrl}" src="static/cart/img\shop1.jpg" alt=""></dt>
-										<dd th:onclick="'toItem('+${cartInfo.skuId}+')'">
+										<dt><img th:src="${item.image}" src="static/cart/img\shop1.jpg" alt=""></dt>
+										<dd style="width: 300px" th:onclick="'toItem('+${item.skuId}+')'">
 											<p>
-												<span th:text="${cartInfo.skuName}">TCL 55A950C 55英寸32核</span>
+												<span th:text="${item.getTitle()}">TCL 55A950C 55英寸32核</span></br>
+												<span th:each="attr:${item.skuAttr}" th:text="${attr}">TCL 55A950C 55英寸32核</span>
 											</p>
 										</dd>
 									</li>
 									<li>
-										<p class="dj" th:text="'￥'+${cartInfo.skuPrice}">4599.00</p>
+										<p class="dj" th:text="'￥'+${#numbers.formatDecimal(item.price,3,2)}">4599.00</p>
 									</li>
 									<li>
-										<p>
+										<p style="width: 80px">
 											<span>-</span>
-											<span th:text="${cartInfo.skuNum}">5</span>
+											<span th:text="${item.count}">5</span>
 											<span>+</span>
 										</p>
 									</li>
 									<li style="font-weight:bold">
-										<p class="zj" th:text="'￥'+${cartInfo.totalPrice}">￥22995.00</p>
+										<p class="zj" th:text="'￥'+${#numbers.formatDecimal(cast.getTotalAmount(),1,2)}">￥22995.00</p>
 									</li>
 									<li>
 										<p>删除</p>
@@ -114,45 +124,6 @@
 								</ol>
 							</div>
 						</li>
-						<!--<li>
-                    <div>
-                    </div>
-                    <div>
-                        <ol>
-                            <li><input type="checkbox"  class="check"></li>
-                            <li>
-                                <dt><img src="static/cart/img\shop1.jpg" alt=""></dt>
-                                <dd>
-                                    <p>
-
-                                        <span>TCL 55A950C 55英寸32核</span>
-                                        <span>尺码: 55时 超薄曲面 人工智能</span>
-                                    </p>
-                                    <p>人工智能 HDR曲面超薄4K电视金属机</p>
-
-                                </dd>
-                            </li>
-                            <li>
-                                <p class="dj">￥4599.00</p>
-
-                            </li>
-                            <li>
-                                <p>
-                                    <span>-</span>
-                                    <span>5</span>
-                                    <span>+</span>
-                                </p>
-
-                            </li>
-                            <li style="font-weight:bold"><p class="zj">￥22995.00</p></li>
-                            <li>
-                                <p>删除</p>
-
-                            </li>
-                        </ol>
-                    </div>
-                </li>-->
-
 					</ul>
 				</div>
 				<div class="One_ShopFootBuy fix1">
@@ -246,7 +217,7 @@
 	<script src="static/cart/js/index.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		function toTrade() {
-			window.location.href = "http://cart.gmall.com:8087/toTrade";
+			window.location.href = "http://cast.gmall.com:8087/toTrade";
 		}
 
 		function toItem(skuId) {
@@ -254,7 +225,7 @@
 		}
 
 		function login() {
-			var s = encodeURIComponent("http://cart.gmall.com:8087/cartList");
+			var s = encodeURIComponent("http://cast.gmall.com:8087/castList");
 			window.location.href = "http://passport.atguigu.com/index?originUrl=" + s;
 		}
 
@@ -266,7 +237,7 @@
 				isCheckedFlag = "1";
 			}
 			var param = "isChecked=" + isCheckedFlag + "&" + "skuId=" + skuId;
-			$.post("checkCart", param, function(data) {
+			$.post("checkcast", param, function(data) {
 				sumSumPrice();
 			});
 

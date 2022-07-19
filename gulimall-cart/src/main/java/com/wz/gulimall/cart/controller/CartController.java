@@ -22,9 +22,9 @@ public class CartController {
     CartService cartService;
 
     @RequestMapping("/cart.html")
-    public String cartListPage(Model model) {
-        Cast cart = cartService.getCast();
-        model.addAttribute("cart", cart);
+    public String cartListPage(Model model) throws ExecutionException, InterruptedException {
+        Cast cast = cartService.getCast();
+        model.addAttribute("cast", cast);
         return "cartList";
     }
 
