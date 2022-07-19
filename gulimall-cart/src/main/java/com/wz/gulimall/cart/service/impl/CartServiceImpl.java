@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,7 +40,7 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String, Object, Object> redisOps = gerRedisOps();
         String castItemRedis = (String) redisOps.get(String.valueOf(skuId));
         if (StringUtils.isEmpty(castItemRedis)) {
-            CastItem castItem =  new CastItem();
+            CastItem castItem = new CastItem();
             CompletableFuture getSkuInfoTask = CompletableFuture.runAsync(() -> {
                 //        组装CastItem
                 //        查询Sku信息加入CastItem
@@ -52,14 +53,14 @@ public class CartServiceImpl implements CartService {
                 castItem.setTitle(skuInfoVo.getSkuTitle());
                 castItem.setPrice(skuInfoVo.getPrice());
                 castItem.setCount(count);
-            },executorService);
+            }, executorService);
 
             CompletableFuture getSkuSaleAttrValues = CompletableFuture.runAsync(() -> {
                 //        查询SkuAttr
                 List<String> attrList = productFeignService.listBySkuId(skuId);
                 castItem.setSkuAttr(attrList);
-            },executorService);
-            CompletableFuture.allOf(getSkuInfoTask,getSkuSaleAttrValues).get();
+            }, executorService);
+            CompletableFuture.allOf(getSkuInfoTask, getSkuSaleAttrValues).get();
 //        保存到redis
             String castItemJson = JSON.toJSONString(castItem);
             redisOps.put(String.valueOf(skuId), castItemJson);
@@ -78,31 +79,45 @@ public class CartServiceImpl implements CartService {
     public CastItem getCartItemBySkuId(Long skuId) {
         BoundHashOperations<String, Object, Object> operations = gerRedisOps();
         String castItemStr = (String) operations.get(skuId.toString());
-        return JSONObject.parseObject(castItemStr,CastItem.class);
+        return JSONObject.parseObject(castItemStr, CastItem.class);
     }
 
     @Override
-    public Cast getCast() {
+    public Cast getCast() throws ExecutionException, InterruptedException {
+        Cast cast = new Cast();
         UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
 //        区分登录用户，临时用户
         if (StringUtils.isEmpty(userInfoTo.getUserId())) {
+            String tempKey = PREFIX_CART + userInfoTo.getUserKey();
 //            临时用户
-            BoundHashOperations<String, Object, Object> operations = gerRedisOps();
-            List<Object> castItems = operations.values();
-            for (Object cast : castItems) {
-
-            }
-
-
-
-
+            List<CastItem> castItems = getCastItems(tempKey);
+            cast.setCastItems(castItems);
         } else {
 //            登录用户
-
+            String tempKey = PREFIX_CART + userInfoTo.getUserKey();
+            List<CastItem> castItems = getCastItems(tempKey);
+            if (castItems.size() > 0) {
+                for (CastItem castItem : castItems) {
+                    addToCart(castItem.getCount(), castItem.getSkuId());
+                }
+            }
+            String key = PREFIX_CART + userInfoTo.getUserId();
+            List<CastItem> items = getCastItems(key);
+            cast.setCastItems(items);
         }
+//        封装Casta
+        return cast;
+    }
 
-//        封装Cast
-        return null;
+    private List<CastItem> getCastItems(String key) {
+        BoundHashOperations<String, Object, Object> operations = redisTemplate.boundHashOps(key);
+        List<Object> list = operations.values();
+        List<CastItem> castItems = new ArrayList<>();
+        for (Object obj : list) {
+            CastItem castItem = JSON.parseObject((String) obj, CastItem.class);
+            castItems.add(castItem);
+        }
+        return castItems;
     }
 
     private BoundHashOperations<String, Object, Object> gerRedisOps() {
