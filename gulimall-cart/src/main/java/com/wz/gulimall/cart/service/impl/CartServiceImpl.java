@@ -100,6 +100,8 @@ public class CartServiceImpl implements CartService {
                 for (CastItem castItem : castItems) {
                     addToCart(castItem.getCount(), castItem.getSkuId());
                 }
+                //            清空临时购物车
+                redisTemplate.delete(tempKey);
             }
             String key = PREFIX_CART + userInfoTo.getUserId();
             List<CastItem> items = getCastItems(key);
@@ -107,6 +109,9 @@ public class CartServiceImpl implements CartService {
         }
 //        封装Casta
         return cast;
+    }
+    private BoundHashOperations<String,Object,Object> getOpsByKey(String key) {
+        return redisTemplate.boundHashOps(key);
     }
 
     private List<CastItem> getCastItems(String key) {
