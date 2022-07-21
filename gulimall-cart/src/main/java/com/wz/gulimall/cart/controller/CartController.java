@@ -21,8 +21,15 @@ public class CartController {
     @Autowired
     CartService cartService;
 
+    @RequestMapping("/checkItem")
+    public String checkItem(@RequestParam("skuId") String skuId, @RequestParam("check") Integer check){
+        cartService.checkItem(skuId, check);
+        return "redirect:http://cart.gulimall.com/cart.html";
+    }
+
     @RequestMapping("/cart.html")
     public String cartListPage(Model model) throws ExecutionException, InterruptedException {
+
         Cast cast = cartService.getCast();
         model.addAttribute("cast", cast);
         return "cartList";

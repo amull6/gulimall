@@ -11,4 +11,6 @@ public interface CartService {
     CastItem getCartItemBySkuId(Long skuId);
 
     Cast getCast() throws ExecutionException, InterruptedException;
+
+    void checkItem(String skuId, Integer check);
 }

@@ -110,6 +110,16 @@ public class CartServiceImpl implements CartService {
 //        封装Casta
         return cast;
     }
+
+    @Override
+    public void checkItem(String skuId, Integer check) {
+        BoundHashOperations<String,Object,Object> ops = this.gerRedisOps();
+        String objStr = (String)ops.get(skuId);
+        CastItem castItem = JSON.parseObject(objStr, CastItem.class);
+        castItem.setCheck(check == 1 ? true : false);
+        ops.put(skuId.toString(), JSON.toJSONString(castItem));
+    }
+
     private BoundHashOperations<String,Object,Object> getOpsByKey(String key) {
         return redisTemplate.boundHashOps(key);
     }
