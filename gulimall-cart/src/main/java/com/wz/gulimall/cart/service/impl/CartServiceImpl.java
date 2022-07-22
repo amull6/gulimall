@@ -128,6 +128,12 @@ public class CartServiceImpl implements CartService {
         boundHashOperations.put(skuId, JSON.toJSONString(castItem));
     }
 
+    @Override
+    public void deleteItem(Long skuId) {
+        BoundHashOperations<String, Object, Object> boundHashOperations = gerRedisOps();
+        boundHashOperations.delete(skuId.toString());
+    }
+
     private BoundHashOperations<String, Object, Object> getOpsByKey(String key) {
         return redisTemplate.boundHashOps(key);
     }
