@@ -13,4 +13,6 @@ public interface CartService {
     Cast getCast() throws ExecutionException, InterruptedException;
 
     void checkItem(String skuId, Integer check);
+
+    void changeCountItem(Long skuId, Integer count);
 }

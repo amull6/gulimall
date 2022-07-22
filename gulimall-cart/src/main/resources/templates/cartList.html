@@ -111,10 +111,10 @@
                                 <p class="dj" th:text="'￥'+${#numbers.formatDecimal(item.price,3,2)}">4599.00</p>
                             </li>
                             <li>
-                                <p style="width: 80px">
-                                    <span>-</span>
-                                    <span th:text="${item.count}">5</span>
-                                    <span>+</span>
+                                <p style="width: 80px" th:attr="skuId=${item.skuId}">
+                                    <span class="countOpsBtn">-</span>
+                                    <span class="countOpsNum" th:text="${item.count}">5</span>
+                                    <span class="countOpsBtn">+</span>
                                 </p>
                             </li>
                             <li style="font-weight:bold">
@@ -771,6 +771,11 @@
         var skuId = $(this).attr("skuId");
         var check = $(this).prop("checked");
         location.href = "http://cart.gulimall.com/checkItem?skuId=" + skuId + "&check=" + (check ? 1 : 0);
+    })
+    $(".countOpsBtn").click(function () {
+        var skuId = $(this).parent().attr("skuId");
+        var count = $(this).parent().find(".countOpsNum").text();
+        location.href = "http://cart.gulimall.com/countItem?skuId=" + skuId + "&count=" + count;
     })
 </script>
 </html>

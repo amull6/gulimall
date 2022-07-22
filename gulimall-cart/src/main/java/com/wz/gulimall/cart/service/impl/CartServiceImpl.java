@@ -113,14 +113,22 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void checkItem(String skuId, Integer check) {
-        BoundHashOperations<String,Object,Object> ops = this.gerRedisOps();
-        String objStr = (String)ops.get(skuId);
-        CastItem castItem = JSON.parseObject(objStr, CastItem.class);
+        BoundHashOperations<String, Object, Object> ops = this.gerRedisOps();
+        CastItem castItem = getCartItemBySkuId(Long.valueOf(skuId));
         castItem.setCheck(check == 1 ? true : false);
         ops.put(skuId.toString(), JSON.toJSONString(castItem));
     }
 
-    private BoundHashOperations<String,Object,Object> getOpsByKey(String key) {
+    @Override
+    public void changeCountItem(Long skuId, Integer count) {
+        BoundHashOperations<String, Object, Object> boundHashOperations = this.gerRedisOps();
+        String itemStr = (String) boundHashOperations.get(skuId);
+        CastItem castItem = JSONObject.parseObject(itemStr, CastItem.class);
+        castItem.setCount(count);
+        boundHashOperations.put(skuId, JSON.toJSONString(castItem));
+    }
+
+    private BoundHashOperations<String, Object, Object> getOpsByKey(String key) {
         return redisTemplate.boundHashOps(key);
     }
 
