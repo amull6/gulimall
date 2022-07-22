@@ -22,13 +22,13 @@ public class CartController {
     CartService cartService;
 
     @RequestMapping("/countItem")
-    public String  countItem(@RequestParam("skuId") Long skuId,@RequestParam("count") Integer count){
+    public String countItem(@RequestParam("skuId") Long skuId, @RequestParam("count") Integer count) {
         cartService.changeCountItem(skuId, count);
         return "redirect:http://cart.gulimall.com/cart.html";
     }
 
     @RequestMapping("/checkItem")
-    public String checkItem(@RequestParam("skuId") String skuId, @RequestParam("check") Integer check){
+    public String checkItem(@RequestParam("skuId") String skuId, @RequestParam("check") Integer check) {
         cartService.checkItem(skuId, check);
         return "redirect:http://cart.gulimall.com/cart.html";
     }
