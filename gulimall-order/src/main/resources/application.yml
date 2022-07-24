@@ -12,7 +12,10 @@ spring:
     nacos:
       discovery:
         server-addr: 47.100.105.74:8848
-
+  rabbitmq:
+    host: 47.100.105.74
+    port: 5672
+    virtual-host: /
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
