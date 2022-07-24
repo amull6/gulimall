@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class GulimallOrderApplicationTests {
@@ -25,7 +27,7 @@ public class GulimallOrderApplicationTests {
     }
 
     @Test
-    public void testSendMessage(){
+    public void testSendMessage() {
 ////        String name, boolean durable, boolean autoDelete, Map<String, Object> arguments
 //        Exchange exchange = new TopicExchange("gulimall.Exchange", true, false, null);
 //        amqpAdmin.declareExchange(exchange);
@@ -36,15 +38,15 @@ public class GulimallOrderApplicationTests {
 //        Binding binding = new Binding("gulimall.Queque2", Binding.DestinationType.QUEUE,"gulimall.Exchange","#.RoutingKey",null);
 //        amqpAdmin.declareBinding(binding);
 //        String var1, String var2, Object var3, MessagePostProcessor var4, CorrelationData var5
-        for(int i=0;i<10;i++){
-            if (i % 2 == 0) {
+        for (int i = 0; i < 10; i++) {
+            if (i < 10) {
                 OrderEntity orderEntity = new OrderEntity();
                 orderEntity.setId(1L);
-                rabbitTemplate.convertAndSend("gulimall.Exchange","gulimall.RoutingKey",orderEntity);
-            }else{
+                rabbitTemplate.convertAndSend("gulimall.Exchange", "gulimall.RoutingKey", orderEntity, new CorrelationData(UUID.randomUUID().toString()));
+            } else {
                 OrderItemEntity orderItemEntity = new OrderItemEntity();
                 orderItemEntity.setOrderId(2L);
-                rabbitTemplate.convertAndSend("gulimall.Exchange","gulimall.RoutingKey",orderItemEntity);
+                rabbitTemplate.convertAndSend("gulimall.Exchange", "gulimall.RoutingKey", orderItemEntity, new CorrelationData(UUID.randomUUID().toString()));
             }
 
         }
