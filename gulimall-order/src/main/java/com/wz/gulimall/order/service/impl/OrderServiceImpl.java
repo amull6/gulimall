@@ -2,7 +2,6 @@ package com.wz.gulimall.order.service.impl;
 
 import com.rabbitmq.client.Channel;
 import com.wz.common.vo.MemberResVo;
-import com.wz.gulimall.order.entity.OrderItemEntity;
 import com.wz.gulimall.order.feign.CartFeignService;
 import com.wz.gulimall.order.feign.MemberFeignClient;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
@@ -16,7 +15,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
