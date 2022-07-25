@@ -18,7 +18,7 @@ public class GulimallSessionConfig {
     }
 
     @Bean
-    public RedisSerializer<Object> redisSerializer() {
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         return new GenericJackson2JsonRedisSerializer();
     }
 }
