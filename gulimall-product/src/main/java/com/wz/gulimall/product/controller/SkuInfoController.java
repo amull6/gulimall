@@ -1,5 +1,6 @@
 package com.wz.gulimall.product.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -29,6 +30,12 @@ import com.wz.common.utils.R;
 public class SkuInfoController {
     @Autowired
     private SkuInfoService skuInfoService;
+
+    @RequestMapping("/{skuId}/price")
+    public BigDecimal getPrice(@PathVariable Long skuId){
+        return skuInfoService.getPriceBySkuId(skuId);
+    }
+
 
     /**
      * 列表

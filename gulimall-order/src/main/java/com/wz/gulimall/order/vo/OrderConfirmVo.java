@@ -14,6 +14,8 @@ public class OrderConfirmVo {
     @Getter @Setter
     Integer integration;
     BigDecimal total; //订单总额
+    //防重复提交令牌
+    String orderToken;
 
     public BigDecimal getTotal() {
         BigDecimal total = BigDecimal.ZERO;

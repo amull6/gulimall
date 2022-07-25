@@ -3,10 +3,12 @@ package com.wz.gulimall.order.service.impl;
 import com.rabbitmq.client.Channel;
 import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.order.entity.OrderItemEntity;
+import com.wz.gulimall.order.feign.CartFeignService;
 import com.wz.gulimall.order.feign.MemberFeignClient;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.order.vo.MemberAddressVo;
 import com.wz.gulimall.order.vo.OrderConfirmVo;
+import com.wz.gulimall.order.vo.OrderItemVo;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -38,6 +40,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Autowired
     MemberFeignClient memberFeignClient;
 
+    @Autowired
+    CartFeignService cartFeignService;
+
     @Override
     public OrderConfirmVo confirmOrder() {
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
@@ -46,10 +51,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         List<MemberAddressVo> addresses = memberFeignClient.getMemberReceiveAddressByMemberId(memberResVo.getId());
         orderConfirmVo.setAddress(addresses);
 //        查询购物项
-
+        List<OrderItemVo> orderItemVos = cartFeignService.getCastItem();
+        orderConfirmVo.setItems(orderItemVos);
 //        用户积分
+        orderConfirmVo.setIntegration(memberResVo.getIntegration());
 //        防重令牌
-        return null;
+        return orderConfirmVo;
     }
 
     @Override

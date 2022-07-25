@@ -3,6 +3,7 @@ package com.wz.gulimall.cart.service;
 import com.wz.gulimall.cart.vo.Cast;
 import com.wz.gulimall.cart.vo.CastItem;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public interface CartService {
@@ -17,4 +18,6 @@ public interface CartService {
     void changeCountItem(Long skuId, Integer count);
 
     void deleteItem(Long skuId);
+
+    List<CastItem> getCastItems();
 }

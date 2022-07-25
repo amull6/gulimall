@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -22,6 +23,11 @@ public class CartController {
     @Autowired
     CartService cartService;
 
+    //    查询用户购物项信息
+    @RequestMapping("/getCastItems")
+    public List<CastItem> getCastItem() {
+        return cartService.getCastItems();
+    }
     @GetMapping("/deleteItem")
     public String deleteItem(@RequestParam("skuId") Long skuId) {
         cartService.deleteItem(skuId);

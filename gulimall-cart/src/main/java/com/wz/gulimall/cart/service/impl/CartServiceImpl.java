@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -132,6 +133,24 @@ public class CartServiceImpl implements CartService {
     public void deleteItem(Long skuId) {
         BoundHashOperations<String, Object, Object> boundHashOperations = gerRedisOps();
         boundHashOperations.delete(skuId.toString());
+    }
+
+    @Override
+    public List<CastItem> getCastItems() {
+        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+        if (userInfoTo != null) {
+            String key = PREFIX_CART + userInfoTo.getUserId();
+            List<CastItem> castItems = getCastItems(key);
+//            1更新为最新价格
+            //            2只返回选中的Item
+            return castItems.stream().filter(CastItem::isCheck).map((obj) -> {
+//                    去商品服务查询最新的价格
+                obj.setPrice(productFeignService.getPrice(obj.getSkuId()));
+                return obj;
+            }).collect(Collectors.toList());
+        }else{
+            return null;
+        }
     }
 
     private BoundHashOperations<String, Object, Object> getOpsByKey(String key) {
