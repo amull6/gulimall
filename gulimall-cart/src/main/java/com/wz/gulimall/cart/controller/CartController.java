@@ -25,7 +25,7 @@ public class CartController {
     @GetMapping("/deleteItem")
     public String deleteItem(@RequestParam("skuId") Long skuId) {
         cartService.deleteItem(skuId);
-        return "redirect:http://cart.gulimall.cn/cart.html";
+        return "redirect:http://cart.gulimall.com/cart.html";
     }
 
     @RequestMapping("/countItem")
