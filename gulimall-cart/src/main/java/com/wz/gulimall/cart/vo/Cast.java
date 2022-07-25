@@ -50,7 +50,9 @@ public class Cast {
         BigDecimal bigDecimal = new BigDecimal("0.00");
         if (castItems.size() > 0) {
             for (CastItem castItem : castItems) {
-                bigDecimal = bigDecimal.add(castItem.getTotalPrice());
+                if (castItem.isCheck()) {
+                    bigDecimal = bigDecimal.add(castItem.getTotalPrice());
+                }
             }
         }
         return bigDecimal.subtract(getReduce());

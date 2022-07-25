@@ -1,7 +1,12 @@
 package com.wz.gulimall.order.service.impl;
 
 import com.rabbitmq.client.Channel;
+import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.order.entity.OrderItemEntity;
+import com.wz.gulimall.order.feign.MemberFeignClient;
+import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
+import com.wz.gulimall.order.vo.MemberAddressVo;
+import com.wz.gulimall.order.vo.OrderConfirmVo;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -10,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,6 +35,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    MemberFeignClient memberFeignClient;
+
+    @Override
+    public OrderConfirmVo confirmOrder() {
+        MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
+        OrderConfirmVo orderConfirmVo = new OrderConfirmVo();
+//        查询地址列表
+        List<MemberAddressVo> addresses = memberFeignClient.getMemberReceiveAddressByMemberId(memberResVo.getId());
+        orderConfirmVo.setAddress(addresses);
+//        查询购物项
+
+//        用户积分
+//        防重令牌
+        return null;
+    }
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<OrderEntity> page = this.page(
@@ -47,13 +70,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         try {
             if (deliveryTag % 2 == 0) {
                 System.out.println("确认收到消息");
-                channel.basicAck(deliveryTag,false);
-            }else{
+                channel.basicAck(deliveryTag, false);
+            } else {
                 System.out.println("没有接受到消息");
-                channel.basicNack(deliveryTag,false,true);
+                channel.basicNack(deliveryTag, false, true);
             }
         } catch (Exception e) {
-        //网络中断
+            //网络中断
         }
 
     }

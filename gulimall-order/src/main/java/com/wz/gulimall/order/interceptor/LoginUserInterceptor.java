@@ -11,9 +11,10 @@ import javax.servlet.http.HttpSession;
 
 @Component
 public class LoginUserInterceptor implements HandlerInterceptor {
+    public static ThreadLocal<MemberResVo> loginUser = new ThreadLocal<>();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        ThreadLocal<MemberResVo> loginUser = new ThreadLocal<>();
 //        判断session中有无用户信息
         HttpSession session = request.getSession();
         MemberResVo memberResVo = (MemberResVo) session.getAttribute(AuthServerConstant.LOGIN_USER);
