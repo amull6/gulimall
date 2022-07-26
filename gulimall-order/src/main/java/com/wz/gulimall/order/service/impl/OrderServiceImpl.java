@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,6 +30,8 @@ import com.wz.common.utils.Query;
 import com.wz.gulimall.order.dao.OrderDao;
 import com.wz.gulimall.order.entity.OrderEntity;
 import com.wz.gulimall.order.service.OrderService;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 
 @Service("orderService")
@@ -41,19 +46,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Autowired
     CartFeignService cartFeignService;
 
+    @Autowired
+    ExecutorService executorService;
+
     @Override
-    public OrderConfirmVo confirmOrder() {
+    public OrderConfirmVo confirmOrder() throws ExecutionException, InterruptedException {
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
         OrderConfirmVo orderConfirmVo = new OrderConfirmVo();
-//        查询地址列表
-        List<MemberAddressVo> addresses = memberFeignClient.getMemberReceiveAddressByMemberId(memberResVo.getId());
-        orderConfirmVo.setAddress(addresses);
-//        查询购物项
-        List<OrderItemVo> orderItemVos = cartFeignService.getCastItem();
-        orderConfirmVo.setItems(orderItemVos);
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        CompletableFuture<Void> addressCompletableFuture = CompletableFuture.runAsync(() -> {
+            RequestContextHolder.setRequestAttributes(requestAttributes);
+            //        查询地址列表
+            List<MemberAddressVo> addresses = memberFeignClient.getMemberReceiveAddressByMemberId(memberResVo.getId());
+            orderConfirmVo.setAddress(addresses);
+        });
+        CompletableFuture<Void> castItemFuture = CompletableFuture.runAsync(() -> {
+            RequestContextHolder.setRequestAttributes(requestAttributes);
+            //        查询购物项
+            List<OrderItemVo> orderItemVos = cartFeignService.getCastItem();
+            orderConfirmVo.setItems(orderItemVos);
+        });
 //        用户积分
         orderConfirmVo.setIntegration(memberResVo.getIntegration());
 //        防重令牌
+        CompletableFuture.allOf(addressCompletableFuture, castItemFuture).get();
         return orderConfirmVo;
     }
 

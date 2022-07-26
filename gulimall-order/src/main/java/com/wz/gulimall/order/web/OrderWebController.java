@@ -8,13 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.concurrent.ExecutionException;
+
 @Controller
 public class OrderWebController {
     @Autowired
     OrderService orderService;
 
     @RequestMapping("/toTrade")
-    public String toTrade(Model model) {
+    public String toTrade(Model model) throws ExecutionException, InterruptedException {
         OrderConfirmVo orderConfirmVo = orderService.confirmOrder();
         model.addAttribute("orderConfirm", orderConfirmVo);
         return "confirm";

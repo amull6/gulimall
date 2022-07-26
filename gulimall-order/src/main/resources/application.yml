@@ -39,4 +39,10 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+gulimall:
+  thread:
+    coreSize: 20
+    maxSize: 50
+    keepAliveTime: 10
+
 
