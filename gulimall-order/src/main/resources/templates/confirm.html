@@ -66,6 +66,7 @@
                         <li><a href="static/order/confirm/">广西</a></li>
                         <li><a href="static/order/confirm/">云南</a></li>
                         <li><a href="static/order/confirm/">宁夏</a></li>
+                        <li><a href="static/order/confirm/">宁夏</a></li>
                         <li><a href="static/order/confirm/">海外</a></li>
                     </ul>
 
@@ -603,8 +604,8 @@
     </div>
 
     <!--地址-->
-    <div class="top-3">
-        <p>家里</p><span>齐天大圣  北京市  昌平区城区晨曦小区-16号楼 吉利大学  150****2245</span>
+    <div class="top-3" th:each="attr:${orderConfirm.getAddress()}">
+        <p>[[${attr.name}}]]</p><span>[[${attr.name}}]]  [[${attr.city}}]]  [[${attr.detailAddress}}]] 吉利大学  150****2245</span>
     </div>
     <p class="p2">更多地址︾</p>
     <div class="hh1"/>
