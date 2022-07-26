@@ -16,6 +16,18 @@ public class OrderConfirmVo {
     BigDecimal total; //订单总额
     //防重复提交令牌
     String orderToken;
+    Integer count;
+
+    public Integer getCount(){
+        Integer count = 0;
+        if(items!=null&&items.size()>0){
+            for (OrderItemVo orderItemVo : items) {
+                count+=orderItemVo.getCount();
+            }
+        }
+        return count;
+    }
+
 
     public BigDecimal getTotal() {
         BigDecimal total = BigDecimal.ZERO;
