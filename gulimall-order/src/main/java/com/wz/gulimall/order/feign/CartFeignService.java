@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@FeignClient("gulimal-cart")
+@FeignClient("gulimall-cart")
 public interface CartFeignService {
     @RequestMapping("/getCastItems")
     List<OrderItemVo> getCastItem();
