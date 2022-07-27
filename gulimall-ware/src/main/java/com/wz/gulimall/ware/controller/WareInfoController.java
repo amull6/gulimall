@@ -1,5 +1,6 @@
 package com.wz.gulimall.ware.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -30,6 +31,14 @@ public class WareInfoController {
     @Autowired
     private WareInfoService wareInfoService;
 
+    /*
+     *根据addrID获取物流费用
+     */
+    @RequestMapping("fare")
+    private R getFare(@RequestParam("addrId") Long addrId) {
+        BigDecimal bigDecimal = wareInfoService.getFare(addrId);
+        return R.ok().setData(bigDecimal);
+    }
     /**
      * 列表
      */
