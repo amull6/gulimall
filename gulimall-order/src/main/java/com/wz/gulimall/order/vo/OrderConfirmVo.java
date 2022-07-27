@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public class OrderConfirmVo {
     @Getter @Setter
@@ -17,6 +18,9 @@ public class OrderConfirmVo {
     //防重复提交令牌
     String orderToken;
     Integer count;
+
+    @Getter @Setter
+    Map<Long,Boolean> stocks;
 
     public Integer getCount(){
         Integer count = 0;

@@ -14,9 +14,11 @@ public class GuliFeignConfig {
     public RequestInterceptor requestInterceptor() {
         RequestInterceptor requestInterceptor = requestTemplate -> {
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-            if (httpServletRequest != null) {
-                requestTemplate.header("cookie", httpServletRequest.getHeader("cookie"));
+            if (servletRequestAttributes != null) {
+                HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
+                if (httpServletRequest != null) {
+                    requestTemplate.header("cookie", httpServletRequest.getHeader("cookie"));
+                }
             }
         };
         return requestInterceptor;

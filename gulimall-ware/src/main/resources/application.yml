@@ -20,7 +20,7 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 server:
-  port: 11000
+  port: 9999
 
 logging:
   level:

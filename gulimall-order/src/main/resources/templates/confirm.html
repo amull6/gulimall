@@ -672,7 +672,7 @@
         <div class="yun1" th:each="item:${orderConfirm.getItems()}">
             <img th:src="item.getImage" class="yun"/>
             <div class="mi">
-                <p>[[${item.getTitle()}]]<span style="color: red;"> ￥ [[${#numbers.formatDecimal(item.getPrice(),1,2)}]]</span> <span> x[[${item.getCount()}]] </span> <span>[[${item.hasStock?"有货":"无货"}]]</span>
+                <p>[[${item.getTitle()}]]<span style="color: red;"> ￥ [[${#numbers.formatDecimal(item.getPrice(),1,2)}]]</span> <span> x[[${item.getCount()}]] </span> <span>[[${orderConfirm.stocks[item.getSkuId()]?"有货":"无货"}]]</span>
                 </p>
                 <p><span>0.095kg</span></p>
                 <p class="tui-1"><img src="static/order/confirm/img/i_07.png"/>支持7天无理由退货</p>

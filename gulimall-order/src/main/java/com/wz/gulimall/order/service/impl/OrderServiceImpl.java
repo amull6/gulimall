@@ -1,9 +1,13 @@
 package com.wz.gulimall.order.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.rabbitmq.client.Channel;
+import com.wz.common.to.SkuHasStockVo;
+import com.wz.common.utils.R;
 import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.order.feign.CartFeignService;
 import com.wz.gulimall.order.feign.MemberFeignClient;
+import com.wz.gulimall.order.feign.WareFeignService;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.order.vo.MemberAddressVo;
 import com.wz.gulimall.order.vo.OrderConfirmVo;
@@ -20,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -49,6 +54,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Autowired
     ExecutorService executorService;
 
+
+    @Autowired
+    WareFeignService wareFeignService;
+
     @Override
     public OrderConfirmVo confirmOrder() throws ExecutionException, InterruptedException {
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
@@ -59,13 +68,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             //        查询地址列表
             List<MemberAddressVo> addresses = memberFeignClient.getMemberReceiveAddressByMemberId(memberResVo.getId());
             orderConfirmVo.setAddress(addresses);
-        });
+        }, executorService);
         CompletableFuture<Void> castItemFuture = CompletableFuture.runAsync(() -> {
             RequestContextHolder.setRequestAttributes(requestAttributes);
             //        查询购物项
             List<OrderItemVo> orderItemVos = cartFeignService.getCastItem();
             orderConfirmVo.setItems(orderItemVos);
-        });
+        }, executorService).thenRunAsync(() -> {
+            RequestContextHolder.setRequestAttributes(requestAttributes);
+            List<OrderItemVo> orderItemVos = orderConfirmVo.getItems();
+            List<Long> skuIds = orderItemVos.stream().map(OrderItemVo::getSkuId).collect(Collectors.toList());
+            R r = wareFeignService.hasStock(skuIds);
+            List<SkuHasStockVo> skuHasStockVos = r.getData(new TypeReference<List<SkuHasStockVo>>() {
+            });
+            Map<Long, Boolean> map = skuHasStockVos.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, SkuHasStockVo::getHasStock));
+            orderConfirmVo.setStocks(map);
+        }, executorService);
 //        用户积分
         orderConfirmVo.setIntegration(memberResVo.getIntegration());
 //        防重令牌
