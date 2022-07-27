@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MemberAddressVo {
+    private Long id;
     /**
      * member_id
      */
