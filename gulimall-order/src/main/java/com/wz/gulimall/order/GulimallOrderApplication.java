@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @MapperScan("com.wz.gulimall.order.dao")
 @EnableRabbit
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.wz.gulimall.order.feign")
 public class GulimallOrderApplication {
 
     public static void main(String[] args) {

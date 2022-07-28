@@ -726,7 +726,7 @@
         </p>
         <p class="qian_y">
             <span>服务费： </span>
-            <span class="rmb"> &nbsp ￥0.00</span>
+            <span class="rmb"> &nbsp ￥<b id="fareEle"></b></span>
         </p>
         <p class="qian_y">
             <span>退换无忧： </span>
@@ -736,7 +736,7 @@
     </div>
 
     <div class="yfze">
-        <p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥ [[${#numbers.formatDecimal(orderConfirm.getPayPrice(),1,2)}]]</span></p>
+        <p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥ <b id="payPriceEle">[[${#numbers.formatDecimal(orderConfirm.getPayPrice(),1,2)}]]</b></span></p>
         <p class="yfze_b">寄送至：  收货人：</p>
     </div>
     <button class="tijiao">提交订单</button>
@@ -973,6 +973,7 @@
             $('.h-r-1').css('display', 'none')
         })
         highLight();
+        getFare($(".addr-item p[def='1']").attr("addrId"))
     })
     function highLight(){
         $(".addr-item p").css({"border":"2px solid gray"});
@@ -983,10 +984,18 @@
     $(".addr").click(function () {
         $(".addr-item p").css({"border":"2px solid gray"});
         $(this).css({"border": "2px solid red"});
-
-
-        $.get("http://ware.gulimall.com/api/ware/wareinfo/fare?addrId=")
+        var addrId = $(this).attr("addrId");
+        getFare(addrId)
     })
+
+    function getFare(addrId) {
+        $.get("http://ware.gulimall.com/api/ware/wareinfo/fare?addrId="+addrId,function (data) {
+            $("#fareEle").text(data.data);
+            var total = [[${orderConfirm.getTotal()}]];
+            var payPrice = total*1 +data.data*1
+            $("#payPriceEle").text(payPrice);
+        })
+    }
 
 
 

@@ -19,6 +19,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -73,6 +74,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             RequestContextHolder.setRequestAttributes(requestAttributes);
             //        查询购物项
             List<OrderItemVo> orderItemVos = cartFeignService.getCastItem();
+//            List<OrderItemVo> orderItemVos = new ArrayList<>();
             orderConfirmVo.setItems(orderItemVos);
         }, executorService).thenRunAsync(() -> {
             RequestContextHolder.setRequestAttributes(requestAttributes);
