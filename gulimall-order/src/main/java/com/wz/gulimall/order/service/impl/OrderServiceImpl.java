@@ -10,20 +10,17 @@ import com.wz.gulimall.order.feign.CartFeignService;
 import com.wz.gulimall.order.feign.MemberFeignClient;
 import com.wz.gulimall.order.feign.WareFeignService;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
-import com.wz.gulimall.order.vo.MemberAddressVo;
-import com.wz.gulimall.order.vo.OrderConfirmVo;
-import com.wz.gulimall.order.vo.OrderItemVo;
+import com.wz.gulimall.order.vo.*;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -61,6 +58,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Autowired
     WareFeignService wareFeignService;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
+
+    @Override
+    public SubmitOrderResponseVo submitOrder(OrderSubmitVo orderSubmitVo) {
+//        获取用户信息
+        MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
+//        验证令牌、验价格、锁库存
+        String orderToken = orderSubmitVo.getOrderToken();
+        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+        Long code = (Long) redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(OrderConstant.USER_ORDER_TOKEN_PREFIX + memberResVo.getId()), orderToken);
+
+        return null;
+    }
+
     @Override
     public OrderConfirmVo confirmOrder() throws ExecutionException, InterruptedException {
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
@@ -91,7 +104,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 //        用户积分
         orderConfirmVo.setIntegration(memberResVo.getIntegration());
 //        生成防重令牌
-        String orderToken = OrderConstant.USER_ORDER_TOKEN_PREFIX + UUID.randomUUID().toString().replace("-", "");
+        String orderToken = OrderConstant.USER_ORDER_TOKEN_PREFIX + memberResVo.getId();
+        redisTemplate.opsForValue().set(orderToken, UUID.randomUUID().toString().replace("-", ""));
         orderConfirmVo.setOrderToken(orderToken);
         CompletableFuture.allOf(addressCompletableFuture, castItemFuture).get();
         return orderConfirmVo;

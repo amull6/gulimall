@@ -3,6 +3,7 @@ package com.wz.gulimall.order.web;
 import com.wz.gulimall.order.service.OrderService;
 import com.wz.gulimall.order.vo.OrderConfirmVo;
 import com.wz.gulimall.order.vo.OrderSubmitVo;
+import com.wz.gulimall.order.vo.SubmitOrderResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,14 @@ public class OrderWebController {
     OrderService orderService;
 
     @RequestMapping("/submitOrder")
-    public String submitOrder(OrderSubmitVo orderSubmitVo){
-
-        System.out.println(orderSubmitVo);
-        return "";
+    public String submitOrder(OrderSubmitVo orderSubmitVo, Model model) {
+        SubmitOrderResponseVo responseVo = orderService.submitOrder(orderSubmitVo);
+        if (responseVo != null && responseVo.getCode() == 0) {
+            model.addAttribute("order", responseVo.getOrderEntity());
+            return "pay";
+        } else {
+            return "redirect:http://order.gulimall.com/toTrade";
+        }
     }
 
     @RequestMapping("/toTrade")
