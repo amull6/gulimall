@@ -16,6 +16,7 @@ public class OrderConfirmVo {
     Integer integration;
     BigDecimal total; //订单总额
     //防重复提交令牌
+    @Getter @Setter
     String orderToken;
     Integer count;
 

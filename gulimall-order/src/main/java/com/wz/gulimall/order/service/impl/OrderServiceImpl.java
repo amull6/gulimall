@@ -2,6 +2,7 @@ package com.wz.gulimall.order.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
 import com.rabbitmq.client.Channel;
+import com.wz.common.constant.OrderConstant;
 import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.utils.R;
 import com.wz.common.vo.MemberResVo;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -88,7 +90,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }, executorService);
 //        用户积分
         orderConfirmVo.setIntegration(memberResVo.getIntegration());
-//        防重令牌
+//        生成防重令牌
+        String orderToken = OrderConstant.USER_ORDER_TOKEN_PREFIX + UUID.randomUUID().toString().replace("-", "");
+        orderConfirmVo.setOrderToken(orderToken);
         CompletableFuture.allOf(addressCompletableFuture, castItemFuture).get();
         return orderConfirmVo;
     }

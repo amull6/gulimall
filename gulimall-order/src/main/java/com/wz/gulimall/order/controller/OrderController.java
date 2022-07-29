@@ -3,6 +3,7 @@ package com.wz.gulimall.order.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wz.gulimall.order.vo.OrderSubmitVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,6 @@ import com.wz.gulimall.order.entity.OrderEntity;
 import com.wz.gulimall.order.service.OrderService;
 import com.wz.common.utils.PageUtils;
 import com.wz.common.utils.R;
-
 
 
 /**
@@ -45,8 +45,8 @@ public class OrderController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-        public R info(@PathVariable("id") Long id){
-		OrderEntity order = orderService.getById(id);
+    public R info(@PathVariable("id") Long id) {
+        OrderEntity order = orderService.getById(id);
 
         return R.ok().put("order", order);
     }
@@ -55,8 +55,8 @@ public class OrderController {
      * 保存
      */
     @RequestMapping("/save")
-        public R save(@RequestBody OrderEntity order){
-		orderService.save(order);
+    public R save(@RequestBody OrderEntity order) {
+        orderService.save(order);
 
         return R.ok();
     }
@@ -65,8 +65,8 @@ public class OrderController {
      * 修改
      */
     @RequestMapping("/update")
-        public R update(@RequestBody OrderEntity order){
-		orderService.updateById(order);
+    public R update(@RequestBody OrderEntity order) {
+        orderService.updateById(order);
 
         return R.ok();
     }
@@ -75,8 +75,8 @@ public class OrderController {
      * 删除
      */
     @RequestMapping("/delete")
-        public R delete(@RequestBody Long[] ids){
-		orderService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody Long[] ids) {
+        orderService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

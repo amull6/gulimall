@@ -739,7 +739,14 @@
         <p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥ <b id="payPriceEle">[[${#numbers.formatDecimal(orderConfirm.getPayPrice(),1,2)}]]</b></span></p>
         <p class="yfze_b">寄送至：<b id="receiveAddressEle"></b> 收货人：<b id="receiverEle"></b></p>
     </div>
-    <button class="tijiao">提交订单</button>
+    <form action="http://gulimall.com/api/submitOrder">
+        <input type="hidden" name="addrId" id="addrId">
+        <input type="hidden" name="payPrice" id="payPrice">
+        <input type="hidden" name="payType" id="payType">
+        <input type="hidden" name="orderToken" th:value="${orderConfirm.getOrderToken()}"/>
+        <button class="tijiao">提交订单</button>
+    </form>
+
 </div>
 </div>
 
@@ -996,6 +1003,8 @@
             $("#payPriceEle").text(payPrice);
             $("#receiveAddressEle").text(data.data.addressVo.province+" "+data.data.addressVo.detailAddress);
             $("#receiverEle").text(data.data.addressVo.name);
+            $("#payPrice").val(payPrice);
+            $("#addrId").val(addrId);
         })
     }
 
