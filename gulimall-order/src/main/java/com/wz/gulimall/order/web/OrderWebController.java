@@ -18,6 +18,7 @@ public class OrderWebController {
 
     @RequestMapping("/submitOrder")
     public String submitOrder(OrderSubmitVo orderSubmitVo){
+
         System.out.println(orderSubmitVo);
         return "";
     }
