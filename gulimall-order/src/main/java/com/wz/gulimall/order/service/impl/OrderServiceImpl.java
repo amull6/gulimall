@@ -106,7 +106,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         Integer giftGrowth = 0;
         Integer giftIntegration = 0;
         for (OrderItemEntity orderItemEntity : orderItemEntities) {
-            total = total.add(orderItemEntity.getSkuPrice());
+            total = total.add(orderItemEntity.getRealAmount());
             integration = integration.add(orderItemEntity.getIntegrationAmount());
             promotion = promotion.add(orderItemEntity.getPromotionAmount());
             coupon = coupon.add(orderItemEntity.getCouponAmount());
@@ -235,8 +235,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                     submitOrderResponseVo.setOrderEntity(orderCreateTo.getOrder());
                     return submitOrderResponseVo;
                 }else{
-                    submitOrderResponseVo.setCode(3);
-                    return submitOrderResponseVo;
+                    throw new NoStockException();
                 }
             } else {
                 submitOrderResponseVo.setCode(2);

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.wz.common.exception.BizCodeEnum;
 import com.wz.common.to.SkuHasStockVo;
-import com.wz.gulimall.ware.exception.NoStockException;
+import com.wz.common.exception.NoStockException;
 import com.wz.gulimall.ware.vo.WareLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

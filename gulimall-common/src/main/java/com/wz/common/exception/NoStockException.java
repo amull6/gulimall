@@ -1,4 +1,4 @@
-package com.wz.gulimall.ware.exception;
+package com.wz.common.exception;
 
 public class NoStockException extends RuntimeException{
     public NoStockException(Long skuId) {

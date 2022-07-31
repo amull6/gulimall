@@ -2,7 +2,7 @@ package com.wz.gulimall.ware.service.impl;
 
 import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.utils.R;
-import com.wz.gulimall.ware.exception.NoStockException;
+import com.wz.common.exception.NoStockException;
 import com.wz.gulimall.ware.feign.ProductFeignClient;
 import com.wz.gulimall.ware.vo.OrderItemVo;
 import com.wz.gulimall.ware.vo.WareLockVo;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

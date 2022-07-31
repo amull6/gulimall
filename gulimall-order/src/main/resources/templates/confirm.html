@@ -595,7 +595,7 @@
 <!--</div>-->
 <!--</div>-->
 <!--主体部分-->
-<p class="p1">填写并核对订单信息</p>
+<p class="p1">填写并核对订单信息<span style="color: red" th:if="${msg !=null}" th:text="${msg}"></span></p>
 <div class="section">
     <!--收货人信息-->
     <div class="top-2">
@@ -672,7 +672,9 @@
         <div class="yun1" th:each="item:${orderConfirm.getItems()}">
             <img th:src="item.getImage" class="yun"/>
             <div class="mi">
-                <p>[[${item.getTitle()}]]<span style="color: red;"> ￥ [[${#numbers.formatDecimal(item.getPrice(),1,2)}]]</span> <span> x[[${item.getCount()}]] </span> <span>[[${orderConfirm.stocks[item.getSkuId()]?"有货":"无货"}]]</span>
+                <p>[[${item.getTitle()}]]<span
+                        style="color: red;"> ￥ [[${#numbers.formatDecimal(item.getPrice(),1,2)}]]</span> <span> x[[${item.getCount()}]] </span>
+                    <span>[[${orderConfirm.stocks[item.getSkuId()]?"有货":"无货"}]]</span>
                 </p>
                 <p><span>0.095kg</span></p>
                 <p class="tui-1"><img src="static/order/confirm/img/i_07.png"/>支持7天无理由退货</p>
@@ -736,7 +738,8 @@
     </div>
 
     <div class="yfze">
-        <p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥ <b id="payPriceEle">[[${#numbers.formatDecimal(orderConfirm.getPayPrice(),1,2)}]]</b></span></p>
+        <p class="yfze_a"><span class="z">应付总额：</span><span class="hq">￥ <b id="payPriceEle">[[${#numbers.formatDecimal(orderConfirm.getPayPrice(),1,2)}]]</b></span>
+        </p>
         <p class="yfze_b">寄送至：<b id="receiveAddressEle"></b> 收货人：<b id="receiverEle"></b></p>
     </div>
     <form action="http://order.gulimall.com/submitOrder" method="post">
@@ -982,34 +985,32 @@
         highLight();
         getFare($(".addr-item p[def='1']").attr("addrId"))
     })
-    function highLight(){
-        $(".addr-item p").css({"border":"2px solid gray"});
-        $(".addr-item p[def='1']").css({"border":"2px solid red"});
+
+    function highLight() {
+        $(".addr-item p").css({"border": "2px solid gray"});
+        $(".addr-item p[def='1']").css({"border": "2px solid red"});
     }
 
 
     $(".addr").click(function () {
-        $(".addr-item p").css({"border":"2px solid gray"});
+        $(".addr-item p").css({"border": "2px solid gray"});
         $(this).css({"border": "2px solid red"});
         var addrId = $(this).attr("addrId");
         getFare(addrId)
     })
 
     function getFare(addrId) {
-        $.get("http://ware.gulimall.com/api/ware/wareinfo/fare?addrId="+addrId,function (data) {
+        $.get("http://ware.gulimall.com/api/ware/wareinfo/fare?addrId=" + addrId, function (data) {
             $("#fareEle").text(data.data.fare);
             var total = [[${orderConfirm.getTotal()}]];
-            var payPrice = total*1 +data.data.fare*1
+            var payPrice = total * 1 + data.data.fare * 1
             $("#payPriceEle").text(payPrice);
-            $("#receiveAddressEle").text(data.data.addressVo.province+" "+data.data.addressVo.detailAddress);
+            $("#receiveAddressEle").text(data.data.addressVo.province + " " + data.data.addressVo.detailAddress);
             $("#receiverEle").text(data.data.addressVo.name);
             $("#payPrice").val(payPrice);
             $("#addrId").val(addrId);
         })
     }
-
-
-
 
 
 </script>

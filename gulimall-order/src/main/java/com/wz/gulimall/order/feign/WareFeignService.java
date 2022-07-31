@@ -21,6 +21,6 @@ public interface WareFeignService {
     @RequestMapping("/ware/wareinfo/fare")
     R getFare(@RequestParam("addrId") Long addrId);
 
-    @RequestMapping("/ware/wareskulock/order")
+    @RequestMapping("/ware/waresku/lock/order")
     R lockOrder(@RequestBody WareLockVo wareLockVo);
 }
