@@ -2,7 +2,11 @@ package com.wz.gulimall.ware.service.impl;
 
 import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.utils.R;
+import com.wz.gulimall.ware.exception.NoStockException;
 import com.wz.gulimall.ware.feign.ProductFeignClient;
+import com.wz.gulimall.ware.vo.OrderItemVo;
+import com.wz.gulimall.ware.vo.WareLockVo;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ import com.wz.common.utils.Query;
 import com.wz.gulimall.ware.dao.WareSkuDao;
 import com.wz.gulimall.ware.entity.WareSkuEntity;
 import com.wz.gulimall.ware.service.WareSkuService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
@@ -77,15 +82,63 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     @Override
     public List<SkuHasStockVo> hasStock(List<Long> skuIds) {
         List<SkuHasStockVo> list = baseMapper.hasStock(skuIds);
-        Map<Long, Boolean> map = list.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId,SkuHasStockVo::getHasStock ));
+        Map<Long, Boolean> map = list.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, SkuHasStockVo::getHasStock));
 
         List<SkuHasStockVo> list01 = skuIds.stream().map((obj) -> {
             if (!map.containsKey(obj)) {
                 return new SkuHasStockVo(obj, false);
-            }else{
+            } else {
                 return new SkuHasStockVo(obj, map.get(obj));
             }
         }).collect(Collectors.toList());
         return list01;
+    }
+
+    @Override
+    @Transactional
+    public Boolean lockStock(WareLockVo wareLockVo) {
+        List<OrderItemVo> orderItemVos = wareLockVo.getOrderItemVos();
+        List<SkuWareHasStock> skuWareHasStocks = orderItemVos.stream().map((item) -> {
+            SkuWareHasStock skuWareHasStock = new SkuWareHasStock();
+            Long skuId = item.getSkuId();
+            skuWareHasStock.setSkuId(skuId);
+            skuWareHasStock.setNum(item.getCount());
+            List<Long> wareIds = this.getWareIdsBySkuIdHasStock(skuId);
+            skuWareHasStock.setWareIds(wareIds);
+            return skuWareHasStock;
+        }).collect(Collectors.toList());
+//        锁定库存
+        for (SkuWareHasStock skuWareHasStock : skuWareHasStocks) {
+            boolean skuStockLocked = false;
+            List<Long> wareIds = skuWareHasStock.getWareIds();
+            if (wareIds == null || wareIds.size() < 0) {
+                throw new NoStockException(skuWareHasStock.getSkuId());
+            }
+            for (Long wareId : wareIds) {
+                Long count = this.baseMapper.lockSkuStock(skuWareHasStock.skuId, wareId, skuWareHasStock.getNum());
+                if (count == 1) {
+                    skuStockLocked = true;
+                    break;
+                } else {
+
+                }
+            }
+            if (!skuStockLocked) {
+                throw new NoStockException(skuWareHasStock.getSkuId());
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<Long> getWareIdsBySkuIdHasStock(Long skuId) {
+        return this.baseMapper.getWareIdsBySkuIdHasStock(skuId);
+    }
+
+    @Data
+    private class SkuWareHasStock {
+        private Long skuId;
+        private Integer num;
+        private List<Long> wareIds;
     }
 }

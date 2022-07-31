@@ -11,4 +11,7 @@ import java.util.List;
 public interface MemberFeignClient {
     @RequestMapping("member/memberreceiveaddress/{memberId}/addresses")
     List<MemberAddressVo> getMemberReceiveAddressByMemberId(@PathVariable Long memberId);
+
+    @RequestMapping("member/memberreceiveaddress//address/{id}")
+    MemberAddressVo getMemberReceiveAddressById(@PathVariable Long id);
 }

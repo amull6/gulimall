@@ -34,4 +34,9 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
         return this.baseMapper.selectList(new QueryWrapper<MemberReceiveAddressEntity>().eq("member_id", memberId));
     }
 
+    @Override
+    public MemberReceiveAddressEntity getMemberReceiveAddressById(Long id) {
+        return this.getById(id);
+    }
+
 }

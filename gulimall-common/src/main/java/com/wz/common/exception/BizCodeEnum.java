@@ -16,7 +16,10 @@ public enum BizCodeEnum {
 
     PHONE_EXIST_EXCEPTION(15002, "手机号码已存在"),
 
-    LOGINACCT_PASSWORD_EXCEPTION(15002, "账号或者密码不正确");
+    LOGINACCT_PASSWORD_EXCEPTION(15002, "账号或者密码不正确"),
+
+    NO_STOCK_EXCEPTION(20001, "商品库存不足");
+
 
     private Integer code;
     private String msg;

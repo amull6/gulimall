@@ -34,6 +34,14 @@ public class MemberReceiveAddressController {
     /*
      * 根据会员ID获取地址列表
      */
+    @RequestMapping("/address/{id}")
+    public MemberReceiveAddressEntity getMemberReceiveAddressById(@PathVariable Long id) {
+        return memberReceiveAddressService.getMemberReceiveAddressById(id);
+    }
+
+    /*
+     * 根据会员ID获取地址列表
+     */
     @RequestMapping("{memberId}/addresses")
     public List<MemberReceiveAddressEntity> getMemberReceiveAddressByMemberId(@PathVariable Long memberId) {
         return memberReceiveAddressService.getMemberReceiveAddressByMemberId(memberId);
