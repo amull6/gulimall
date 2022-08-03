@@ -16,6 +16,7 @@ import com.wz.gulimall.order.feign.WareFeignService;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.order.service.OrderItemService;
 import com.wz.gulimall.order.vo.*;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -204,6 +205,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     @Override
     @Transactional
+    @GlobalTransactional
     public SubmitOrderResponseVo submitOrder(OrderSubmitVo orderSubmitVo) {
         confirmVoThreadLocal.set(orderSubmitVo);
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
