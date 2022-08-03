@@ -232,6 +232,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                 wareLockVo.setOrderItemVos(orderItemVos);
                 R r = wareFeignService.lockOrder(wareLockVo);
                 if (r.getCode() == 0) {
+                    int a = 10 / 0;
                     submitOrderResponseVo.setOrderEntity(orderCreateTo.getOrder());
                     return submitOrderResponseVo;
                 }else{
