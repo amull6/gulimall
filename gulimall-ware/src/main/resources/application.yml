@@ -12,6 +12,11 @@ spring:
         server-addr: 47.100.105.74:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:dd
+  rabbitmq:
+    host: 47.100.105.74
+    port: 5672
+    virtual-host: /
+
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
@@ -25,3 +30,4 @@ server:
 logging:
   level:
     com.wz.gulimall.ware: debug
+
