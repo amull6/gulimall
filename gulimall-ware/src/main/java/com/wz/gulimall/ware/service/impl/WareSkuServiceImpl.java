@@ -183,23 +183,37 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
 
     @Override
     public void unLocked(StockLockedTo stockLockedTo) {
-        Long detailId = stockLockedTo.getId();
-        WareOrderTaskEntity wareOrderTaskEntity = wareOrderTaskService.getById(detailId);
-        StockDetailTo stockDetailTo = stockLockedTo.getStockDetailTo();
-        if (wareOrderTaskEntity != null) {
+        Long detailId = stockLockedTo.getStockDetailTo().getId();
+        WareOrderTaskDetailEntity wareOrderTaskDetailEntity = wareOrderTaskDetailService.getById(detailId);
+        if (wareOrderTaskDetailEntity != null) {
+            WareOrderTaskEntity taskEntity = wareOrderTaskService.getById(stockLockedTo.getId());
 //            根据订单编号查询订单
-            R r = orderFeignService.getOrderStatus(wareOrderTaskEntity.getOrderSn());
+            R r = orderFeignService.getOrderStatus(taskEntity.getOrderSn());
 //            调用失败重试
             if (r.getCode() == 0) {
                 OrderVo orderVo = r.getData(new TypeReference<OrderVo>() {
                 });
                 if (orderVo == null || orderVo.getStatus() == 4) {
 //                解锁订单
-                    unLocked(stockDetailTo.getSkuId(), stockDetailTo.getWareId(), stockDetailTo.getSkuNum());
+                    if(wareOrderTaskDetailEntity.getLockStatus()==1){
+                        unLockedStatus(wareOrderTaskDetailEntity.getSkuId(), wareOrderTaskDetailEntity.getWareId(), wareOrderTaskDetailEntity.getSkuNum(),detailId);
+                    }
                 }
+            }else{
+                throw new RuntimeException();
             }
         }
     }
+
+    private void unLockedStatus(Long skuId, Long wareId, Integer skuNum, Long detailId) {
+        unLocked(skuId,wareId,skuNum);
+//        更新状态
+        WareOrderTaskDetailEntity wareOrderTaskDetailEntity = new WareOrderTaskDetailEntity();
+        wareOrderTaskDetailEntity.setId(detailId);
+        wareOrderTaskDetailEntity.setLockStatus(2);
+        wareOrderTaskDetailService.updateById(wareOrderTaskDetailEntity);
+    }
+
 
     @Override
     public void unLocked(Long skuId, Long wareId, Integer skuNum) {

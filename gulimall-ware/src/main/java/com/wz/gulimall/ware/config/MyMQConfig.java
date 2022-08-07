@@ -14,10 +14,10 @@ import java.util.Map;
 
 @Configuration
 public class MyMQConfig {
-    @RabbitListener(queues = "stock.release.stock.queue")
-    public void handle() {
-
-    }
+//    @RabbitListener(queues = "stock.release.stock.queue")
+//    public void handle() {
+//
+//    }
     @Bean
     public Queue stockDelayQueue() {
         Map<String, Object> arguments = new HashMap<>();
