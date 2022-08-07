@@ -14,13 +14,6 @@ import java.util.Map;
 
 @Configuration
 public class MyMQConfig {
-
-    @RabbitListener(queues = {"order.release.order.queue"})
-    public void receiveOrder(OrderEntity orderEntity, Channel channel, Message message) throws IOException {
-        System.out.println("接收到订单"+message.getBody().toString()+orderEntity.getOrderSn());
-        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
-    }
-
     @Bean
     public Queue orderDelayQueue() {
         Map<String, Object> arguments = new HashMap<>();
