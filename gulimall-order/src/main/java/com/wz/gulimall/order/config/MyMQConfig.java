@@ -24,7 +24,7 @@ public class MyMQConfig {
     @Bean
     public Queue orderDelayQueue() {
         Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-message-ttl", 6000);
+        arguments.put("x-message-ttl", 60000);
         arguments.put("x-dead-letter-exchange", "order.event.exchange");
         arguments.put("x-dead-letter-routing-key", "order.release.order");
 //        String name, boolean durable, boolean exclusive, boolean autoDelete, Map<String, Object> arguments
