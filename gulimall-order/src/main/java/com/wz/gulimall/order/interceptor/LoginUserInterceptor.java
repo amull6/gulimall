@@ -3,6 +3,7 @@ package com.wz.gulimall.order.interceptor;
 import com.wz.common.constant.AuthServerConstant;
 import com.wz.common.vo.MemberResVo;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,12 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+//        Feign调用放行
+        boolean match = new AntPathMatcher().match("/order/order/statu/**", request.getRequestURI());
+        if (match) {
+            return true;
+        }
 //        判断session中有无用户信息
         HttpSession session = request.getSession();
         MemberResVo memberResVo = (MemberResVo) session.getAttribute(AuthServerConstant.LOGIN_USER);

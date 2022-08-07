@@ -30,11 +30,17 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @RequestMapping("/status/{orderSn}")
+    public R getOrderStatus(@PathVariable String orderSn) {
+        OrderEntity orderEntity = orderService.getOrderStatus(orderSn);
+        return R.ok().setData(orderEntity);
+    }
+
     /**
      * 列表
      */
     @RequestMapping("/list")
-        public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = orderService.queryPage(params);
 
         return R.ok().put("page", page);

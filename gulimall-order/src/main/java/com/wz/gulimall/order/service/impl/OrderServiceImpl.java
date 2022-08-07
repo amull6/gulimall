@@ -251,6 +251,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }
     }
 
+    @Override
+    public OrderEntity getOrderStatus(String orderSn) {
+        return this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn",orderSn));
+    }
+
     private void saveOrder(OrderCreateTo orderCreateTo) {
         OrderEntity order = orderCreateTo.getOrder();
         order.setCreateTime(new Date());
