@@ -205,7 +205,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     @Override
     @Transactional
-    @GlobalTransactional
+//    @GlobalTransactional
     public SubmitOrderResponseVo submitOrder(OrderSubmitVo orderSubmitVo) {
         confirmVoThreadLocal.set(orderSubmitVo);
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();

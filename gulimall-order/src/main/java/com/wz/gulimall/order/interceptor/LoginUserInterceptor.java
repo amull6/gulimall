@@ -18,7 +18,7 @@ public class LoginUserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
 //        Feign调用放行
-        boolean match = new AntPathMatcher().match("/order/order/statu/**", request.getRequestURI());
+        boolean match = new AntPathMatcher().match("/order/order/status/**", request.getRequestURI());
         if (match) {
             return true;
         }

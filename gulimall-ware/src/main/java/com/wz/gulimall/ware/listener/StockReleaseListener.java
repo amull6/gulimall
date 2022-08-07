@@ -1,24 +1,21 @@
 package com.wz.gulimall.ware.listener;
 
-import com.alibaba.fastjson.TypeReference;
 import com.rabbitmq.client.Channel;
-import com.wz.common.to.mq.StockDetailTo;
 import com.wz.common.to.mq.StockLockedTo;
-import com.wz.common.utils.R;
-import com.wz.gulimall.ware.entity.WareOrderTaskEntity;
 import com.wz.gulimall.ware.feign.OrderFeignService;
 import com.wz.gulimall.ware.service.WareOrderTaskDetailService;
 import com.wz.gulimall.ware.service.WareOrderTaskService;
 import com.wz.gulimall.ware.service.WareSkuService;
-import com.wz.gulimall.ware.vo.OrderVo;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @RabbitListener(queues = "stock.release.stock.queue")
+@Service
 public class StockReleaseListener {
     @Autowired
     WareOrderTaskService wareOrderTaskService;
