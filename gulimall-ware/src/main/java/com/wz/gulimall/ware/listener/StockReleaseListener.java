@@ -51,8 +51,4 @@ public class StockReleaseListener {
         }
 
     }
-
-    private void unLocked(Long skuId, Long wareId, Integer skuNum, Long detailId) {
-        wareSkuService.unLocked(skuId, wareId, skuNum);
-    }
 }
