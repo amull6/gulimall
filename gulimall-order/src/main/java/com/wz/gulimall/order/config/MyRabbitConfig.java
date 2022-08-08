@@ -25,6 +25,7 @@ public class MyRabbitConfig {
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
             @Override
             public void confirm(CorrelationData correlationData, boolean b, String s) {
+//                已到达
                 System.out.println("confirm:" + correlationData + "--" + b + "--" + s);
             }
         });
@@ -39,6 +40,7 @@ public class MyRabbitConfig {
              */
             @Override
             public void returnedMessage(Message message, int i, String s, String s1, String s2) {
+//                错误
                 System.out.println("Fail Message["+message+"]==>i["+i+"]==>s["+s+"]==>s1["+s1+"]==>s2["+s2+"]");
             }
         });
