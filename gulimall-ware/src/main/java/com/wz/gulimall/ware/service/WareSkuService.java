@@ -1,6 +1,7 @@
 package com.wz.gulimall.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wz.common.to.OrderTo;
 import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.to.mq.StockLockedTo;
 import com.wz.common.utils.PageUtils;
@@ -32,5 +33,7 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     void unLocked(StockLockedTo stockLockedTo);
 
     void unLocked(Long skuId, Long wareId, Integer skuNum);
+
+    void unLockedAfterOrderCLose(OrderTo order);
 }
 

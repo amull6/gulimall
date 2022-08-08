@@ -1,6 +1,7 @@
 package com.wz.gulimall.ware.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
+import com.wz.common.to.OrderTo;
 import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.to.mq.StockDetailTo;
 import com.wz.common.to.mq.StockLockedTo;
@@ -195,18 +196,18 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
                 });
                 if (orderVo == null || orderVo.getStatus() == 4) {
 //                解锁订单
-                    if(wareOrderTaskDetailEntity.getLockStatus()==1){
-                        unLockedStatus(wareOrderTaskDetailEntity.getSkuId(), wareOrderTaskDetailEntity.getWareId(), wareOrderTaskDetailEntity.getSkuNum(),detailId);
+                    if (wareOrderTaskDetailEntity.getLockStatus() == 1) {
+                        unLockedStatus(wareOrderTaskDetailEntity.getSkuId(), wareOrderTaskDetailEntity.getWareId(), wareOrderTaskDetailEntity.getSkuNum(), detailId);
                     }
                 }
-            }else{
+            } else {
                 throw new RuntimeException();
             }
         }
     }
 
     private void unLockedStatus(Long skuId, Long wareId, Integer skuNum, Long detailId) {
-        unLocked(skuId,wareId,skuNum);
+        unLocked(skuId, wareId, skuNum);
 //        更新状态
         WareOrderTaskDetailEntity wareOrderTaskDetailEntity = new WareOrderTaskDetailEntity();
         wareOrderTaskDetailEntity.setId(detailId);
@@ -218,6 +219,21 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     @Override
     public void unLocked(Long skuId, Long wareId, Integer skuNum) {
         this.baseMapper.unLocked(skuId, wareId, skuNum);
+    }
+
+    @Override
+    public void unLockedAfterOrderCLose(OrderTo order) {
+        WareOrderTaskEntity wareOrderTaskEntity = wareOrderTaskService.getOne(new QueryWrapper<WareOrderTaskEntity>().eq("order_sn", order.getOrderSn()));
+        if (wareOrderTaskEntity != null) {
+            List<WareOrderTaskDetailEntity> wareOrderTaskDetailEntities = wareOrderTaskDetailService.list(new QueryWrapper<WareOrderTaskDetailEntity>().eq("task_id", wareOrderTaskEntity.getId()));
+            if (wareOrderTaskDetailEntities != null && wareOrderTaskDetailEntities.size() > 0) {
+                for (WareOrderTaskDetailEntity wareOrderTaskDetailEntity : wareOrderTaskDetailEntities) {
+                    if (wareOrderTaskDetailEntity.getLockStatus() == 1) {
+                        this.unLockedStatus(wareOrderTaskDetailEntity.getSkuId(), wareOrderTaskDetailEntity.getWareId(), wareOrderTaskDetailEntity.getSkuNum(), wareOrderTaskDetailEntity.getId());
+                    }
+                }
+            }
+        }
     }
 
     @Data

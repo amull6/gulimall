@@ -15,11 +15,14 @@ import com.wz.gulimall.order.feign.ProductFeignService;
 import com.wz.gulimall.order.feign.WareFeignService;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.order.service.OrderItemService;
+import com.wz.gulimall.order.utils.OrderStatusEnum;
 import com.wz.gulimall.order.vo.*;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -234,10 +237,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                 wareLockVo.setOrderItemVos(orderItemVos);
                 R r = wareFeignService.lockOrder(wareLockVo);
                 if (r.getCode() == 0) {
-                    int a = 10 / 0;
+//                    订单创建成功后，发送延时消息释放订单
+//                    String var1, String var2, Object var3, MessagePostProcessor var4, CorrelationData var5
+                    rabbitTemplate.convertAndSend("order.event.exchange", "order.delay.queue", orderCreateTo.getOrder());
+//                    int a = 10 / 0;
                     submitOrderResponseVo.setOrderEntity(orderCreateTo.getOrder());
                     return submitOrderResponseVo;
-                }else{
+                } else {
                     throw new NoStockException();
                 }
             } else {
@@ -253,7 +259,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     @Override
     public OrderEntity getOrderStatus(String orderSn) {
-        return this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn",orderSn));
+        return this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
+    }
+
+    @Override
+    public void closeOrder(OrderEntity orderEntity) {
+//        关闭订单
+        OrderEntity orderNow = this.getById(orderEntity.getId());
+        if (orderNow.getStatus() == OrderStatusEnum.CREATE_NEW.getCode()) {
+            OrderEntity newOrder = new OrderEntity();
+            newOrder.setId(orderEntity.getId());
+            newOrder.setStatus(OrderStatusEnum.CANCLED.getCode());
+            this.updateById(newOrder);
+//            关闭订单之后发送解锁库存消息
+            rabbitTemplate.convertAndSend("stock.event.exchange", "stock.release.order", orderNow);
+        }
+
+
     }
 
     private void saveOrder(OrderCreateTo orderCreateTo) {
