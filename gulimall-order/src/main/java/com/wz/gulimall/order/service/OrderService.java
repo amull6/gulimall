@@ -8,6 +8,7 @@ import com.wz.gulimall.order.vo.OrderSubmitVo;
 import com.wz.gulimall.order.vo.PayVo;
 import com.wz.gulimall.order.vo.SubmitOrderResponseVo;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -31,5 +32,7 @@ public interface OrderService extends IService<OrderEntity> {
     void closeOrder(OrderEntity orderEntity);
 
     PayVo handlePayVo(String orderSn);
+
+    PageUtils listOrderWithItem(Map<String, Object> params);
 }
 

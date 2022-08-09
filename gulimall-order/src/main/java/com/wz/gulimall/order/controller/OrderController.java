@@ -1,6 +1,7 @@
 package com.wz.gulimall.order.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,13 @@ import com.wz.common.utils.R;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
+
+    @RequestMapping("/listOrderWithItem")
+    public R listOrderWithItem(@RequestBody Map<String, Object> params) {
+        PageUtils page = orderService.listOrderWithItem(params);
+        return R.ok().setData(page);
+    }
 
     @RequestMapping("/status/{orderSn}")
     public R getOrderStatus(@PathVariable String orderSn) {

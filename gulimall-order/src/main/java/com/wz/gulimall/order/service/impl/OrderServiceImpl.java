@@ -266,7 +266,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     @Override
     public void closeOrder(OrderEntity orderEntity) {
 //        关闭订单
-        OrderEntity orderNow = this.getById(orderEntity.getId());
+        OrderEntity orderNow = this.baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderEntity.getOrderSn()));
         if (orderNow.getStatus() == OrderStatusEnum.CREATE_NEW.getCode()) {
             OrderEntity newOrder = new OrderEntity();
             newOrder.setId(orderEntity.getId());
@@ -286,12 +286,28 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         PayVo vo = new PayVo();
         vo.setOut_trade_no(orderSn);
         vo.setTotal_amount((order.getPayAmount().setScale(2, RoundingMode.UP)).toString());
-        List<OrderItemEntity> orderItemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_id", order.getId()));
+        List<OrderItemEntity> orderItemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", order.getOrderSn()));
         OrderItemEntity orderItemEntity = orderItemEntities.get(0);
 //        组合VO
         vo.setSubject(orderItemEntity.getSkuName());
         vo.setBody(orderItemEntity.getSkuAttrsVals());
         return vo;
+    }
+
+    @Override
+    public PageUtils listOrderWithItem(Map<String, Object> params) {
+        MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
+        IPage<OrderEntity> page = this.page(
+                new Query<OrderEntity>().getPage(params),
+                new QueryWrapper<OrderEntity>().eq("member_id", memberResVo.getId())
+        );
+        List<OrderEntity> orderEntities = page.getRecords().stream().map((item) -> {
+            List<OrderItemEntity> orderItemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", item.getOrderSn()));
+            item.setOrderItemEntityList(orderItemEntities);
+            return item;
+        }).collect(Collectors.toList());
+        page.setRecords(orderEntities);
+        return new PageUtils(page);
     }
 
     private void saveOrder(OrderCreateTo orderCreateTo) {
