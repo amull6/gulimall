@@ -26,7 +26,7 @@ public class GulimallMemberApplicationTests {
 
     @Test
     public void contextLoads2() throws Exception {
-        HttpResponse httpResponse = HttpUtils.doGet("http://47.100.105.74:9200", "/customer/external/1",  new HashMap<>(), null);
+        HttpResponse httpResponse = HttpUtils.doGet("http://47.92.0.112:9200", "/customer/external/1",  new HashMap<>(), null);
         System.out.println(httpResponse.getStatusLine().getStatusCode());
     }
 
