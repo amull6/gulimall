@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.100.105.74:3306/gulimall_wms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://47.92.0.112:3306/gulimall_wms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: root
   application:
@@ -9,11 +9,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 47.100.105.74:8848
+        server-addr: 47.92.0.112:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:dd
   rabbitmq:
-    host: 47.100.105.74
+    host: 47.92.0.112
     port: 5672
     virtual-host: /
     listener:
