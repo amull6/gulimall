@@ -30,6 +30,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -276,6 +277,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }
 
 
+    }
+
+    @Override
+    public PayVo handlePayVo(String orderSn) {
+//        根据订单编号获取订单
+        OrderEntity order = this.getOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
+        PayVo vo = new PayVo();
+        vo.setOut_trade_no(orderSn);
+        vo.setTotal_amount((order.getPayAmount().setScale(2, RoundingMode.UP)).toString());
+        List<OrderItemEntity> orderItemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_id", order.getId()));
+        OrderItemEntity orderItemEntity = orderItemEntities.get(0);
+//        组合VO
+        vo.setSubject(orderItemEntity.getSkuName());
+        vo.setBody(orderItemEntity.getSkuAttrsVals());
+        return vo;
     }
 
     private void saveOrder(OrderCreateTo orderCreateTo) {
