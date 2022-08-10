@@ -8,6 +8,7 @@ import com.wz.common.to.SkuHasStockVo;
 import com.wz.common.utils.R;
 import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.order.entity.OrderItemEntity;
+import com.wz.gulimall.order.entity.PaymentInfoEntity;
 import com.wz.gulimall.order.exception.NoStockException;
 import com.wz.gulimall.order.feign.CartFeignService;
 import com.wz.gulimall.order.feign.MemberFeignClient;
@@ -15,6 +16,7 @@ import com.wz.gulimall.order.feign.ProductFeignService;
 import com.wz.gulimall.order.feign.WareFeignService;
 import com.wz.gulimall.order.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.order.service.OrderItemService;
+import com.wz.gulimall.order.service.PaymentInfoService;
 import com.wz.gulimall.order.utils.OrderStatusEnum;
 import com.wz.gulimall.order.vo.*;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -79,6 +81,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     @Autowired
     OrderItemService orderItemService;
+
+    @Autowired
+    PaymentInfoService paymentInfoService;
+
+    @Autowired
+    OrderService orderService;
 
     public ThreadLocal<OrderSubmitVo> confirmVoThreadLocal = new ThreadLocal<>();
 
@@ -203,6 +211,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         orderEntity.setReceiverDetailAddress(memberAddressVo.getDetailAddress());
 //        设置运费信息
         orderEntity.setFreightAmount(fare.getFare());
+        orderEntity.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
         return orderEntity;
     }
 
@@ -299,7 +308,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
         IPage<OrderEntity> page = this.page(
                 new Query<OrderEntity>().getPage(params),
-                new QueryWrapper<OrderEntity>().eq("member_id", memberResVo.getId())
+                new QueryWrapper<OrderEntity>().eq("member_id", memberResVo.getId()).orderByDesc("id")
         );
         List<OrderEntity> orderEntities = page.getRecords().stream().map((item) -> {
             List<OrderItemEntity> orderItemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", item.getOrderSn()));
@@ -308,6 +317,27 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }).collect(Collectors.toList());
         page.setRecords(orderEntities);
         return new PageUtils(page);
+    }
+
+    @Override
+    public String handlePayResult(PayAsyncVo payAsyncVo) {
+        PaymentInfoEntity paymentInfoEntity = new PaymentInfoEntity();
+        paymentInfoEntity.setOrderSn(payAsyncVo.getOut_trade_no());
+        paymentInfoEntity.setAlipayTradeNo(payAsyncVo.getTrade_no());
+        String trade_status = payAsyncVo.getTrade_status();
+        paymentInfoEntity.setPaymentStatus(trade_status);
+        paymentInfoEntity.setCallbackTime(payAsyncVo.getNotify_time());
+        paymentInfoService.save(paymentInfoEntity);
+
+        if (trade_status.equals("TRADE_SUCCESS") || trade_status.equals("TRADE_FINISHED")) {
+            this.updateStatus(payAsyncVo.getOut_trade_no(), OrderStatusEnum.PAYED.getCode());
+        }
+        return "success";
+    }
+
+    private void updateStatus(String outTradeNo, Integer code) {
+        this.baseMapper.updateStatusByOrderSn(outTradeNo, code);
+
     }
 
     private void saveOrder(OrderCreateTo orderCreateTo) {
