@@ -19,7 +19,7 @@ public class PayWebController {
     @Autowired
     AlipayTemplate alipayTemplate;
 
-    @RequestMapping(value = "/payOrder",produces = "text/html")
+    @RequestMapping(value = "/payOrder", produces = "text/html")
     @ResponseBody
     public String payOrder(@RequestParam("orderSn") String orderSn) throws AlipayApiException {
         PayVo payVo = orderService.handlePayVo(orderSn);

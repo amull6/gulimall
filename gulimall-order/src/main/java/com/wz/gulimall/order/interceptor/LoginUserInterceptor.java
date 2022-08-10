@@ -19,7 +19,9 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 
 //        Feign调用放行
         boolean match = new AntPathMatcher().match("/order/order/status/**", request.getRequestURI());
-        if (match) {
+        boolean matchPay = new AntPathMatcher().match("/payed/notify", request.getRequestURI());
+
+        if (match||matchPay) {
             return true;
         }
 //        判断session中有无用户信息
