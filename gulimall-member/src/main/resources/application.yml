@@ -27,3 +27,7 @@ mybatis-plus:
       id-type: auto
       logic-delete-value: 1
       logic-not-delete-value: 0
+
+ribbon:
+  ReadTimeout: 30000
+  ConnectTimeout: 30000

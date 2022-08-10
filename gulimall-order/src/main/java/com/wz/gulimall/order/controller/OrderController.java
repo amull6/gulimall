@@ -1,15 +1,10 @@
 package com.wz.gulimall.order.controller;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wz.gulimall.order.entity.OrderEntity;
 import com.wz.gulimall.order.service.OrderService;
@@ -31,11 +26,12 @@ public class OrderController {
     private OrderService orderService;
 
 
-    @RequestMapping("/listOrderWithItem")
+    @PostMapping("/listOrderWithItem")
     public R listOrderWithItem(@RequestBody Map<String, Object> params) {
         PageUtils page = orderService.listOrderWithItem(params);
         return R.ok().setData(page);
     }
+
 
     @RequestMapping("/status/{orderSn}")
     public R getOrderStatus(@PathVariable String orderSn) {

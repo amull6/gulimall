@@ -17,15 +17,13 @@ import java.util.Map;
 public class MemberWebController {
     @Autowired
     OrderFeignService orderFeignService;
+
     @RequestMapping("/memberOrder.html")
-    public String memberOrderPage(@RequestParam(value = "pageNum",defaultValue = "1") String pageNum, Model model) {
+    public String memberOrderPage(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum, Model model) {
         Map<String, Object> params = new HashMap<>();
         params.put("pageNum", pageNum);
         R r = orderFeignService.listOrderWithItem(params);
-        PageUtils pageUtils = r.getData(new TypeReference<PageUtils>() {
-        });
-        model.addAttribute("orders", pageUtils.getList());
+        model.addAttribute("orders", r);
         return "orderList";
     }
-
 }
