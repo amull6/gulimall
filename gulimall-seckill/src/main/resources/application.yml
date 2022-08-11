@@ -1,0 +1,13 @@
+server:
+  port: 25000
+spring:
+  application:
+    name: gulimall-seckill
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.92.0.112:8848
+  redis:
+    host: 47.92.0.112
+    port: 6379
