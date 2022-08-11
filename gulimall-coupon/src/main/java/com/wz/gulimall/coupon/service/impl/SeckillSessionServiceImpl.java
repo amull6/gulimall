@@ -1,6 +1,8 @@
 package com.wz.gulimall.coupon.service.impl;
 
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,6 +26,16 @@ public class SeckillSessionServiceImpl extends ServiceImpl<SeckillSessionDao, Se
         );
 
         return new PageUtils(page);
+    }
+    /*
+     *获取三天内秒杀任务信息
+     */
+    @Override
+    public List<SeckillSessionEntity> getSeckillSessionWithSkuIn3Days() {
+//        获取session信息
+
+//        获取sku关联信息
+        return null;
     }
 
 }
