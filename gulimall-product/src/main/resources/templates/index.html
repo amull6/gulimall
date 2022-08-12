@@ -597,7 +597,7 @@
             if (data.data.length > 0) {
                 data.data.forEach(function (item) {
                     $("<li></li>")
-                        .append($("<img src='" + item.skuInfoVo.skuDefaultImg + "'/>"))
+                        .append($("<img style='width: 130px;height: 130px' src='" + item.skuInfoVo.skuDefaultImg + "'/>"))
                         .append($("<p>" + item.skuInfoVo.skuTitle + "</p>"))
                         .append($("<span>" + item.seckillPrice + "</span>"))
                         .append($("<s>" + item.skuInfoVo.price + "</s>")).appendTo("#secskillSkuInfo");
