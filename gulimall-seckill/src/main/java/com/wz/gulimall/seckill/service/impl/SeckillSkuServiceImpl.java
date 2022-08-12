@@ -84,12 +84,13 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
 //                幂等性判断
                 if (!boundHashOperations.hasKey(sku.getPromotionSessionId() + "_" + sku.getSkuId())) {
                     SeckillSkuTo seckillSkuTo = new SeckillSkuTo();
-                    //生成randomkey
-                    String randomCode = UUID.randomUUID().toString().replace("-", "");
-                    seckillSkuTo.setRandomCode(randomCode);
                     // 远程获取sku信息
                     R r = productFeignService.info(sku.getSkuId());
                     if (r.getCode() == 0) {
+                        //生成randomkey
+                        String randomCode = UUID.randomUUID().toString().replace("-", "");
+
+                        seckillSkuTo.setRandomCode(randomCode);
                         SkuInfoVo skuInfoVo = r.getData("skuInfo", new TypeReference<SkuInfoVo>() {
                         });
                         seckillSkuTo.setSkuInfoVo(skuInfoVo);
@@ -100,13 +101,14 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
 
                         seckillSkuTo.setEndTime(session.getEndTime().getTime());
 
-                        String json = JSON.toJSONString(seckillSkuTo);
-
-                        boundHashOperations.put(sku.getPromotionSessionId() + "_" + sku.getSkuId(), json);
 //                        使用库存作为信号量限流
                         RSemaphore rSemaphore = redisson.getSemaphore(SKUSTOCK_SEMAPHONE + randomCode);
 
                         rSemaphore.trySetPermits(sku.getSeckillCount().intValue());
+
+                        String json = JSON.toJSONString(seckillSkuTo);
+
+                        boundHashOperations.put(sku.getPromotionSessionId() + "_" + sku.getSkuId(), json);
                     }
                 }
             });
