@@ -89,7 +89,6 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                     if (r.getCode() == 0) {
                         //生成randomkey
                         String randomCode = UUID.randomUUID().toString().replace("-", "");
-
                         seckillSkuTo.setRandomCode(randomCode);
                         SkuInfoVo skuInfoVo = r.getData("skuInfo", new TypeReference<SkuInfoVo>() {
                         });
@@ -98,17 +97,12 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                         BeanUtils.copyProperties(sku, seckillSkuTo);
 //                        设置起始截止时间
                         seckillSkuTo.setStartTime(session.getStartTime().getTime());
-
                         seckillSkuTo.setEndTime(session.getEndTime().getTime());
-
-//                        使用库存作为信号量限流
-                        RSemaphore rSemaphore = redisson.getSemaphore(SKUSTOCK_SEMAPHONE + randomCode);
-
-                        rSemaphore.trySetPermits(sku.getSeckillCount().intValue());
-
                         String json = JSON.toJSONString(seckillSkuTo);
-
                         boundHashOperations.put(sku.getPromotionSessionId() + "_" + sku.getSkuId(), json);
+                        //                        使用库存作为信号量限流
+                        RSemaphore rSemaphore = redisson.getSemaphore(SKUSTOCK_SEMAPHONE + randomCode);
+                        rSemaphore.trySetPermits(sku.getSeckillCount().intValue());
                     }
                 }
             });
