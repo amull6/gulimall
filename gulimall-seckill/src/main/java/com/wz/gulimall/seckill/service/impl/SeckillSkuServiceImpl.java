@@ -38,7 +38,7 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
     RedissonClient redisson;
 
     public static final String SESSION_CACHE_PREFIX = "seckill:session:";
-    public static final String SKUS_CACHE_PREFIX = "seckill:skus:";
+    public static final String SKUS_CACHE_PREFIX = "seckill:skus";
     //    商品随机码
     public static final String SKUSTOCK_SEMAPHONE = "seckill:stock:";
 
@@ -66,9 +66,9 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                 long endTime = session.getEndTime().getTime();
                 String key = SESSION_CACHE_PREFIX + startTime + "-" + endTime;
                 boolean hasKey = stringRedisTemplate.hasKey(key);
-                if (hasKey) {
+                if (!hasKey) {
 //                    取出所有skuId
-                    List<String> skuIds = session.getSeckillSkuRelationVos().stream().map((item) -> item.getSkuId().toString()).collect(Collectors.toList());
+                    List<String> skuIds = session.getSeckillSkuRelationEntityList().stream().map((item) -> item.getSkuId().toString()).collect(Collectors.toList());
                     stringRedisTemplate.opsForList().leftPushAll(key, skuIds);
                 }
             });
@@ -79,7 +79,7 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
         seckillSessionVos.stream().forEach((session) -> {
 //            保存成hash
             BoundHashOperations<String, Object, Object> boundHashOperations = stringRedisTemplate.boundHashOps(SKUS_CACHE_PREFIX);
-            List<SeckillSkuRelationVo> skus = session.getSeckillSkuRelationVos();
+            List<SeckillSkuRelationVo> skus = session.getSeckillSkuRelationEntityList();
             skus.stream().forEach((sku) -> {
 //                幂等性判断
                 if (!boundHashOperations.hasKey(sku.getPromotionSessionId() + "_" + sku.getSkuId())) {

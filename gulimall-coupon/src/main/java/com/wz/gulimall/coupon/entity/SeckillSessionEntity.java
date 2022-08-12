@@ -1,5 +1,6 @@
 package com.wz.gulimall.coupon.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -47,6 +48,7 @@ public class SeckillSessionEntity implements Serializable {
 	 */
 	private Date createTime;
 
+	@TableField(exist = false)
 	private List<SeckillSkuRelationEntity> seckillSkuRelationEntityList;
 
 }

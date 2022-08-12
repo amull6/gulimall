@@ -47,6 +47,6 @@ public class SeckillSessionVo implements Serializable {
     private Date createTime;
 
 
-    private List<SeckillSkuRelationVo> seckillSkuRelationVos;
+    private List<SeckillSkuRelationVo> seckillSkuRelationEntityList;
 
 }

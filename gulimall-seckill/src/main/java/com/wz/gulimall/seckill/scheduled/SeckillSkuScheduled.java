@@ -12,7 +12,7 @@ public class SeckillSkuScheduled {
     @Autowired
     SeckillSkuService seckillSkuService;
 
-    @Scheduled(cron = "* * /3 * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void seckillSKuUp3Days(){
         seckillSkuService.seckillSKuUp3Days();
     }
