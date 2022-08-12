@@ -33,6 +33,7 @@ public class SeckillSessionController {
     /*
      *获取三天内的秒杀任务
      */
+    @RequestMapping("/lates3DaySession")
     public R getSeckillSessionWithSkuIn3Days() {
         List<SeckillSessionEntity> seckillSessionEntities = seckillSessionService.getSeckillSessionWithSkuIn3Days();
         return R.ok().setData(seckillSessionEntities);
