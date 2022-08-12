@@ -68,7 +68,7 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                 boolean hasKey = stringRedisTemplate.hasKey(key);
                 if (!hasKey) {
 //                    取出所有skuId
-                    List<String> skuIds = session.getSeckillSkuRelationEntityList().stream().map((item) -> item.getSkuId().toString()).collect(Collectors.toList());
+                    List<String> skuIds = session.getSeckillSkuRelationEntityList().stream().map((item) -> session.getId() + "_" + item.getSkuId().toString()).collect(Collectors.toList());
                     stringRedisTemplate.opsForList().leftPushAll(key, skuIds);
                 }
             });
