@@ -15,7 +15,6 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +50,7 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
 //        获取当前时间（long）
         Long now = new Date().getTime();
 //        获取所有的keys
-        Set<String> keys = stringRedisTemplate.keys(SESSION_CACHE_PREFIX+"*");
+        Set<String> keys = stringRedisTemplate.keys(SESSION_CACHE_PREFIX + "*");
 //        遍历keys 判断是否在指定时间
         if (keys != null && keys.size() > 0) {
             for (String key : keys) {
@@ -72,6 +72,33 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                             return seckillSkuTo;
                         }).collect(Collectors.toList());
                     }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SeckillSkuTo getSeckillBySkuId(Long skuId) {
+        BoundHashOperations<String, String, String> boundHashOperations = stringRedisTemplate.boundHashOps(SKUS_CACHE_PREFIX);
+        Set<String> keys = boundHashOperations.keys();
+        if (keys != null && keys.size() > 0) {
+            for (String key : keys) {
+                String pattern = "\\d_" + skuId;
+                if (Pattern.matches(pattern, key)) {
+                    String json = boundHashOperations.get(key);
+                    SeckillSkuTo seckillSkuTo = JSON.parseObject(json, SeckillSkuTo.class);
+//                    判断秒杀时间
+                    Long now = new Date().getTime();
+                    Long startTime = seckillSkuTo.getStartTime();
+                    Long endTime = seckillSkuTo.getEndTime();
+                    if (now >= startTime && now <= endTime) {
+                        // 在秒杀活动时
+                    } else {
+                        // 不在秒杀活动时不应该传递随机码
+                        seckillSkuTo.setRandomCode("");
+                    }
+                    return seckillSkuTo;
                 }
             }
         }

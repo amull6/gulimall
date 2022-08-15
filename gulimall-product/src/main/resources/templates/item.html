@@ -519,8 +519,9 @@
                             <span>￥</span>
                             <span th:text="${#numbers.formatDecimal(item.skuInfoEntity.getPrice(),0,2)}">4499.00</span>
                         </li>
-                        <li>
-                            预约享资格
+                        <li style="color: red">
+                            <span th:if="${#dates.createNow().getTime()<item.seckillInfo.getStartTime()}">商品将会在[[${#dates.format(new java.util.Date(item.seckillInfo.getStartTime()), 'yyyy-MM-dd HH:mm:ss')}]]进行秒杀</span>
+                            <span th:if="${#dates.createNow().getTime()>=item.seckillInfo.getStartTime()&&#dates.createNow().getTime()<=item.seckillInfo.getEndTime()}">秒杀价：[[${#numbers.formatDecimal(item.seckillInfo.getSeckillPrice(),1,2)}]]</span>
                         </li>
                         <li>
                             <a href="static/item/">
