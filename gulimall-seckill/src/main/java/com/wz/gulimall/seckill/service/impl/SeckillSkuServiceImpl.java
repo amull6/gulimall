@@ -87,6 +87,7 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
                             secKillTo.setPromotionSessionId(seckillSkuTo.getPromotionSessionId());
                             secKillTo.setSkuId(seckillSkuTo.getSkuId());
                             rabbitTemplate.convertAndSend("order.event.exchange", "order.seckill.order", secKillTo);
+                            return secKillTo.getOrderSn();
                         } catch (InterruptedException e) {
                             return null;
                         }
@@ -102,7 +103,6 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
         } else {
             return null;
         }
-        return null;
     }
 
     @Override
