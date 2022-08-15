@@ -2,9 +2,13 @@ package com.wz.gulimall.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.wz.common.to.mq.SecKillTo;
 import com.wz.common.utils.R;
+import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.seckill.feign.CouponFeignService;
 import com.wz.gulimall.seckill.feign.ProductFeignService;
+import com.wz.gulimall.seckill.interceptor.LoginUserInterceptor;
 import com.wz.gulimall.seckill.service.SeckillSkuService;
 import com.wz.gulimall.seckill.to.SeckillSkuTo;
 import com.wz.gulimall.seckill.vo.SeckillSessionVo;
@@ -12,6 +16,7 @@ import com.wz.gulimall.seckill.vo.SeckillSkuRelationVo;
 import com.wz.gulimall.seckill.vo.SkuInfoVo;
 import org.redisson.api.RSemaphore;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
@@ -22,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -39,11 +45,65 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
     @Autowired
     RedissonClient redisson;
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
     public static final String SESSION_CACHE_PREFIX = "seckill:session:";
     public static final String SKUS_CACHE_PREFIX = "seckill:skus";
     //    商品随机码
     public static final String SKUSTOCK_SEMAPHONE = "seckill:stock:";
 
+    @Override
+    public String seckill(String killId, String key, Integer num) {
+        MemberResVo memberResVo = LoginUserInterceptor.loginUser.get();
+//        查找SeckillSkuTo
+        BoundHashOperations<String, String, String> boundHashOperations = stringRedisTemplate.boundHashOps(SKUS_CACHE_PREFIX);
+        String json = boundHashOperations.get(killId);
+        SeckillSkuTo seckillSkuTo = JSON.parseObject(json, SeckillSkuTo.class);
+//        2、校验合法性
+//        2.1、校验时间的合法性
+        Long now = new Date().getTime();
+        Long start = seckillSkuTo.getStartTime();
+        Long end = seckillSkuTo.getEndTime();
+        Long exp = end - start;
+        if (now >= seckillSkuTo.getStartTime() && now <= seckillSkuTo.getEndTime()) {
+//        2.2、校验随机码 和 商品id 是否正确
+            String skuId = seckillSkuTo.getPromotionSessionId() + "_" + seckillSkuTo.getSkuId();
+            if (key.equals(seckillSkuTo.getRandomCode()) && skuId.equals(killId)) {
+//        2.3、验证购物车数量是否合理
+                if (num <= seckillSkuTo.getSeckillLimit().intValue()) {
+                    //        2.4、验证这个人是否购买过。幂等性：如果只要秒杀成功，就去占位。 userId_SessionId_skuId
+                    String rediskey = memberResVo.getId() + skuId;
+                    Boolean isFirstTime = stringRedisTemplate.opsForValue().setIfAbsent(rediskey, num.toString(), exp, TimeUnit.MILLISECONDS);
+                    if (isFirstTime) {
+                        RSemaphore semaphore = redisson.getSemaphore(SKUSTOCK_SEMAPHONE + key);
+                        try {
+                            boolean tryAcquire = semaphore.tryAcquire(num, 100, TimeUnit.MILLISECONDS);
+                            SecKillTo secKillTo = new SecKillTo();
+                            secKillTo.setOrderSn(IdWorker.getTimeId());
+                            secKillTo.setMemberId(memberResVo.getId());
+                            secKillTo.setSeckillPrice(seckillSkuTo.getSeckillPrice());
+                            secKillTo.setNum(num);
+                            secKillTo.setPromotionSessionId(seckillSkuTo.getPromotionSessionId());
+                            secKillTo.setSkuId(seckillSkuTo.getSkuId());
+                            rabbitTemplate.convertAndSend("order.event.exchange", "order.seckill.order", secKillTo);
+                        } catch (InterruptedException e) {
+                            return null;
+                        }
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+        return null;
+    }
 
     @Override
     public List<SeckillSkuTo> getCurrentSeckillSkus() {

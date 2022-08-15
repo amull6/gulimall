@@ -6,6 +6,7 @@ import com.wz.gulimall.seckill.to.SeckillSkuTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,5 +30,12 @@ public class SecKillController {
         return R.ok().setData(seckillSkuTo);
     }
 
+    @RequestMapping("/order")
+    public R seckill(@RequestParam("killId") String killId,
+                     @RequestParam("key") String key,
+                     @RequestParam("num") Integer num) {
+        String orderSn = seckillSkuService.seckill(killId,key,num);
+        return R.ok().setData(orderSn);
+    }
 
 }

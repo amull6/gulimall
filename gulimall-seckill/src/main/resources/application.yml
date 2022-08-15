@@ -20,3 +20,9 @@ spring:
       pool:
         core-size: 5
         max-size: 20
+  session:
+    store-type: redis
+  rabbitmq:
+    host: 47.92.0.112
+    virtual-host: /
+
