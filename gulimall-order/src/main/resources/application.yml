@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9011
 spring:
   datasource:
     username: root
@@ -73,4 +73,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: '*'

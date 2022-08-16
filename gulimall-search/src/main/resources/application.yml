@@ -1,5 +1,5 @@
 server:
-  port: 13005
+  port: 13010
 spring:
   application:
     name: gulimall-search
@@ -19,4 +19,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: *
+        include: '*'

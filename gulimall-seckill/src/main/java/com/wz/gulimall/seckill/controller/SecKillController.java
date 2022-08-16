@@ -4,12 +4,14 @@ import com.wz.common.utils.R;
 import com.wz.gulimall.seckill.service.SeckillSkuService;
 import com.wz.gulimall.seckill.to.SeckillSkuTo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/seckill")
+@Controller
 public class SecKillController {
     @Autowired
     SeckillSkuService seckillSkuService;
