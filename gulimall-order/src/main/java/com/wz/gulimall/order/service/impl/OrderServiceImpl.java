@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.rabbitmq.client.Channel;
 import com.wz.common.constant.OrderConstant;
 import com.wz.common.to.SkuHasStockVo;
+import com.wz.common.to.mq.SecKillTo;
 import com.wz.common.utils.R;
 import com.wz.common.vo.MemberResVo;
 import com.wz.gulimall.order.entity.OrderItemEntity;
@@ -335,6 +336,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         return "success";
     }
 
+
     private void updateStatus(String outTradeNo, Integer code) {
         this.baseMapper.updateStatusByOrderSn(outTradeNo, code);
 
@@ -415,8 +417,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
 
     }
 
-//    @RabbitHandler
-//    public void receiveMessage01(OrderItemEntity orderItemEntity) {
-//        System.out.println(orderItemEntity.getOrderId());
-//    }
+
+    @Override
+    public void createSeckillOrder(SecKillTo secKillTo) {
+//        创建订单
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setOrderSn(secKillTo.getOrderSn());
+        orderEntity.setMemberId(secKillTo.getMemberId());
+        orderEntity.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        BigDecimal multiply = secKillTo.getSeckillPrice().multiply(new BigDecimal("" + secKillTo.getNum()));
+        orderEntity.setPayAmount(multiply);
+        this.save(orderEntity);
+//        创建订单项
+        OrderItemEntity orderItemEntity = new OrderItemEntity();
+        orderItemEntity.setOrderSn(secKillTo.getOrderSn());
+        orderItemEntity.setRealAmount(multiply);
+        orderItemEntity.setSkuQuantity(secKillTo.getNum());
+        orderItemService.save(orderItemEntity);
+    }
 }

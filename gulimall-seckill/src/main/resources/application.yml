@@ -25,4 +25,5 @@ spring:
   rabbitmq:
     host: 47.92.0.112
     virtual-host: /
-
+  thymeleaf:
+    cache: false
