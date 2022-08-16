@@ -8,6 +8,10 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        port: 8791
+        dashboard: localhost:8333
   redis:
     host: 47.92.0.112
     port: 6379
@@ -27,3 +31,9 @@ spring:
     virtual-host: /
   thymeleaf:
     cache: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

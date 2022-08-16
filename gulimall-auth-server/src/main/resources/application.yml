@@ -10,6 +10,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
   thymeleaf:
     cache: false
   redis:
@@ -24,3 +27,8 @@ gulimall:
     maxSize: 50
     keepAliveTime: 10
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

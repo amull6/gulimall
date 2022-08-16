@@ -10,6 +10,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
   jackson:
     date-format: yyyy-MM-dd HH:mm:dd
   rabbitmq:
@@ -34,3 +37,8 @@ logging:
   level:
     com.wz.gulimall.ware: debug
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

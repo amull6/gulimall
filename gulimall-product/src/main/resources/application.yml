@@ -10,6 +10,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   thymeleaf:
@@ -46,3 +49,9 @@ gulimall:
     coreSize: 20
     maxSize: 50
     keepAliveTime: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

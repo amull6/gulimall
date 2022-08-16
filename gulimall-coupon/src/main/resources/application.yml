@@ -12,6 +12,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -25,3 +28,9 @@ coupon:
  user:
    name: qinjie
    age: 18
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

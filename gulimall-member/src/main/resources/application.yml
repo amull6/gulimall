@@ -12,6 +12,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
   session:
     store-type: redis
   redis:
@@ -31,3 +34,9 @@ mybatis-plus:
 ribbon:
   ReadTimeout: 30000
   ConnectTimeout: 30000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *

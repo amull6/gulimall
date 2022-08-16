@@ -5,6 +5,9 @@ spring:
     nacos:
       discovery:
         server-addr: 47.92.0.112:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8333
     alicloud:
       access-key: LTAI5t6NA1MMjbB7EGKKXAAW
       secret-key: docTpuRoFxjo1SSOA8t4MwO6gopcw5
@@ -24,3 +27,8 @@ logging:
   level:
     com.wz.gulimall.thirdparty: debug
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
