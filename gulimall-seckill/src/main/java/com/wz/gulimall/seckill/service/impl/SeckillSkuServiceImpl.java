@@ -1,5 +1,9 @@
 package com.wz.gulimall.seckill.service.impl;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -14,6 +18,7 @@ import com.wz.gulimall.seckill.to.SeckillSkuTo;
 import com.wz.gulimall.seckill.vo.SeckillSessionVo;
 import com.wz.gulimall.seckill.vo.SeckillSkuRelationVo;
 import com.wz.gulimall.seckill.vo.SkuInfoVo;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RSemaphore;
 import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -30,7 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class SeckillSkuServiceImpl implements SeckillSkuService {
     @Autowired
@@ -105,35 +110,45 @@ public class SeckillSkuServiceImpl implements SeckillSkuService {
         }
     }
 
+    public List<SeckillSkuTo> handlerException(BlockException e) {
+        log.error(e.getMessage());
+        return null;
+    }
+
     @Override
+    @SentinelResource(value = "seckillSkusByRes",blockHandler = "handlerException")
     public List<SeckillSkuTo> getCurrentSeckillSkus() {
 //        获取当前时间（long）
         Long now = new Date().getTime();
 //        获取所有的keys
         Set<String> keys = stringRedisTemplate.keys(SESSION_CACHE_PREFIX + "*");
 //        遍历keys 判断是否在指定时间
-        if (keys != null && keys.size() > 0) {
-            for (String key : keys) {
-                String redisTime = key.replace(SESSION_CACHE_PREFIX, "");
-                String[] redisTimeArray = redisTime.split("-");
-                Long startTime = Long.valueOf(redisTimeArray[0]);
-                Long endTime = Long.valueOf(redisTimeArray[1]);
-                if (startTime <= now && endTime >= now) {
-                    //        取出key下面的所有session List skuIds
-                    List<String> sessionSkuIds = stringRedisTemplate.opsForList().range(key, -100, 100);
-                    //        批量获取当前session的所有商品信息
-                    BoundHashOperations<String, String, String> boundHashOperations = stringRedisTemplate.boundHashOps(SKUS_CACHE_PREFIX);
-                    if (sessionSkuIds != null && sessionSkuIds.size() > 0) {
-                        List<String> redisTosJson = boundHashOperations.multiGet(sessionSkuIds);
-                        //        list遍历
-                        return redisTosJson.stream().map((item) -> {
-                            SeckillSkuTo seckillSkuTo = new SeckillSkuTo();
-                            seckillSkuTo = JSON.parseObject(item, SeckillSkuTo.class);
-                            return seckillSkuTo;
-                        }).collect(Collectors.toList());
+        try (Entry entry = SphU.entry("seckillSkus")){
+            if (keys != null && keys.size() > 0) {
+                for (String key : keys) {
+                    String redisTime = key.replace(SESSION_CACHE_PREFIX, "");
+                    String[] redisTimeArray = redisTime.split("-");
+                    Long startTime = Long.valueOf(redisTimeArray[0]);
+                    Long endTime = Long.valueOf(redisTimeArray[1]);
+                    if (startTime <= now && endTime >= now) {
+                        //        取出key下面的所有session List skuIds
+                        List<String> sessionSkuIds = stringRedisTemplate.opsForList().range(key, -100, 100);
+                        //        批量获取当前session的所有商品信息
+                        BoundHashOperations<String, String, String> boundHashOperations = stringRedisTemplate.boundHashOps(SKUS_CACHE_PREFIX);
+                        if (sessionSkuIds != null && sessionSkuIds.size() > 0) {
+                            List<String> redisTosJson = boundHashOperations.multiGet(sessionSkuIds);
+                            //        list遍历
+                            return redisTosJson.stream().map((item) -> {
+                                SeckillSkuTo seckillSkuTo = new SeckillSkuTo();
+                                seckillSkuTo = JSON.parseObject(item, SeckillSkuTo.class);
+                                return seckillSkuTo;
+                            }).collect(Collectors.toList());
+                        }
                     }
                 }
             }
+        } catch (BlockException e) {
+            log.error("资源被限流{}", e.getMessage());
         }
         return null;
     }
