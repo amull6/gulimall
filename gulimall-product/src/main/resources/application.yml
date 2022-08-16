@@ -43,7 +43,7 @@ server:
 
 logging:
   level:
-    com.wz.gulimall: error
+    com.wz.gulimall: info
 gulimall:
   thread:
     coreSize: 20
@@ -55,3 +55,6 @@ management:
     web:
       exposure:
         include: '*'
+feign:
+  sentinel:
+    enabled: true
