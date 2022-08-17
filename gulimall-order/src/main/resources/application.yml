@@ -16,6 +16,14 @@ spring:
       transport:
         port: 8719
         dashboard: localhost:8333
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
 
   rabbitmq:
     host: 47.92.0.112
@@ -59,6 +67,8 @@ feign:
       default:
         connectTimeout: 10000
         readTimeout: 600000
+  sentinel:
+    enabled: true
 
 alipay:
   app_id: 2021000121644268
@@ -76,6 +86,3 @@ management:
       exposure:
         include: '*'
 
-feign:
-  sentinel:
-    enabled: true

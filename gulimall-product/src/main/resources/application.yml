@@ -30,6 +30,14 @@ spring:
 #      key-prefix: CACHE_
 #      use-key-prefix: true
       cache-null-values: true
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml

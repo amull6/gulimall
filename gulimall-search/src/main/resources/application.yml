@@ -15,6 +15,14 @@ spring:
     cache: false
     suffix: .html
     prefix: classpath:/templates/
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
 
 management:
   endpoints:

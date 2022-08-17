@@ -642,12 +642,12 @@
                     </div>
                     <div class="box-btns-two">
                         <a href="#" id="seckillA"
-                           th:if="${item.seckillInfo!=null||(#dates.createNow().getTime()>=item.seckillInfo.getStartTime()&&#dates.createNow().getTime()<=item.seckillInfo.getEndTime())}"
+                           th:if="${item.seckillInfo!=null&&(#dates.createNow().getTime()>=item.seckillInfo.getStartTime()&&#dates.createNow().getTime()<=item.seckillInfo.getEndTime())}"
                            th:attr="sessionId=${item.seckillInfo.getPromotionSessionId()},skuId=${item.skuInfoEntity.getSkuId()},randomCode=${item.seckillInfo.getRandomCode()}">
                             立即抢购
                         </a>
                         <a href="#" id="addToCartA"
-                           th:if="${item.seckillInfo==null||(#dates.createNow().getTime()<item.seckillInfo.getStartTime()||#dates.createNow().getTime()>item.seckillInfo.getEndTime())}"
+                           th:if="${item.seckillInfo==null||(item.seckillInfo!=null&&(#dates.createNow().getTime()<item.seckillInfo.getStartTime()||#dates.createNow().getTime()>item.seckillInfo.getEndTime()))}"
                            th:attr="skuId=${item.skuInfoEntity.getSkuId()}">
                             加入购物车
                         </a>
@@ -1337,7 +1337,7 @@
             var killId = sessionId + "_" + skuId
             var key = $(this).attr("randomCode");
             var num = $("#count").val();
-            location.href = "http://seckill.gulimall.cn/seckill/order?killId=" + killId + "&key=" + key + "&num=" + num;
+            location.href = "http://seckill.gulimall.com/seckill/order?killId=" + killId + "&key=" + key + "&num=" + num;
         } else {
             alert("请先登录！")
         }

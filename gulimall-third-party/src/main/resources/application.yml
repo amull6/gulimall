@@ -21,6 +21,14 @@ spring:
         endpoint: "dysmsapi.aliyuncs.com"
         signName: "阿里云短信测试"
         templateCode: "SMS_154950909"
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
 server:
   port: 30000
 

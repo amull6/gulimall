@@ -20,6 +20,14 @@ spring:
     host: 47.92.0.112
   session:
     store-type: redis
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
 
 gulimall:
   thread:

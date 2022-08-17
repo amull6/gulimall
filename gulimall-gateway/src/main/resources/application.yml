@@ -66,3 +66,11 @@ spring:
           uri: lb://gulimall-seckill
           predicates:
             - Host=seckill.gulimall.com
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
