@@ -15,6 +15,7 @@ spring:
     sentinel:
       transport:
         dashboard: localhost:8333
+        port: 8719
   session:
     store-type: redis
   redis:

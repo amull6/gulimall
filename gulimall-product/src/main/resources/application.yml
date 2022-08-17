@@ -12,6 +12,7 @@ spring:
         server-addr: 47.92.0.112:8848
     sentinel:
       transport:
+        port: 8719
         dashboard: localhost:8333
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
