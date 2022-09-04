@@ -14,10 +14,8 @@ import com.wz.gulimall.product.feign.SearchFeighService;
 import com.wz.gulimall.product.feign.WareFeignService;
 import com.wz.gulimall.product.service.*;
 import com.wz.gulimall.product.vo.*;
-import oracle.jrockit.jfr.openmbean.ProducerDescriptorType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
