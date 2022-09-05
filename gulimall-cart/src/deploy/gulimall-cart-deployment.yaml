@@ -22,7 +22,7 @@ spec:
         app: gulimall-cart
     spec:
       containers:
-          name: gulimall-cart
+        - name: gulimall-cart
           image: $REGISTRY/$DOCKERHUB_NAMESPACE/$PROJECT_NAME:latest
           ports:
             - containerPort: 8080
