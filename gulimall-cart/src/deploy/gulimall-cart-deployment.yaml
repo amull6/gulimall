@@ -11,6 +11,11 @@ spec:
   selector:
     matchLabels:
       app: gulimall-cart
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 25%
+        maxSurge: 25%
   template:
     metadata:
       labels:
@@ -40,11 +45,6 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
-      strategy:
-        type: RollingUpdate
-        rollingUpdate:
-          maxUnavailable: 25%
-          maxSurge: 25%
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
 ---
